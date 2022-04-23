@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+      "module": "amd",
+      "noImplicitAny": true,
+      "removeComments": true,
+      "preserveConstEnums": true,
+      "outFile": "./build/main.js",
+      "outDir": "./build",
+      "incremental":true,
+      "sourceMap": true,
+      "declaration": true,
+      "declarationMap": true,
+      "target": "es6",
+      "composite": true
+  },
+  "include": [
+      "**/*.ts"
+  ],
+  "exclude": [
+      "node_modules",
+      "**/*.spec.ts",
+      "**/*.d.ts"
+  ]
+}
