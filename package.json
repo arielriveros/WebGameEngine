@@ -1,0 +1,24 @@
+{
+  "name": "webgameengine",
+  "version": "0.0.1",
+  "description": "Web Game Engine",
+  "main": "index.js",
+  "dependencies": {
+    "typescript": "^4.6.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arielriveros/WebGameEngine.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arielriveros/WebGameEngine/issues"
+  },
+  "homepage": "https://github.com/arielriveros/WebGameEngine#readme"
+}
