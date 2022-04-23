@@ -36,14 +36,14 @@ namespace RENDER {
         }
 
         public getAttributeLocation(name:string): number {
-            if(this._attributes[name] === undefined) {
+            if (this._attributes[name] === undefined) {
                 throw new Error(`Cannot find attribute "${name}" in shader "${this._name}"`);
             }
             return this._attributes[name];
         }
 
         public getUniformLocation(name:string): WebGLUniformLocation {
-            if(this._uniforms[name] === undefined) {
+            if (this._uniforms[name] === undefined) {
                 throw new Error(`Cannot find uniform "${name}" in shader "${this._name}"`);
             }
             return this._uniforms[name];
@@ -78,7 +78,7 @@ namespace RENDER {
             let attributeCount = gl.getProgramParameter(this._program, gl.ACTIVE_ATTRIBUTES);
             for(let i = 0; i < attributeCount; i++) {
                 let info: WebGLActiveInfo = gl.getActiveAttrib(this._program, i);
-                if(!info) {
+                if (!info) {
                     break;
                 }
                 this._attributes[info.name] = gl.getAttribLocation(this._program, info.name);
@@ -89,7 +89,7 @@ namespace RENDER {
             let uniformCount = gl.getProgramParameter(this._program, gl.ACTIVE_UNIFORMS);
             for(let i = 0; i < uniformCount; i++) {
                 let info: WebGLActiveInfo = gl.getActiveUniform(this._program, i);
-                if(!info) {
+                if (!info) {
                     break;
                 }
                 this._uniforms[info.name] = gl.getUniformLocation(this._program, info.name);

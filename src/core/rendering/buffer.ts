@@ -59,7 +59,7 @@ namespace RENDER {
         public bind(normalized: boolean = false): void {
             gl.bindBuffer(this._targetBufferType, this._buffer);
 
-            if(this._hasAttributeLocation) {
+            if (this._hasAttributeLocation) {
                 for(let it of this._attributes) {
                     gl.vertexAttribPointer(
                         it.location, 
@@ -123,10 +123,10 @@ namespace RENDER {
         }
 
         public draw(): void {
-            if(this._targetBufferType === gl.ARRAY_BUFFER) {
+            if (this._targetBufferType === gl.ARRAY_BUFFER) {
                 gl.drawArrays(this._mode, 0, this._data.length / this._elementSize);
             }
-            else if(this._targetBufferType === gl.ELEMENT_ARRAY_BUFFER) {
+            else if (this._targetBufferType === gl.ELEMENT_ARRAY_BUFFER) {
                 gl.drawElements(this._mode, this._data.length, this._dataType, 0);
             }
         }
