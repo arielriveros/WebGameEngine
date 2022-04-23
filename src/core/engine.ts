@@ -6,8 +6,9 @@ namespace ENGINE {
 
         private _canvas: HTMLCanvasElement;
         private _shader: RENDER.Shader;
-        private _buffer: RENDER.Buffer;
-
+        private _projection: MATH.Matrix4x4;
+        private _sprite: RENDER.Sprite;
+        
         public constructor() {
 
         }
@@ -17,10 +18,17 @@ namespace ENGINE {
          */
         public start(): void {
             this._canvas = RENDER.initialize("render-viewport");
+
             RENDER.gl.clearColor(0, 0, 0, 1);
+
             this.loadShaders();
             this._shader.use();
-            this.createBuffer();
+
+            this._projection = MATH.Matrix4x4.orthographic(0.0, this._canvas.width, 0.0, this._canvas.height, -100.0, 100.0);
+            this._sprite = new RENDER.Sprite("Test");
+            this._sprite.load();
+            this._sprite.position.x = 200;
+
             this.resize();
             this.loop();
         }
@@ -33,7 +41,7 @@ namespace ENGINE {
                 this._canvas.width = window.innerWidth;
                 this._canvas.height = window.innerHeight;
 
-                RENDER.gl.viewport(0, 0, this._canvas.width, this._canvas.height);
+                RENDER.gl.viewport(-1, 1, -1, 1);
             }
         }
 
@@ -44,8 +52,14 @@ namespace ENGINE {
             RENDER.gl.clear(RENDER.gl.COLOR_BUFFER_BIT); // clears buffers to preset values.
             let colorPosition: WebGLUniformLocation = this._shader.getUniformLocation("u_color");
             RENDER.gl.uniform4f(colorPosition, 1, 0.5, 0, 1);
-            this._buffer.bind();
-            this._buffer.draw();
+            
+            let projectionPosition = this._shader.getUniformLocation("u_projection");
+            RENDER.gl.uniformMatrix4fv(projectionPosition, false, new Float32Array(this._projection.data));
+
+            let modelLocation = this._shader.getUniformLocation("u_model");
+            RENDER.gl.uniformMatrix4fv(modelLocation, false, new Float32Array(MATH.Matrix4x4.translation(this._sprite.position).data));
+
+            this._sprite.draw();
 
             requestAnimationFrame(this.loop.bind( this ));
         }
@@ -53,8 +67,10 @@ namespace ENGINE {
         private loadShaders(): void {
             let vertexShaderSource = `
             attribute vec3 a_position;
+            uniform mat4 u_projection;
+            uniform mat4 u_model;
             void main() {
-                gl_Position = vec4(a_position, 1.0);
+                gl_Position = u_projection * u_model * vec4(a_position, 1.0);
             }`;
             let fragmentShaderSource = `
             precision mediump float;
@@ -65,25 +81,5 @@ namespace ENGINE {
             this._shader = new RENDER.Shader("basic", vertexShaderSource, fragmentShaderSource);
         }
         
-        private createBuffer(): void {
-            this._buffer = new RENDER.Buffer(3);
-            let positionAttribute: RENDER.AttributeInfo = {
-                location: this._shader.getAttributeLocation("a_position"),
-                offset: 0,
-                size: 3
-            };
-            
-            this._buffer.addAttributeLocation(positionAttribute);
-            
-            let vertices = [
-                //X Y Z
-                0,   0,   0,
-                0,   0.5, 0,
-                0.5, 0.5, 0];
-            
-            this._buffer.pushBackData(vertices);
-            this._buffer.uploadData();
-            this._buffer.unbind();
-        }
     }
 }
