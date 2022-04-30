@@ -1,8 +1,11 @@
-let engine: ENGINE.Engine;
+import { Engine } from './core/engine';
+
+let engine: Engine;
 
 // main application the browser runs
 window.onload = () => {
-    engine = new ENGINE.Engine();
+    engine = new Engine();
+    console.log("A");
     engine.start();
 }
 
