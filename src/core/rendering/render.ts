@@ -100,10 +100,10 @@ export class Render{
         const gl:WebGLRenderingContext = this._context;
 
         let triangleVertices: number[] = [
-            //  X      Y      Z
-                -0.5,  Math.random()/2,   0.0,
-                0.5,   0.0,   0.0,
-                0.0,   0.5,   0.0
+            //  X     Y     Z     R    G    B
+                -0.3, -0.5, 0.0,  1.0, 0.0, 0.0,
+                0.3,  -0.5, 0.0,  0.0, 1.0, 0.0,
+                0.0,  0.7,  0.0,  0.0, 0.0, 1.0
             ];
     
             let triangleBuffer: WebGLBuffer = gl.createBuffer() as WebGLBuffer;
@@ -112,17 +112,28 @@ export class Render{
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triangleVertices), gl.STATIC_DRAW);
     
             let positionAttribLocation = gl.getAttribLocation(this._program, 'vertex_position');
+            let colorAttribLocation = gl.getAttribLocation(this._program, 'vertex_color');
             // Layout of attribute
             gl.vertexAttribPointer(
                 positionAttribLocation,   // Attribute location
                 3,                  // Number of elements of each attribute
                 gl.FLOAT,           // Type of elements
                 false,              // Normalized?
-                3 * Float32Array.BYTES_PER_ELEMENT, // Size of a vertex
+                6 * Float32Array.BYTES_PER_ELEMENT, // Size of a vertex
                 0
+            );
+
+            gl.vertexAttribPointer(
+                colorAttribLocation,   // Attribute location
+                3,                  // Number of elements of each attribute
+                gl.FLOAT,           // Type of elements
+                false,              // Normalized?
+                6 * Float32Array.BYTES_PER_ELEMENT, // Size of a vertex
+                3 * Float32Array.BYTES_PER_ELEMENT
             );
     
             gl.enableVertexAttribArray(positionAttribLocation);
+            gl.enableVertexAttribArray(colorAttribLocation);
             gl.useProgram(this._program);
             gl.drawArrays(gl.TRIANGLES, 0, 3);
     }
