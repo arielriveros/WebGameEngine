@@ -1,4 +1,5 @@
 import { SIMPLE_VERTEX_SHADER, SIMPLE_FRAGMENT_SHADER } from "./shaders/shaderSources";
+import { Shader } from "./shaders/shader";
 
 export class Render{
 
@@ -47,46 +48,8 @@ export class Render{
 
         // ===================== S H A D E R S =====================
 
-        const gl:WebGLRenderingContext = this._context;
-
-        let vertexShader: WebGLShader|null = gl.createShader(gl.VERTEX_SHADER);
-        let fragmentShader: WebGLShader|null = gl.createShader(gl.FRAGMENT_SHADER);
-
-        let program: WebGLProgram = gl.createProgram() as WebGLProgram;
-
-        if(vertexShader) {
-            // Sets vertex shader source and compiles it
-            gl.shaderSource(vertexShader, SIMPLE_VERTEX_SHADER);
-            gl.compileShader(vertexShader);
-            if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
-                throw new Error(`Error compiling vertex shader.\n${gl.getShaderInfoLog(vertexShader)}`);
-            }
-            gl.attachShader(program, vertexShader);
-        }
-
-        if(fragmentShader) {
-            // Sets fragment shader source and compiles it
-            gl.shaderSource(fragmentShader, SIMPLE_FRAGMENT_SHADER);
-            gl.compileShader(fragmentShader);
-            if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
-                throw new Error(`Error compiling vertex shader.\n${gl.getShaderInfoLog(fragmentShader)}`);
-            }
-            gl.attachShader(program, fragmentShader);
-        }
-
-        // WebGL Program linking and error catching
-        gl.linkProgram(program);
-        if(!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-            throw new Error(`Error linking WebGL program.\n${gl.getProgramInfoLog(program)}`);
-        }
-
-        // Program validation, only use in debugging mode for performance reasons
-        gl.validateProgram(program);
-        if(!gl.getProgramParameter(program, gl.VALIDATE_STATUS)) {
-            throw new Error(`Error validating WebGL program.\n${gl.getProgramInfoLog(program)}`);
-        }
-
-        this._program = program;
+        const simpleShader: Shader = new Shader(this._context);
+        this._program = simpleShader.program;
     }
 
     /**
