@@ -14,4 +14,4 @@ Videogame engine written in typescript made for browser execution using WebGL.
 
 ## Build
 
-`tsc` on root folder, requires "typescript": "^4.6.3"
+`npm run build` on root folder

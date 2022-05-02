@@ -18,5 +18,6 @@ module.exports = {
         publicPath: 'public',
         filename: 'app.js',
         path: path.resolve(__dirname, 'public')
-    }
+    },
+    mode: 'development'
 }
