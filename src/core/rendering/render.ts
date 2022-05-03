@@ -1,7 +1,9 @@
-import { SIMPLE_VERTEX_SHADER, SIMPLE_FRAGMENT_SHADER } from "./shaders/shaderSources";
 import { Shader } from "./shaders/shader";
 import { Matrix4x4 } from "../math/matrix";
 import { Vector3 } from "../math/vector";
+import { Buffer } from "./gl/buffer";
+import { AttributeInformation } from "./interfaces";
+
 
 /**
  * WebGL Global interface for rendering context
@@ -11,7 +13,8 @@ export let gl: WebGLRenderingContext;
 export class Render{
 
     private _canvas!:HTMLCanvasElement ;
-    private _program!:WebGLProgram;
+    private _shader!:Shader;
+    private _buffer!: Buffer;
 
     private angle: number = 0;
     private worldMatrix!: Matrix4x4;
@@ -58,50 +61,40 @@ export class Render{
 
         // ===================== S H A D E R S =====================
 
-        const simpleShader: Shader = new Shader();
-        this._program = simpleShader.program;
+        this._shader = new Shader();
 
         // ===================== B U F F E R S =====================
+        
 
         let triangleVertices: number[] = [
             //  X     Y     Z     R    G    B
-                -0.3, -0.5, 0.0,  1.0, 0.0, 0.0,
-                0.3,  -0.5, 0.0,  0.0, 1.0, 0.0,
-                0.0,  0.7,  0.0,  0.0, 0.0, 1.0
-            ];
-    
-        let triangleBuffer: WebGLBuffer = gl.createBuffer() as WebGLBuffer;
-        gl.bindBuffer(gl.ARRAY_BUFFER, triangleBuffer);
-        // TriangleVertices is not readable as it is, float32 conversion required
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triangleVertices), gl.STATIC_DRAW);
+            -0.3,   -0.5,  0.0,  1.0, 0.0, 0.0,
+             0.3,   -0.5,  0.0,  0.0, 1.0, 0.0,
+             0.0,    0.7,  0.0,  0.0, 0.0, 1.0 ];
+        
+        this._buffer = new Buffer(6, gl.FLOAT, gl.ARRAY_BUFFER, gl.TRIANGLES );
 
-        let positionAttribLocation = gl.getAttribLocation(this._program, 'a_position');
-        let colorAttribLocation = gl.getAttribLocation(this._program, 'a_color');
-        // Layout of attribute
-        gl.vertexAttribPointer(
-            positionAttribLocation,   // Attribute location
-            3,                  // Number of elements of each attribute
-            gl.FLOAT,           // Type of elements
-            false,              // Normalized?
-            6 * Float32Array.BYTES_PER_ELEMENT, // Size of a vertex
-            0
-        );
-        gl.vertexAttribPointer(
-            colorAttribLocation,   // Attribute location
-            3,                  // Number of elements of each attribute
-            gl.FLOAT,           // Type of elements
-            false,              // Normalized?
-            6 * Float32Array.BYTES_PER_ELEMENT, // Size of a vertex
-            3 * Float32Array.BYTES_PER_ELEMENT
-        );
+        let positionAttribute:AttributeInformation = {
+            location: this._shader.getAttributeLocation("a_position"),
+            size: 3,
+            offset: 0 };
+        this._buffer.addAttribLocation(positionAttribute);
 
-        gl.enableVertexAttribArray(positionAttribLocation);
-        gl.enableVertexAttribArray(colorAttribLocation);
-        gl.useProgram(this._program);
+        let colorAttribute:AttributeInformation = {
+            location: this._shader.getAttributeLocation("a_color"),
+            size: 3, 
+            offset: 3 };
+        this._buffer.addAttribLocation(colorAttribute);
+
+        this._buffer.pushData(triangleVertices);
+        this._buffer.upload();
+        
+        this._shader.use();
+        
         // ===================== R O T A T I O N =====================
-        this.worldUniformLocation = gl.getUniformLocation(this._program, 'u_world') as WebGLUniformLocation;
-        let viewUniformLocation = gl.getUniformLocation(this._program, 'u_view');
-        let projectionUniformLocation = gl.getUniformLocation(this._program, 'u_proj');
+        this.worldUniformLocation = this._shader.getUniformLocation('u_world');
+        let viewUniformLocation = this._shader.getUniformLocation('u_view');
+        let projectionUniformLocation = this._shader.getUniformLocation('u_proj');
         this.worldMatrix = Matrix4x4.identity();
         let viewMatrix = Matrix4x4.lookAt(
             Matrix4x4.identity(),
@@ -119,18 +112,19 @@ export class Render{
     /**
      * Gets called every frame
      */
-    
-
     public update(){
         // clears buffers to preset values.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+        // Set uniforms
+        
         
         this.angle = performance.now() / 1000.0 / 6.0 * 2.0 * Math.PI;
-        
         Matrix4x4.rotate(this.worldMatrix, this.identity, this.angle, new Vector3(0, 1, 0));
-
         gl.uniformMatrix4fv(this.worldUniformLocation, false, this.worldMatrix.toFloat32Array());
-        gl.drawArrays(gl.TRIANGLES, 0, 3);
+        
+        this._buffer.bind();
+        this._buffer.draw();
     }
 
     /**

@@ -1,3 +1,4 @@
+import { Input } from './rendering/input/handler';
 import { Render } from './rendering/render';
 
 /**
@@ -5,15 +6,18 @@ import { Render } from './rendering/render';
  */
 export class Engine{
     private _render:Render;
+    private _input: Input;
     
     public constructor() {
         this._render = new Render();
+        this._input = new Input();
     }
     /** 
      * Initializes the render engine and starts the game loop.
      */
     public start(): void {
         this._render.initialize("render-viewport");
+        this._input.initialize();
         this.loop();
     }
 

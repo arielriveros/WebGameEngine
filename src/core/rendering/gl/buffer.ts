@@ -1,5 +1,5 @@
 import { gl } from "../render";
-import { AttributeInformation } from "./interfaces";
+import { AttributeInformation } from "../interfaces";
 
 /**
  * Encapsulates a WebGL Buffer
@@ -74,11 +74,11 @@ export class Buffer{
         if (this._hasAttribLocation) {
             for( let attrib of this._attributes) {
                 gl.vertexAttribPointer(
-                    attrib.location,
-                    attrib.size,
-                    this._dataType,
-                    false,
-                    this._stride,
+                    attrib.location, // Attribute location
+                    attrib.size,     // Number of elements of each attribute
+                    this._dataType,  // Type of elements
+                    false,           // Normalized?
+                    this._stride,    // Size of a vertex
                     attrib.offset * this._typeSize);
                 gl.enableVertexAttribArray(attrib.location);
             }
@@ -107,6 +107,15 @@ export class Buffer{
      * Adds data to this buffer.
      */
     public pushData( data: number[]) {
+        for (let d of data) {
+            this._data.push(d);
+        }
+    }
+
+    /**
+     * Uploads content from this buffer to the GPU
+     */
+    public upload() {
         gl.bindBuffer(this._target, this._buffer);
         let dataToBuffer: ArrayBuffer|null = null;
         // Array type is based on the data type passed to the buffer.
@@ -137,7 +146,7 @@ export class Buffer{
                 break;
         }
         if (dataToBuffer){
-            gl.bufferData(this._target, dataToBuffer, this._mode);
+            gl.bufferData(this._target, dataToBuffer, gl.STATIC_DRAW);
         }   
     }
 

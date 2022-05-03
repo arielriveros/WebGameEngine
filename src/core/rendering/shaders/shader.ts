@@ -3,6 +3,8 @@ import { gl } from "../render";
 
 export class Shader {
     private _program: WebGLProgram;
+    private _attributes: {[name:string]: number} = {};
+    private _uniforms: {[name:string]: WebGLUniformLocation} = {};
 
     public get program(): WebGLProgram {
         return this._program;
@@ -49,5 +51,23 @@ export class Shader {
         }
         
         return program;
+    }
+
+    public getAttributeLocation(attrib:string): number {
+        return gl.getAttribLocation(this._program, attrib);
+    }
+
+    public getUniformLocation(uniform:string): WebGLUniformLocation {
+        let outLocation:any = gl.getUniformLocation(this._program, uniform)
+        if (outLocation) {
+            return outLocation as WebGLUniformLocation;
+        }
+        else {
+            throw new Error(`No uniform of name ${uniform} found.`)
+        }
+    }
+
+    public use(): void {
+        gl.useProgram(this._program);
     }
 }
