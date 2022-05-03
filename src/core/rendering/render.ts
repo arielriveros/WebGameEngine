@@ -3,11 +3,13 @@ import { Shader } from "./shaders/shader";
 import { Matrix4x4 } from "../math/matrix";
 import { Vector3 } from "../math/vector";
 
-
+/**
+ * WebGL Global interface for rendering context
+ */
+export let gl: WebGLRenderingContext; 
 
 export class Render{
 
-    private _context!:WebGLRenderingContext;
     private _canvas!:HTMLCanvasElement ;
     private _program!:WebGLProgram;
 
@@ -20,8 +22,7 @@ export class Render{
         console.log("New Render Instance")
     }
 
-    public get gl(){ return this._context; }
-    public get canvas(){ return this._canvas; }
+    public get canvas() { return this._canvas; }
 
     /**
     * Initializes WebGL rendering context. 
@@ -50,19 +51,17 @@ export class Render{
         }
 
         // gets webGL context object from the canvas and stores it in _context
-        this._context = this._canvas.getContext("webgl") as WebGLRenderingContext; 
+        gl = this._canvas.getContext("webgl") as WebGLRenderingContext; 
         // Dark gray initial color
-        this._context.clearColor(0.2, 0.2, 0.2, 1.0);
+        gl.clearColor(0.2, 0.2, 0.2, 1.0);
         this.resize();
 
         // ===================== S H A D E R S =====================
 
-        const simpleShader: Shader = new Shader(this._context);
+        const simpleShader: Shader = new Shader();
         this._program = simpleShader.program;
 
         // ===================== B U F F E R S =====================
-
-        const gl:WebGLRenderingContext = this._context;
 
         let triangleVertices: number[] = [
             //  X     Y     Z     R    G    B
@@ -124,14 +123,14 @@ export class Render{
 
     public update(){
         // clears buffers to preset values.
-        this._context.clear(this._context.COLOR_BUFFER_BIT | this._context.DEPTH_BUFFER_BIT);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         
         this.angle = performance.now() / 1000.0 / 6.0 * 2.0 * Math.PI;
         
         Matrix4x4.rotate(this.worldMatrix, this.identity, this.angle, new Vector3(0, 1, 0));
 
-        this._context.uniformMatrix4fv(this.worldUniformLocation, false, this.worldMatrix.toFloat32Array());
-        this._context.drawArrays(this._context.TRIANGLES, 0, 3);
+        gl.uniformMatrix4fv(this.worldUniformLocation, false, this.worldMatrix.toFloat32Array());
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
     }
 
     /**
@@ -141,7 +140,7 @@ export class Render{
         if (this._canvas) {
             this._canvas.width = window.innerWidth;
             this._canvas.height = window.innerHeight;
-            this._context.viewport(-1, 1, window.innerWidth, window.innerHeight);
+            gl.viewport(-1, 1, window.innerWidth, window.innerHeight);
         }
     }
 }
