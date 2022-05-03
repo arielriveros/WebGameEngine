@@ -45,7 +45,7 @@ export class Buffer{
             case gl.BYTE:
             case gl.UNSIGNED_BYTE:
                 this._typeSize = 1;
-                break
+                break;
             default:
                 throw new Error(`Invalid datatype ${dataType.toString()}`);
         }

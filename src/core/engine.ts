@@ -1,4 +1,4 @@
-import { Input } from './rendering/input/handler';
+import { Input } from './input/poller';
 import { Render } from './rendering/render';
 
 /**
@@ -9,6 +9,7 @@ export class Engine{
     private _input: Input;
     
     public constructor() {
+        console.log("New Game Instance");
         this._render = new Render();
         this._input = new Input();
     }

@@ -1,13 +1,13 @@
 import { Engine } from './core/engine';
 
-let engine: Engine;
+export let GameInstance: Engine;
 
 // main application the browser runs
 window.onload = () => {
-    engine = new Engine();
-    engine.start();
+    GameInstance = new Engine();
+    GameInstance.start();
 }
 
 window.onresize = () => {
-    engine.resize();
+    GameInstance.resize();
 }
