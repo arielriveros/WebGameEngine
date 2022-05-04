@@ -37,8 +37,10 @@ export class Matrix4x4 {
         return m;
     }
 
-    public static lookAt(out:Matrix4x4, eye: Vector3, at: Vector3, up: Vector3): Matrix4x4 {
+    public static lookAt(eye: Vector3, at: Vector3, up: Vector3): Matrix4x4 {
         /* GLMATRIX LIBRARY IMPLEMENTATION */
+
+        let out:Matrix4x4 = Matrix4x4.identity();
         let x0, x1, x2, y0, y1, y2, z0, z1, z2, len;
         let eyex = eye.x;
         let eyey = eye.y;

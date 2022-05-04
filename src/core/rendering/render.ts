@@ -64,9 +64,10 @@ export class Render{
         this._shader = new Shader();
         this._shader.use();
 
-        this._shapes.push(new SHAPE.ColorTriangle(this._shader, 'test1', 3, 1));
-        this._shapes.push(new SHAPE.Triangle(this._shader, 'test1', 1, 2, [0.0, 0.0, 0.0]));
-        this._shapes.push(new SHAPE.Quad(this._shader, "test2", 1, 1, [0.5, 0.2, 1.0]));
+        //this._shapes.push(new SHAPE.Shape(this._shader, 'test0'));
+        //this._shapes.push(new SHAPE.Triangle(this._shader, 'test1', 1, 2, [0.0, 0.0, 0.0]));
+        //this._shapes.push(new SHAPE.Quad(this._shader, "test2", 1, 1, [0.5, 0.2, 1.0]));
+        this._shapes.push(new SHAPE.Cube(this._shader, 'test0'));
         this._shapes.forEach( s => {s.load()});
         
         // ===================== R O T A T I O N =====================
@@ -75,12 +76,11 @@ export class Render{
         let projectionUniformLocation = this._shader.getUniformLocation('u_proj');
         this.worldMatrix = Matrix4x4.identity();
         let viewMatrix = Matrix4x4.lookAt(
-            Matrix4x4.identity(),
             new Vector3(-2, 2, 0),
             new Vector3(0, 0, 0),
             new Vector3(0, 1, 0),
             );
-        let projectionMatrix = Matrix4x4.orthographic(-2, 2, -3, 3, 0.1, 1000.0);
+        let projectionMatrix = Matrix4x4.orthographic(-2, 2, -2, 2, 0.01, 1000.0);
         gl.uniformMatrix4fv(this.worldUniformLocation, false, this.worldMatrix.toFloat32Array());
         gl.uniformMatrix4fv(viewUniformLocation, false, viewMatrix.toFloat32Array());
         gl.uniformMatrix4fv(projectionUniformLocation, false, projectionMatrix.toFloat32Array());
