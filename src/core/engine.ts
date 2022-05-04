@@ -1,4 +1,5 @@
 import { Input } from './input/poller';
+import { Camera } from './rendering/graphics/camera';
 import { Render } from './rendering/render';
 
 /**
@@ -7,17 +8,20 @@ import { Render } from './rendering/render';
 export class Engine{
     private _render:Render;
     private _input: Input;
-    
+    private _camera: Camera;
+
     public constructor() {
         console.log("New Game Instance");
         this._render = new Render();
         this._input = new Input();
+        this._camera = new Camera()
     }
     /** 
-     * Initializes the render engine and starts the game loop.
+     * Initializes the engine and starts the game loop.
      */
     public start(): void {
-        this._render.initialize("render-viewport");
+        
+        this._render.initialize("render-viewport", this._camera);
         this._input.initialize();
         this.loop();
     }

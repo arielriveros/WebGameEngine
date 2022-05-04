@@ -13,7 +13,6 @@ export let gl: WebGLRenderingContext;
 export class Render{
 
     private _canvas!:HTMLCanvasElement ;
-    private _shader!:Shader;
     private _shapes:SHAPE.Shape[] = [];
     private _camera!:Camera;
 
@@ -27,7 +26,42 @@ export class Render{
     * Initializes WebGL rendering context. 
     * @param elementID Id of the canvas element to render in.
     */
-    public initialize(elementID?: string): void {
+    public initialize(elementID: string, camera: Camera): void {
+        this.initializeContext(elementID);
+        
+        
+        this._shapes.push(new SHAPE.Shape('test0'));
+        this._shapes.push(new SHAPE.Triangle('test1', 1, 2, [0.0, 0.0, 0.0]));
+        this._shapes.push(new SHAPE.Quad("test2", 1, 1, [0.5, 0.2, 1.0]));
+        this._shapes.push(new SHAPE.ColorCube('test0'));
+        this._shapes.forEach( s => {s.load()});
+        
+        this._camera = camera;
+        this._camera.initialize();
+    }
+
+    /**
+     * Gets called every frame
+     */
+    public update(){
+        // clears buffers to preset values.
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        this._shapes.forEach( s => {s.draw()});
+        this._camera.update();
+    }
+
+    /**
+     * Resizes canvas to fit window.
+     */
+    public resize(){
+        if (this._canvas) {
+            this._canvas.width = window.innerWidth;
+            this._canvas.height = window.innerHeight;
+            gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+        }
+    }
+
+    private initializeContext(elementID: string){
         let canvas: HTMLCanvasElement;
         
         if (elementID !== undefined) {
@@ -57,38 +91,7 @@ export class Render{
         gl.enable(gl.CULL_FACE);
         gl.frontFace(gl.CCW);
         gl.cullFace(gl.BACK);
+        //gl.cullFace(gl.FRONT);
         this.resize();
-
-        this._shader = new Shader();
-        this._shader.use();
-
-        //this._shapes.push(new SHAPE.Shape(this._shader, 'test0'));
-        //this._shapes.push(new SHAPE.Triangle(this._shader, 'test1', 1, 2, [0.0, 0.0, 0.0]));
-        //this._shapes.push(new SHAPE.Quad(this._shader, "test2", 1, 1, [0.5, 0.2, 1.0]));
-        this._shapes.push(new SHAPE.Cube(this._shader, 'test0'));
-        this._shapes.forEach( s => {s.load()});
-        
-        this._camera = new Camera(this._shader);
-    }
-
-    /**
-     * Gets called every frame
-     */
-    public update(){
-        // clears buffers to preset values.
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        this._shapes.forEach( s => {s.draw()});
-        this._camera.update();
-    }
-
-    /**
-     * Resizes canvas to fit window.
-     */
-    public resize(){
-        if (this._canvas) {
-            this._canvas.width = window.innerWidth;
-            this._canvas.height = window.innerHeight;
-            gl.viewport(0, 0, window.innerWidth, window.innerHeight);
-        }
     }
 }
