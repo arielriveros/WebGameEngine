@@ -141,6 +141,52 @@ export class Matrix4x4 {
         return m;
     }
 
+    public static translate(out:Matrix4x4, a:Matrix4x4, v: Vector3) {
+        /* GLMATRIX LIBRARY IMPLEMENTATION */
+        let x = v.x,
+        y = v.y,
+        z = v.z;
+        let a00, a01, a02, a03;
+        let a10, a11, a12, a13;
+        let a20, a21, a22, a23;
+        if (a === out) {
+            out._data[12] = a._data[0] * x + a._data[4] * y + a._data[8] * z + a._data[12];
+            out._data[13] = a._data[1] * x + a._data[5] * y + a._data[9] * z + a._data[13];
+            out._data[14] = a._data[2] * x + a._data[6] * y + a._data[10] * z + a._data[14];
+            out._data[15] = a._data[3] * x + a._data[7] * y + a._data[11] * z + a._data[15];
+        } else {
+            a00 = a._data[0];
+            a01 = a._data[1];
+            a02 = a._data[2];
+            a03 = a._data[3];
+            a10 = a._data[4];
+            a11 = a._data[5];
+            a12 = a._data[6];
+            a13 = a._data[7];
+            a20 = a._data[8];
+            a21 = a._data[9];
+            a22 = a._data[10];
+            a23 = a._data[11];
+            out._data[0] = a00;
+            out._data[1] = a01;
+            out._data[2] = a02;
+            out._data[3] = a03;
+            out._data[4] = a10;
+            out._data[5] = a11;
+            out._data[6] = a12;
+            out._data[7] = a13;
+            out._data[8] = a20;
+            out._data[9] = a21;
+            out._data[10] = a22;
+            out._data[11] = a23;
+            out._data[12] = a00 * x + a10 * y + a20 * z + a._data[12];
+            out._data[13] = a01 * x + a11 * y + a21 * z + a._data[13];
+            out._data[14] = a02 * x + a12 * y + a22 * z + a._data[14];
+            out._data[15] = a03 * x + a13 * y + a23 * z + a._data[15];
+        }
+        return out;
+    }
+
     public static rotate(out: Matrix4x4, a: Matrix4x4, rad: number, axis:Vector3): Matrix4x4 {
         /* GLMATRIX LIBRARY IMPLEMENTATION */
         let x = axis.x,
