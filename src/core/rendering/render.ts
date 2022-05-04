@@ -93,12 +93,11 @@ export class Render{
     public update(){
         // clears buffers to preset values.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-        // Set uniforms
+        gl.enable(gl.DEPTH_TEST);
         
         
-        this.angle = performance.now() / 1000.0 / 6.0 * 2.0 * Math.PI;
-        Matrix4x4.rotate(this.worldMatrix, this.identity, this.angle, new Vector3(0, 1, 0));
+        this.angle = performance.now() / 1000.0 / 6.0 * 3.0 * Math.PI;
+        Matrix4x4.rotate(this.worldMatrix, this.identity, this.angle, new Vector3(0.1, 0.7, 0.5));
         gl.uniformMatrix4fv(this.worldUniformLocation, false, this.worldMatrix.toFloat32Array());
         
         this._shapes.forEach( s => {s.draw()});
