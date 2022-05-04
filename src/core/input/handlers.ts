@@ -1,24 +1,26 @@
+import * as DISPATCHERS from './dispatchers';
 
 export function KeyDown(event: KeyboardEvent): void{
     switch(event.key){
         case "w":
         case "ArrowUp":
-            console.log("UP+");
+            DISPATCHERS.UP_KeyDown();
             break;
         case "s":
         case "ArrowDown":
-            console.log("DOWN+");
+            DISPATCHERS.DOWN_KeyDown();
+            
             break;
         case "d":
         case "ArrowRight":
-            console.log("RIGHT+");
+            DISPATCHERS.RIGHT_KeyDown();
             break;
         case "a":
         case "ArrowLeft":
-            console.log("LEFT+");
+            DISPATCHERS.LEFT_KeyDown();
             break;
         default:
-            console.log(event);
+            DISPATCHERS.NOT_RECOGNIZED();
             break;
     }
 }
@@ -27,43 +29,39 @@ export function KeyUp(event: KeyboardEvent): void{
     switch(event.key){
         case "w":
         case "ArrowUp":
-            console.log("UP-");
+            DISPATCHERS.UP_KeyUp();
             break;
         case "s":
         case "ArrowDown":
-            console.log("DOWN-");
+            DISPATCHERS.DOWN_KeyUp();
             break;
         case "d":
         case "ArrowRight":
-            console.log("RIGHT-");
+            DISPATCHERS.RIGHT_KeyUp();
             break;
         case "a":
         case "ArrowLeft":
-            console.log("LEFT-");
+            DISPATCHERS.LEFT_KeyUp();
             break;
         default:
-            console.log(event);
+            DISPATCHERS.NOT_RECOGNIZED();
             break;
     }
 }
 
 export function MouseLeftClick(event: MouseEvent): void {
-    switch(event.buttons) {
-        case 0:
-            console.log("BUTTON 0");
-            break;
-        case 1:
-            console.log("BUTTON 1");
-            break;
-        case 2:
-            console.log("BUTTON 2");
-            break;
-        default:
-            console.log(event);
-            break;
+    if (event.button === 0) {
+        DISPATCHERS.LCLICK();
     }
 }
 
+export function MouseRightClick(event: MouseEvent): void { 
+    if (event.button === 2) { 
+        event.preventDefault();
+        DISPATCHERS.RCLICK();
+     }
+}
+
 export function MouseMove(event: MouseEvent): void {
-    console.log(event);
+    DISPATCHERS.CURSOR();
 }

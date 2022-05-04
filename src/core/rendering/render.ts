@@ -1,8 +1,7 @@
 import { Shader } from "./shaders/shader";
 import { Matrix4x4 } from "../math/matrix";
 import { Vector3 } from "../math/vector";
-import { Buffer } from "./gl/buffer";
-import { AttributeInformation } from "./interfaces";
+import * as SHAPE from "./graphics/shape";
 
 
 /**
@@ -14,7 +13,8 @@ export class Render{
 
     private _canvas!:HTMLCanvasElement ;
     private _shader!:Shader;
-    private _buffer!: Buffer;
+
+    private _shapes:SHAPE.Shape[] = [];
 
     private angle: number = 0;
     private worldMatrix!: Matrix4x4;
@@ -62,34 +62,12 @@ export class Render{
         // ===================== S H A D E R S =====================
 
         this._shader = new Shader();
-
-        // ===================== B U F F E R S =====================
-        
-
-        let triangleVertices: number[] = [
-            //  X     Y     Z     R    G    B
-            -0.3,   -0.5,  0.0,  1.0, 0.0, 0.0,
-             0.3,   -0.5,  0.0,  0.0, 1.0, 0.0,
-             0.0,    0.7,  0.0,  0.0, 0.0, 1.0 ];
-        
-        this._buffer = new Buffer(6, gl.FLOAT, gl.ARRAY_BUFFER, gl.TRIANGLES );
-
-        let positionAttribute:AttributeInformation = {
-            location: this._shader.getAttributeLocation("a_position"),
-            size: 3,
-            offset: 0 };
-        this._buffer.addAttribLocation(positionAttribute);
-
-        let colorAttribute:AttributeInformation = {
-            location: this._shader.getAttributeLocation("a_color"),
-            size: 3, 
-            offset: 3 };
-        this._buffer.addAttribLocation(colorAttribute);
-
-        this._buffer.pushData(triangleVertices);
-        this._buffer.upload();
-        
         this._shader.use();
+
+        this._shapes.push(new SHAPE.ColorTriangle(this._shader, 'test1', 3, 1));
+        this._shapes.push(new SHAPE.Triangle(this._shader, 'test1', 1, 2, [0.0, 0.0, 0.0]));
+        this._shapes.push(new SHAPE.Quad(this._shader, "test2", 1, 1, [0.5, 0.2, 1.0]));
+        this._shapes.forEach( s => {s.load()});
         
         // ===================== R O T A T I O N =====================
         this.worldUniformLocation = this._shader.getUniformLocation('u_world');
@@ -98,11 +76,11 @@ export class Render{
         this.worldMatrix = Matrix4x4.identity();
         let viewMatrix = Matrix4x4.lookAt(
             Matrix4x4.identity(),
-            new Vector3(0, 0, -2),
+            new Vector3(-2, 2, 0),
             new Vector3(0, 0, 0),
             new Vector3(0, 1, 0),
             );
-        let projectionMatrix = Matrix4x4.orthographic(-2, 2, -2, 2, 0.1, 1000.0);
+        let projectionMatrix = Matrix4x4.orthographic(-2, 2, -3, 3, 0.1, 1000.0);
         gl.uniformMatrix4fv(this.worldUniformLocation, false, this.worldMatrix.toFloat32Array());
         gl.uniformMatrix4fv(viewUniformLocation, false, viewMatrix.toFloat32Array());
         gl.uniformMatrix4fv(projectionUniformLocation, false, projectionMatrix.toFloat32Array());
@@ -123,8 +101,7 @@ export class Render{
         Matrix4x4.rotate(this.worldMatrix, this.identity, this.angle, new Vector3(0, 1, 0));
         gl.uniformMatrix4fv(this.worldUniformLocation, false, this.worldMatrix.toFloat32Array());
         
-        this._buffer.bind();
-        this._buffer.draw();
+        this._shapes.forEach( s => {s.draw()});
     }
 
     /**
