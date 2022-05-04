@@ -15,7 +15,7 @@ module.exports = {
         extensions: ['.ts', '.js']
     },
     output: {
-        publicPath: 'public',
+        publicPath: 'auto',
         filename: 'app.js',
         path: path.resolve(__dirname, 'public')
     },
