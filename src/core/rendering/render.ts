@@ -1,6 +1,7 @@
 import { Shader } from "./shaders/shader";
 import { Matrix4x4 } from "../math/matrix";
 import { Vector3 } from "../math/vector";
+import { Camera } from "./graphics/camera";
 import * as SHAPE from "./graphics/shape";
 
 
@@ -13,13 +14,8 @@ export class Render{
 
     private _canvas!:HTMLCanvasElement ;
     private _shader!:Shader;
-
     private _shapes:SHAPE.Shape[] = [];
-
-    private angle: number = 0;
-    private worldMatrix!: Matrix4x4;
-    private identity: Matrix4x4 = Matrix4x4.identity();
-    private worldUniformLocation!:WebGLUniformLocation;
+    private _camera!:Camera;
 
     public constructor(){
         console.log("New Render Instance")
@@ -57,9 +53,11 @@ export class Render{
         gl = this._canvas.getContext("webgl") as WebGLRenderingContext; 
         // Dark gray initial color
         gl.clearColor(0.2, 0.2, 0.2, 1.0);
+        gl.enable(gl.DEPTH_TEST);
+        gl.enable(gl.CULL_FACE);
+        gl.frontFace(gl.CCW);
+        gl.cullFace(gl.BACK);
         this.resize();
-
-        // ===================== S H A D E R S =====================
 
         this._shader = new Shader();
         this._shader.use();
@@ -70,21 +68,7 @@ export class Render{
         this._shapes.push(new SHAPE.Cube(this._shader, 'test0'));
         this._shapes.forEach( s => {s.load()});
         
-        // ===================== R O T A T I O N =====================
-        this.worldUniformLocation = this._shader.getUniformLocation('u_world');
-        let viewUniformLocation = this._shader.getUniformLocation('u_view');
-        let projectionUniformLocation = this._shader.getUniformLocation('u_proj');
-        this.worldMatrix = Matrix4x4.identity();
-        let viewMatrix = Matrix4x4.lookAt(
-            new Vector3(-2, 2, 0),
-            new Vector3(0, 0, 0),
-            new Vector3(0, 1, 0),
-            );
-        let projectionMatrix = Matrix4x4.orthographic(-2, 2, -2, 2, 0.01, 1000.0);
-        gl.uniformMatrix4fv(this.worldUniformLocation, false, this.worldMatrix.toFloat32Array());
-        gl.uniformMatrix4fv(viewUniformLocation, false, viewMatrix.toFloat32Array());
-        gl.uniformMatrix4fv(projectionUniformLocation, false, projectionMatrix.toFloat32Array());
-        // ===========================================================
+        this._camera = new Camera(this._shader);
     }
 
     /**
@@ -93,14 +77,8 @@ export class Render{
     public update(){
         // clears buffers to preset values.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        gl.enable(gl.DEPTH_TEST);
-        
-        
-        this.angle = performance.now() / 1000.0 / 6.0 * 3.0 * Math.PI;
-        Matrix4x4.rotate(this.worldMatrix, this.identity, this.angle, new Vector3(0.1, 0.7, 0.5));
-        gl.uniformMatrix4fv(this.worldUniformLocation, false, this.worldMatrix.toFloat32Array());
-        
         this._shapes.forEach( s => {s.draw()});
+        this._camera.update();
     }
 
     /**
@@ -110,7 +88,7 @@ export class Render{
         if (this._canvas) {
             this._canvas.width = window.innerWidth;
             this._canvas.height = window.innerHeight;
-            gl.viewport(-1, 1, window.innerWidth, window.innerHeight);
+            gl.viewport(0, 0, window.innerWidth, window.innerHeight);
         }
     }
 }
