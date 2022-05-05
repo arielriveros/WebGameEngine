@@ -23,22 +23,21 @@ export class Camera {
         this._camPosition = new Vector3(-3, 1, 0);
         this._focalPosition = new Vector3(0, 0, 0);
 
-        this._worldMatrix = Matrix4x4.identity();
-        this._viewMatrix = Matrix4x4.lookAt(
-            this._camPosition,
-            this._focalPosition,
-            new Vector3(0, 1, 0),
-            );
-        this._projectionMatrix = Matrix4x4.orthographic(-1, 1, -1, 1, 0.01, 1000.0);
+        this._worldMatrix = new Matrix4x4();
+        this._viewMatrix = new Matrix4x4();
+        this._projectionMatrix = new Matrix4x4();
+
+        Matrix4x4.lookAt(this._viewMatrix, this._camPosition, this._focalPosition, new Vector3(0, 1, 0));
+        Matrix4x4.perspective(this._projectionMatrix, 1.0, window.innerWidth/window.innerHeight, 0.1, 100.0);
     }
 
     public updatePosition(newPos: Vector3){
-        Matrix4x4.translate(this._worldMatrix, Matrix4x4.identity(), newPos);
+        Matrix4x4.translate(this._worldMatrix, new Matrix4x4(), newPos);
         gl.uniformMatrix4fv(this._worldUniformLocation, false, this._worldMatrix.toFloat32Array());
     }
 
-    public updateRotaton(angle: number, axis: Vector3) {
-        Matrix4x4.rotate(this._worldMatrix, Matrix4x4.identity(), angle, axis);
+    public updateRotation(angle: number, axis: Vector3) {
+        Matrix4x4.rotate(this._worldMatrix, new Matrix4x4(), angle, axis);
         gl.uniformMatrix4fv(this._worldUniformLocation, false, this._worldMatrix.toFloat32Array());
     }  
 
@@ -47,7 +46,7 @@ export class Camera {
      */
     public update(){
         this._angle = 3 * Math.sin( performance.now() / 500.0);
-        this.updateRotaton(this._angle, new Vector3(0.0, 1.0, 0.0));
+        this.updateRotation(this._angle, new Vector3(0.0, 1.0, 0.0));
     }
 
     /**
@@ -62,5 +61,6 @@ export class Camera {
         gl.uniformMatrix4fv(this._worldUniformLocation, false, this._worldMatrix.toFloat32Array());
         gl.uniformMatrix4fv(this._viewUniformLocation, false, this._viewMatrix.toFloat32Array());
         gl.uniformMatrix4fv(this._projectionUniformLocation, false, this._projectionMatrix.toFloat32Array());
+        
     }
 }
