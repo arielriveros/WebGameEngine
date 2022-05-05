@@ -118,14 +118,6 @@ export class Matrix4x4 {
         return out;
     } 
 
-    public static translation(position: Vector3): Matrix4x4 {
-        let m = new Matrix4x4();
-        m._data[12] = position.x;
-        m._data[13] = position.y;
-        m._data[14] = position.z;
-        return m;
-    }
-
     public static translate(out:Matrix4x4, a:Matrix4x4, v: Vector3) {
         /* GLMATRIX LIBRARY IMPLEMENTATION */
         let x = v.x,

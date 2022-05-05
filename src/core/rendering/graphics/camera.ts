@@ -17,10 +17,8 @@ export class Camera {
     private _viewUniformLocation!: WebGLUniformLocation;
     private _projectionUniformLocation!: WebGLUniformLocation;
 
-    private _angle: number = 0;
-
     public constructor() {
-        this._camPosition = new Vector3(-3, 1, 0);
+        this._camPosition = new Vector3(-0.01, 0.01, 0);
         this._focalPosition = new Vector3(0, 0, 0);
 
         this._worldMatrix = new Matrix4x4();
@@ -28,25 +26,44 @@ export class Camera {
         this._projectionMatrix = new Matrix4x4();
 
         Matrix4x4.lookAt(this._viewMatrix, this._camPosition, this._focalPosition, new Vector3(0, 1, 0));
-        Matrix4x4.perspective(this._projectionMatrix, 1.0, window.innerWidth/window.innerHeight, 0.1, 100.0);
+        Matrix4x4.perspective(this._projectionMatrix, 1.1, 1.2*window.innerWidth/window.innerHeight, 0.1, 100.0);
     }
 
-    public updatePosition(newPos: Vector3){
+    public move(delta:any) {
+        if ('x' in delta) {
+            this._camPosition.x += delta.x;
+        }
+        if ('y' in delta) {
+            this._camPosition.y += delta.y;
+        }
+        if ('z' in delta) {
+            this._camPosition.z += delta.z;
+        }
+    }
+
+    private updatePosition(newPos: Vector3){
         Matrix4x4.translate(this._worldMatrix, new Matrix4x4(), newPos);
         gl.uniformMatrix4fv(this._worldUniformLocation, false, this._worldMatrix.toFloat32Array());
     }
 
-    public updateRotation(angle: number, axis: Vector3) {
+    private updateRotation(angle: number, axis: Vector3) {
         Matrix4x4.rotate(this._worldMatrix, new Matrix4x4(), angle, axis);
         gl.uniformMatrix4fv(this._worldUniformLocation, false, this._worldMatrix.toFloat32Array());
-    }  
+    }
+
+    private updateLookAt(focalPoint: Vector3) {
+        Matrix4x4.lookAt(this._viewMatrix, this._camPosition, focalPoint, new Vector3(0, 1, 0));
+        gl.uniformMatrix4fv(this._viewUniformLocation, false, this._viewMatrix.toFloat32Array());
+    }
 
     /**
      * Runs every frame.
      */
     public update(){
-        this._angle = 3 * Math.sin( performance.now() / 500.0);
-        this.updateRotation(this._angle, new Vector3(0.0, 1.0, 0.0));
+        this.updatePosition(this._camPosition);
+        //this._angle = Math.sin( performance.now() / 500.0);
+        //this.updateRotation(this._angle, new Vector3(0.0, 1.0, 0.0));
+        //this.updateLookAt(new Vector3(0.0, this._angle, 0.0))
     }
 
     /**
