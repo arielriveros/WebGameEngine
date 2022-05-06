@@ -17,7 +17,7 @@ export class Camera {
     private _viewUniformLocation!: WebGLUniformLocation;
     private _projectionUniformLocation!: WebGLUniformLocation;
 
-    public constructor() {
+    public constructor(orthographic: boolean = false) {
         this._camPosition = new Vector3(-0.01, 0.01, 0);
         this._focalPosition = new Vector3(0, 0, 0);
 
@@ -26,7 +26,12 @@ export class Camera {
         this._projectionMatrix = new Matrix4x4();
 
         Matrix4x4.lookAt(this._viewMatrix, this._camPosition, this._focalPosition, new Vector3(0, 1, 0));
-        Matrix4x4.perspective(this._projectionMatrix, 1.1, 1.2*window.innerWidth/window.innerHeight, 0.1, 100.0);
+        if(orthographic) {
+            Matrix4x4.orthographic(this._projectionMatrix, -1, 1, -1, 1, 0.1, 100.0);
+        }
+        else {
+            Matrix4x4.perspective(this._projectionMatrix, 1.1, window.innerWidth/window.innerHeight, 0.1, 100.0);
+        }
     }
 
     public move(delta:any) {

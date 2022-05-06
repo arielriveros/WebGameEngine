@@ -50,6 +50,19 @@ export class Matrix4x4 {
         return out;
     }
 
+    public static orthographic(out: Matrix4x4, left: number, right: number, bottom: number, top: number, near: number, far: number): Matrix4x4 {
+        let lr: number = 1.0 / (left - right);
+        let bt: number = 1.0 / (bottom - top);
+        let nf: number = 1.0 / (near - far);
+        out._data[0] = -2.0 * lr;
+        out._data[5] = -2.0 * bt;
+        out._data[10] = 2.0 * nf;
+        out._data[12] = (left + right) * lr;
+        out._data[13] = (bottom + top) * bt;
+        out._data[14] = (near + far) * nf;
+        return out;
+    }
+
     public static lookAt(out: Matrix4x4, eye: Vector3, at: Vector3, up: Vector3): Matrix4x4 {
         /* GLMATRIX LIBRARY IMPLEMENTATION */
 
