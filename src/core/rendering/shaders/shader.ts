@@ -3,8 +3,8 @@ import { gl } from "../render";
 
 export class Shader {
     private _program: WebGLProgram;
-    private _attributes: {[name:string]: number} = {};
-    private _uniforms: {[name:string]: WebGLUniformLocation} = {};
+    //private _attributes: {[name:string]: number} = {};
+    //private _uniforms: {[name:string]: WebGLUniformLocation} = {};
 
     public get program(): WebGLProgram {
         return this._program;

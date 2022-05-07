@@ -17,24 +17,25 @@ export class Camera {
     private _viewUniformLocation!: WebGLUniformLocation;
     private _projectionUniformLocation!: WebGLUniformLocation;
 
-    public constructor(orthographic: boolean = false) {
-        this._camPosition = new Vector3(-0.01, 0.01, 0);
-        this._focalPosition = new Vector3(0, 0, 0);
+    public constructor(initialPosition: Vector3 = new Vector3(0.0, 0.0, 0.0), orthographic: boolean = false) {
+        this._camPosition = initialPosition;
+        this._focalPosition = new Vector3(0.0, 0.0, 0.0);
 
         this._worldMatrix = new Matrix4x4();
         this._viewMatrix = new Matrix4x4();
         this._projectionMatrix = new Matrix4x4();
 
-        Matrix4x4.lookAt(this._viewMatrix, this._camPosition, this._focalPosition, new Vector3(0, 1, 0));
+        Matrix4x4.lookAt(this._viewMatrix, initialPosition, this._focalPosition, new Vector3(0, 0.1, 0));
+
         if(orthographic) {
-            Matrix4x4.orthographic(this._projectionMatrix, -1, 1, -1, 1, 0.1, 100.0);
+            Matrix4x4.orthographic(this._projectionMatrix, -1, 1, -1, 1, 0.01, 1000.0);
         }
         else {
-            Matrix4x4.perspective(this._projectionMatrix, 1.1, window.innerWidth/window.innerHeight, 0.1, 100.0);
+            Matrix4x4.perspective(this._projectionMatrix, 1.1, window.innerWidth/window.innerHeight, 0.01, 1000.0);
         }
     }
 
-    public move(delta:any) {
+    public move(delta:any): void {
         if ('x' in delta) {
             this._camPosition.x += delta.x;
         }
@@ -46,17 +47,17 @@ export class Camera {
         }
     }
 
-    private updatePosition(newPos: Vector3){
+    private updatePosition(newPos: Vector3): void {
         Matrix4x4.translate(this._worldMatrix, new Matrix4x4(), newPos);
         gl.uniformMatrix4fv(this._worldUniformLocation, false, this._worldMatrix.toFloat32Array());
     }
 
-    private updateRotation(angle: number, axis: Vector3) {
+    private updateRotation(angle: number, axis: Vector3): void {
         Matrix4x4.rotate(this._worldMatrix, new Matrix4x4(), angle, axis);
         gl.uniformMatrix4fv(this._worldUniformLocation, false, this._worldMatrix.toFloat32Array());
     }
 
-    private updateLookAt(focalPoint: Vector3) {
+    private updateLookAt(focalPoint: Vector3): void {
         Matrix4x4.lookAt(this._viewMatrix, this._camPosition, focalPoint, new Vector3(0, 1, 0));
         gl.uniformMatrix4fv(this._viewUniformLocation, false, this._viewMatrix.toFloat32Array());
     }
@@ -64,17 +65,14 @@ export class Camera {
     /**
      * Runs every frame.
      */
-    public update(){
-        this.updatePosition(this._camPosition);
-        //this._angle = Math.sin( performance.now() / 500.0);
-        //this.updateRotation(this._angle, new Vector3(0.0, 1.0, 0.0));
-        //this.updateLookAt(new Vector3(0.0, this._angle, 0.0))
+    public update(): void {
+        this.updateLookAt(this._focalPosition);
     }
 
     /**
      * Initializes Camera shader and uniforms.
      */
-    public initialize(){
+    public initialize(): void {
         this._shader = new Shader();
         this._shader.use();
         this._worldUniformLocation = this._shader.getUniformLocation('u_world');
@@ -83,6 +81,5 @@ export class Camera {
         gl.uniformMatrix4fv(this._worldUniformLocation, false, this._worldMatrix.toFloat32Array());
         gl.uniformMatrix4fv(this._viewUniformLocation, false, this._viewMatrix.toFloat32Array());
         gl.uniformMatrix4fv(this._projectionUniformLocation, false, this._projectionMatrix.toFloat32Array());
-        
     }
 }

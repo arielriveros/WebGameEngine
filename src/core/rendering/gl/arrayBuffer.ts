@@ -18,7 +18,7 @@ export class GLArrayBuffer extends Buffer {
     /**
      * Binds this buffer.
      */
-     public bind(): void {
+     public override bind(): void {
         gl.bindBuffer(this.target, this.buffer);
 
         // Checks for attribute location
@@ -54,7 +54,7 @@ export class GLArrayBuffer extends Buffer {
         this._attributes.push(info);
     }
 
-    public draw() {
+    public override draw(): void {
         gl.drawArrays(this.mode, 0, this.data.length/this._size);
     }
 }

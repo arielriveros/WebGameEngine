@@ -1,5 +1,6 @@
 import { gl } from "../render";
-import { Buffer } from "../gl/buffer";
+import { GLArrayBuffer } from "../gl/arrayBuffer";
+import { GLElementArrayBuffer } from "../gl/elementArrayBuffer";
 import { AttributeInformation } from "../interfaces";
 import { Shader } from "../shaders/shader";
 
@@ -8,11 +9,23 @@ import { Shader } from "../shaders/shader";
  */
 export class Shape {
     private _name: string;
-    private _buffer!: Buffer;
-    private _indexBuffer!: Buffer;
-    protected _vertices: number[];
-    protected _indices: number[] | null;
+    private _buffer!: GLArrayBuffer;
+    private _indexBuffer!: GLElementArrayBuffer;
+    private _vertices: number[];
+    private _indices: number[] | null;
     private _shader!:Shader;
+
+    public get name(): string {
+        return this._name;
+    }
+
+    protected set vertices(newVertices: number[]) {
+        this._vertices = newVertices;
+    }
+
+    protected set indices(newIndices: number[]) {
+        this._indices = newIndices;
+    }
 
     public constructor(name:string) {
         this._name = name;
@@ -30,10 +43,10 @@ export class Shape {
      * Loads current object's vertices into WebGL Buffer for rendering
      */
     public load(): void {
-        this._buffer = new Buffer(6, gl.FLOAT, gl.ARRAY_BUFFER, gl.TRIANGLES );
+        this._buffer = new GLArrayBuffer(6, gl.FLOAT, gl.TRIANGLES );
 
         if(this._indices) {
-            this._indexBuffer = new Buffer(6, gl.UNSIGNED_SHORT, gl.ELEMENT_ARRAY_BUFFER, gl.TRIANGLES);
+            this._indexBuffer = new GLElementArrayBuffer(gl.UNSIGNED_SHORT, gl.TRIANGLES);
             this._indexBuffer.bind();
             this._indexBuffer.pushData(this._indices);
             this._indexBuffer.upload();
@@ -55,7 +68,7 @@ export class Shape {
         this._buffer.upload();
     }
 
-    public update(deltaTime: number): void {}
+    public update(): void {}
 
     public draw(): void {
         this._buffer.bind();
@@ -79,7 +92,7 @@ export class Triangle extends Shape {
      */
     public constructor(name: string, base: number = 1, height: number = 1, color: number[] = [1.0, 1.0, 1.0]) {
         super(name);
-        super._vertices = [
+        this.vertices = [
         //  X       Y          Z    R         G         B
            -base/2, -height/2, 0.0, color[0], color[1], color[2],
             base/2, -height/2, 0.0, color[0], color[1], color[2],
@@ -98,7 +111,7 @@ export class Quad extends Shape {
      */
     public constructor(name: string, base: number = 1, height: number = 1, color: number[] = [1.0, 1.0, 1.0]) {
         super(name);
-        super._vertices = [
+        this.vertices = [
         //  X       Y          Z    R         G         B
            -base/2, -height/2, 0.0, color[0], color[1], color[2],
             base/2, -height/2, 0.0, color[0], color[1], color[2],
@@ -121,7 +134,7 @@ export class Cube extends Shape {
     public constructor(name: string, length: number = 1, color: number[] = [1.0, 1.0, 1.0]) {
         super(name);
         const l2 = length/2;
-        super._indices = [
+        this.indices = [
                 // Top
                 0, 1, 2,
                 0, 2, 3,
@@ -141,7 +154,7 @@ export class Cube extends Shape {
                 21, 20, 22,
                 22, 20, 23
             ];
-        super._vertices = [
+        this.vertices = [
         //   X   Y    Z   R         G         B
             // TOP
             -l2,  l2, -l2, color[0], color[1], color[2],
@@ -180,7 +193,7 @@ export class Cube extends Shape {
             l2, -l2, -l2, color[0], color[1], color[2],
         ];
 
-        super._indices = [
+        this.indices = [
             // Top
             0, 1, 2,
             0, 2, 3,
@@ -207,7 +220,7 @@ export class ColorCube extends Cube {
     public constructor(name: string, length: number = 1) {
         super(name);
         const l2 = length/2;
-        super._vertices = [
+        this.vertices = [
             //   X   Y    Z    R    G    B
                 // TOP
                 -l2,  l2, -l2, 1.0, 0.0, 0.0,

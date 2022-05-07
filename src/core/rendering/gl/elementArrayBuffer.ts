@@ -6,7 +6,7 @@ export class GLElementArrayBuffer extends Buffer {
         super(dataType, gl.ELEMENT_ARRAY_BUFFER, mode);
     }
 
-    public draw() {
+    public override draw(): void {
         gl.drawElements(this.mode, this.data.length, this.dataType, 0);
     }
 }

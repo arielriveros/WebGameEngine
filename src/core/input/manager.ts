@@ -1,5 +1,3 @@
-import { Camera } from "../rendering/graphics/camera";
-
 export class InputManager {
 
     private _body!:HTMLBodyElement;
@@ -20,14 +18,17 @@ export class InputManager {
     } 
 
     private KeyDown(event: KeyboardEvent): void{
+        event.preventDefault();
         //console.log(event);
     }
 
     private KeyUp(event: KeyboardEvent): void{
+        event.preventDefault();
         //console.log(event);
     }
 
     private MouseLeftClick(event: MouseEvent): void {
+        event.preventDefault();
         //console.log(event);
     }
 
@@ -37,6 +38,7 @@ export class InputManager {
     }
 
     private MouseMove(event: MouseEvent): void {
+        event.preventDefault();
         //console.log(event);
     }
 }

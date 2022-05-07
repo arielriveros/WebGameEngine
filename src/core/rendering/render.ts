@@ -1,8 +1,5 @@
-import { Shader } from "./shaders/shader";
-import { Matrix4x4 } from "../math/matrix";
-import { Vector3 } from "../math/vector";
 import { Camera } from "./graphics/camera";
-import * as SHAPE from "./graphics/shape";
+import { Scene } from "../world/scene";
 
 
 /**
@@ -12,30 +9,31 @@ export let gl: WebGLRenderingContext;
 
 export class Render{
 
-    private _canvas!:HTMLCanvasElement ;
-    private _shapes:SHAPE.Shape[] = [];
-    private _camera!:Camera;
+    private _canvas!: HTMLCanvasElement ;
+    private _camera!: Camera;
+    private _scene!: Scene;
 
-    public constructor(){
+    public constructor() {
         console.log("New Render Instance")
     }
 
-    public get canvas() { return this._canvas; }
+    public get canvas(): HTMLCanvasElement { return this._canvas; }
 
     /**
     * Initializes WebGL rendering context. 
     * @param elementID Id of the canvas element to render in.
     */
-    public initialize(elementID: string, camera: Camera): void {
+    public initialize(elementID: string): void {
         this.initializeContext(elementID);
-        
-        
-        this._shapes.push(new SHAPE.Shape('test0'));
-        this._shapes.push(new SHAPE.Triangle('test1', 1, 2, [0.0, 0.0, 0.0]));
-        this._shapes.push(new SHAPE.Quad("test2", 1, 1, [0.5, 0.2, 1.0]));
-        this._shapes.push(new SHAPE.ColorCube('test0'));
-        this._shapes.forEach( s => {s.load()});
-        
+    }
+
+    /**
+     * Renders the camera and scene.
+     * @param camera
+     * @param scene 
+     */
+    public render(camera: Camera, scene: Scene): void {
+        this._scene = scene;
         this._camera = camera;
         this._camera.initialize();
     }
@@ -43,17 +41,17 @@ export class Render{
     /**
      * Gets called every frame
      */
-    public update(){
+    public update(): void {
         // clears buffers to preset values.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        this._shapes.forEach( s => {s.draw()});
+        this._scene.update();
         this._camera.update();
     }
 
     /**
      * Resizes canvas to fit window.
      */
-    public resize(){
+    public resize(): void {
         if (this._canvas) {
             this._canvas.width = window.innerWidth;
             this._canvas.height = window.innerHeight;
@@ -61,7 +59,7 @@ export class Render{
         }
     }
 
-    private initializeContext(elementID: string){
+    private initializeContext(elementID: string): void {
         let canvas: HTMLCanvasElement;
         
         if (elementID !== undefined) {
@@ -91,7 +89,7 @@ export class Render{
         gl.enable(gl.CULL_FACE);
         gl.frontFace(gl.CCW);
         gl.cullFace(gl.BACK);
-        //gl.cullFace(gl.FRONT);
+        // gl.cullFace(gl.FRONT);
         this.resize();
     }
 }

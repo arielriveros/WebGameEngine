@@ -86,7 +86,7 @@ export class Buffer{
     /**
      * Adds data to this buffer.
      */
-    public pushData( data: number[]) {
+    public pushData( data: number[]): void {
         for (let d of data) {
             this._data.push(d);
         }
@@ -95,7 +95,7 @@ export class Buffer{
     /**
      * Uploads content from this buffer to the GPU
      */
-    public upload() {
+    public upload(): void {
         gl.bindBuffer(this._target, this._buffer);
         let dataToBuffer: ArrayBuffer | null = null;
         // Array type is based on the data type passed to the buffer.
@@ -134,5 +134,5 @@ export class Buffer{
     /** 
      * Draws this Buffer
      */
-    public draw() { }
+    public draw(): void { }
 }
