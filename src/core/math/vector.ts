@@ -1,84 +1,77 @@
 export class Vector2 {
-    private _x: number;
-    private _y: number;
+    protected _data: number[];
+
     public constructor(x: number = 0, y: number = 0) {
-        this._x = x;
-        this._y = y;
+        this._data = [x, y];
     }
+
     public get x(): number {
-        return this._x
+        return this._data[0];
     }
+
     public set x(value: number) {
-        this._x = value;
+        this._data[0] = value;
     }
+
     public get y(): number {
-        return this._y
+        return this._data[1];
     }
+
     public set y(value: number) {
-        this._y = value;
+        this._data[1] = value;
     }
+
+    public length(): number {
+        let sum: number = 0.0;
+        this._data.forEach( i => { sum += i * i; }  );
+        return Math.sqrt(sum);
+    }
+
     public toArray(): number[] {
-        return [this._x, this._y];
+        return this._data;
     }
+
     public toFloat32Array(): Float32Array {
         return new Float32Array(this.toArray());
     }
-    public length(): number {
-        let x2 = this._x * this._x;
-        let y2 = this._y * this._y;
-        return Math.sqrt(x2+y2);
+
+    public toString(): string {
+        const map = ['x', ', y', ', z', ', w']
+        let out = '{';
+        for (const [i, e] of this._data.entries()) {
+            out += `${map[i]}: ${e}`;
+        }
+        out += '}';
+        return out;
     }
 }
 
 export class Vector3 extends Vector2{
-    private _z: number;
     public constructor(x: number = 0, y: number = 0, z: number = 0) {
         super(x, y);
-        this._z = z;
+        this._data.push(z);
     }
+
     public get z(): number {
-        return this._z;
+        return this._data[2];
     }
+
     public set z(value: number) {
-        this._z = value;
-    }
-    public toArray(): number[] {
-        return [this.x, this.y, this._z];
-    }
-    public toFloat32Array(): Float32Array {
-        return new Float32Array(this.toArray());
-    }
-    public length(): number {
-        let x2 = this.x * this.x;
-        let y2 = this.y * this.y;
-        let z2 = this._z * this._z;
-        return Math.sqrt(x2+y2+z2);
+        this._data[2] = value;
     }
 }
 
 export class Vector4 extends Vector3 {
-    private _w: number;
     public constructor(x: number = 0, y: number = 0, z: number = 0, w: number = 0) {
         super(x, y, z);
-        this._w = w;
+        this._data.push(w);
     }
+
     public get w(): number {
-        return this._w;
+        return this._data[3];
     }
+
     public set w(value: number) {
-        this._w = value;
-    }
-    public toArray(): number[] {
-        return [this.x, this.y, this.z, this._w];
-    }
-    public toFloat32Array(): Float32Array {
-        return new Float32Array(this.toArray());
-    }
-    public length(): number {
-        let x2 = this.x * this.x;
-        let y2 = this.y * this.y;
-        let z2 = this.z * this.z;
-        let w2 = this._w * this._w;
-        return Math.sqrt(x2+y2+z2+w2);
+        this._data[3] = value;
     }
 }
