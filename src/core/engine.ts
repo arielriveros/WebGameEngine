@@ -1,9 +1,9 @@
+import { Game } from '../game/game';
 import { InputManager } from './input/manager';
 import { Vector3 } from './math/vector';
 import { Camera } from './rendering/graphics/camera';
 import { Render } from './rendering/render';
 import { Scene } from './world/scene';
-import * as SHAPE from './rendering/graphics/shape'
 
 /**
  *  Main Engine Class 
@@ -11,16 +11,13 @@ import * as SHAPE from './rendering/graphics/shape'
 export class Engine{
     private _render:Render;
     private _input: InputManager;
-    private _camera: Camera;
-    private _scene: Scene;
-
+    private _game: Game;
 
     public constructor() {
         console.log("New Game Instance");
         this._render = new Render();
         this._input = new InputManager();
-        this._camera = new Camera(new Vector3(0.5, 0, 0.5));
-        this._scene = new Scene();
+        this._game = new Game();
     }
     /** 
      * Initializes the engine and starts the game loop.
@@ -28,14 +25,8 @@ export class Engine{
     public start(): void {
         this._input.initialize();
         this._render.initialize("render-viewport");
-
-        /* this._scene.addShape(new SHAPE.Shape('test0'));
-        this._scene.addShape(new SHAPE.Triangle('test1', 1, 2, [0.0, 0.0, 0.0]));
-        this._scene.addShape(new SHAPE.Quad("test2", 1, 1, [0.5, 0.2, 1.0])); */
-        this._scene.addShape(new SHAPE.ColorCube('test0', 0.2));
-
-        this._render.render(this._camera, this._scene);
-        
+        this._game.start();
+        this._render.render(this._game.camera, this._game.scene);
         this.loop();
     }
 
@@ -49,20 +40,8 @@ export class Engine{
      * Main game loop, called every frame.
      */
     private loop(): void {
-        this._render.update();
-        if(this._input.isKeyDown('ArrowLeft')) {
-            this._camera.move({'x': 0.0, 'y': 0.0, 'z': 0.02});
-        }
-        if(this._input.isKeyDown('ArrowRight')) {
-            this._camera.move({'x': 0.0, 'y': 0.0, 'z': -0.02});
-        }
-        if(this._input.isKeyDown('ArrowUp')) {
-            this._camera.move({'x': 0.0, 'y': 0.02, 'z': 0.0});
-        }
-        if(this._input.isKeyDown('ArrowDown')) {
-            this._camera.move({'x': 0.0, 'y': -0.02, 'z': 0.0});
-        }
-        
+        this._game.inputListen(this._input);
+        this._render.update();        
         requestAnimationFrame(this.loop.bind( this ));
     }
 }

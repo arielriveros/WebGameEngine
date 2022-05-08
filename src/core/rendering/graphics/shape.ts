@@ -29,8 +29,6 @@ export class Shape {
 
     public constructor(name:string) {
         this._name = name;
-        this._shader = new Shader();
-        this._shader.use();
         this._vertices = [
         // X   Y    Z    R    G    B
         -0.5, -0.5, 0.0, 1.0, 0.0, 0.0,
@@ -43,6 +41,8 @@ export class Shape {
      * Loads current object's vertices into WebGL Buffer for rendering
      */
     public load(): void {
+        this._shader = new Shader();
+        this._shader.use();
         this._buffer = new GLArrayBuffer(6, gl.FLOAT, gl.TRIANGLES );
 
         if(this._indices) {

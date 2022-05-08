@@ -34,6 +34,7 @@ export class Render{
      */
     public render(camera: Camera, scene: Scene): void {
         this._scene = scene;
+        this._scene.load();
         this._camera = camera;
         this._camera.initialize();
     }
