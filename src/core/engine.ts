@@ -19,23 +19,23 @@ export class Engine{
         console.log("New Game Instance");
         this._render = new Render();
         this._input = new InputManager();
-        this._camera = new Camera(new Vector3( 1, 1, 1));
+        this._camera = new Camera(new Vector3(0.5, 0, 0.5));
         this._scene = new Scene();
     }
     /** 
      * Initializes the engine and starts the game loop.
      */
     public start(): void {
-
+        this._input.initialize();
         this._render.initialize("render-viewport");
 
-        this._scene.addShape(new SHAPE.Shape('test0'));
+        /* this._scene.addShape(new SHAPE.Shape('test0'));
         this._scene.addShape(new SHAPE.Triangle('test1', 1, 2, [0.0, 0.0, 0.0]));
-        this._scene.addShape(new SHAPE.Quad("test2", 1, 1, [0.5, 0.2, 1.0]));
+        this._scene.addShape(new SHAPE.Quad("test2", 1, 1, [0.5, 0.2, 1.0])); */
         this._scene.addShape(new SHAPE.ColorCube('test0', 0.2));
 
         this._render.render(this._camera, this._scene);
-        this._input.initialize();
+        
         this.loop();
     }
 
@@ -50,8 +50,19 @@ export class Engine{
      */
     private loop(): void {
         this._render.update();
-        //this._input.listen();
-        //this._camera.move({'x': 0.0, 'y': 0.0, 'z': 0.002});
+        if(this._input.isKeyDown('ArrowLeft')) {
+            this._camera.move({'x': 0.0, 'y': 0.0, 'z': 0.02});
+        }
+        if(this._input.isKeyDown('ArrowRight')) {
+            this._camera.move({'x': 0.0, 'y': 0.0, 'z': -0.02});
+        }
+        if(this._input.isKeyDown('ArrowUp')) {
+            this._camera.move({'x': 0.0, 'y': 0.02, 'z': 0.0});
+        }
+        if(this._input.isKeyDown('ArrowDown')) {
+            this._camera.move({'x': 0.0, 'y': -0.02, 'z': 0.0});
+        }
+        
         requestAnimationFrame(this.loop.bind( this ));
     }
 }
