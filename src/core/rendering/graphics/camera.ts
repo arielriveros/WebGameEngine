@@ -48,16 +48,19 @@ export class Camera {
     }
 
     private updatePosition(newPos: Vector3): void {
+        this._shader.use();
         Matrix4x4.translate(this._worldMatrix, new Matrix4x4(), newPos);
         gl.uniformMatrix4fv(this._worldUniformLocation, false, this._worldMatrix.toFloat32Array());
     }
 
     private updateRotation(angle: number, axis: Vector3): void {
+        this._shader.use();
         Matrix4x4.rotate(this._worldMatrix, new Matrix4x4(), angle, axis);
         gl.uniformMatrix4fv(this._worldUniformLocation, false, this._worldMatrix.toFloat32Array());
     }
 
     private updateLookAt(focalPoint: Vector3): void {
+        this._shader.use();
         Matrix4x4.lookAt(this._viewMatrix, this._camPosition, focalPoint, new Vector3(0, 1, 0));
         gl.uniformMatrix4fv(this._viewUniformLocation, false, this._viewMatrix.toFloat32Array());
     }
