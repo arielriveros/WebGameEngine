@@ -9,15 +9,16 @@ export class Scene {
 
     public addShape(shape: Shape): void {
         this._shapes.push(shape);
-    }
-
-    public load() {
-        for (const i of this._shapes) {
-            i.load();
-        }
+        shape.load();
     }
 
     public update(): void {
+        for (const i of this._shapes) {
+            i.update();
+        }
+    }
+
+    public draw(): void {
         for (const i of this._shapes) {
             i.draw();
         }

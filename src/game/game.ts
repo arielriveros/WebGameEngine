@@ -9,6 +9,7 @@ export class Game{
 
     private _camera!: Camera;
     private _scene!: Scene;
+    private _x!: SHAPE.Shape;
 
     public constructor() { }
 
@@ -23,7 +24,9 @@ export class Game{
     public start(): void {
         this._camera = new Camera(new Vector3(0.5, 0, 0.5));
         this._scene = new Scene();
-        this._scene.addShape(new SHAPE.Shape('test0'));
+        this._x = new SHAPE.Shape('test0', new Vector3(1, 1, 1))
+        this._scene.addShape(this._x);
+        console.log(this._x)
         this._scene.addShape(new SHAPE.Triangle('test1', 1, 2, [0.0, 0.0, 0.0]));
         this._scene.addShape(new SHAPE.Quad("test2", 1, 1, [0.5, 0.2, 1.0]));
         this._scene.addShape(new SHAPE.ColorCube('test0', 0.2));
@@ -41,6 +44,10 @@ export class Game{
         }
         if(input.isKeyDown('ArrowDown')) {
             this._camera.move({'x': 0.0, 'y': -0.02, 'z': 0.0});
+        }
+        if(input.isKeyDown('KeyQ')) {
+            console.log('Q');
+            this._x.move({'x': 0.0, 'y': -0.02, 'z': 0.0});
         }
     }
 }

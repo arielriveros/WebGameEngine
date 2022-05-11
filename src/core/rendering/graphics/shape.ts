@@ -3,6 +3,8 @@ import { GLArrayBuffer } from "../gl/arrayBuffer";
 import { GLElementArrayBuffer } from "../gl/elementArrayBuffer";
 import { AttributeInformation } from "../interfaces";
 import { Shader } from "../shaders/shader";
+import { Matrix4x4 } from "../../math/matrix";
+import { Vector3 } from "../../math/vector";
 
 /**
  * Basic Shape class for rendering vertices on screen using a shader
@@ -14,6 +16,9 @@ export class Shape {
     private _vertices: number[];
     private _indices: number[] | null;
     private _shader!:Shader;
+    private _position: Vector3;
+    private _translationMatrix!: Float32Array;
+    private _translateUniformLocation!: WebGLUniformLocation;
 
     public get name(): string {
         return this._name;
@@ -27,7 +32,7 @@ export class Shape {
         this._indices = newIndices;
     }
 
-    public constructor(name:string) {
+    public constructor(name:string, position: Vector3 = new Vector3() ) {
         this._name = name;
         this._vertices = [
         // X   Y    Z    R    G    B
@@ -35,6 +40,7 @@ export class Shape {
          0.5, -0.5, 0.0, 0.0, 1.0, 0.0,
          0.0,  0.5, 0.0, 0.0, 0.0, 1.0];
          this._indices = null;
+         this._position = position;
     }
 
     /**
@@ -64,11 +70,31 @@ export class Shape {
             offset: 3 };
         this._buffer.addAttribLocation(colorAttribute);
 
+        /* this._translateUniformLocation = this._shader.getUniformLocation('u_trans');
+        gl.uniform3fv(this._translateUniformLocation, this._position.toFloat32Array()); */
+
+        this._translateUniformLocation = this._shader.getUniformLocation('u_world');
+        let tx = 0.5;
+        let ty = 0.5;
+        let tz = 0.5;
+        this._translationMatrix = new Float32Array([
+            1,0,0,0,
+            0,1,0,0,
+            0,0,1,0,
+            tx,ty,tz,1
+        ])
+        gl.uniformMatrix4fv(this._translateUniformLocation, false, this._translationMatrix);
+
         this._buffer.pushData(this._vertices);
         this._buffer.upload();
     }
 
-    public update(): void {}
+    public update(): void {
+        this._shader.use();
+        
+        //gl.uniform3fv(this._translateUniformLocation, this._position.toFloat32Array());
+        gl.uniformMatrix4fv(this._translateUniformLocation, false, this._translationMatrix);
+    }
 
     public draw(): void {
         this._buffer.bind();
@@ -77,6 +103,18 @@ export class Shape {
         }
         else{
             this._buffer.draw();
+        }
+    }
+
+    public move(delta:any): void {
+        if ('x' in delta) {
+            this._position.x += delta.x;
+        }
+        if ('y' in delta) {
+            this._position.y += delta.y;
+        }
+        if ('z' in delta) {
+            this._position.z += delta.z;
         }
     }
 }

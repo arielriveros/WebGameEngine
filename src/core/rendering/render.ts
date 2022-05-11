@@ -34,7 +34,6 @@ export class Render{
      */
     public render(camera: Camera, scene: Scene): void {
         this._scene = scene;
-        this._scene.load();
         this._camera = camera;
         this._camera.initialize();
     }
@@ -47,6 +46,7 @@ export class Render{
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         this._scene.update();
         this._camera.update();
+        this._scene.draw();
     }
 
     /**
