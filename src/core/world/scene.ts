@@ -13,6 +13,10 @@ export class Scene {
         return this._sceneShader;
     }
 
+    public get shapes() {
+        return this._shapes;
+    }
+
     public addShape(shape: Shape): void {
         this._shapes.push(shape);
     }

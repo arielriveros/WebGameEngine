@@ -36,9 +36,8 @@ export class Render{
     public render(camera: Camera, scene: Scene): void {
         this._scene = scene;
         this._scene.initialize();
-        let shader: Shader = this._scene.shader;
         this._camera = camera;
-        this._camera.initialize(shader);
+        this._camera.initialize(this._scene);
     }
 
     /**

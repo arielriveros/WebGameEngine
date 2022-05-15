@@ -31,6 +31,14 @@ export class Shape {
         return this._name;
     }
 
+    public get shader(): Shader {
+        return this._shader;
+    }
+
+    public get position(): Vector3 {
+        return this._position;
+    }
+
     protected set vertices(newVertices: number[]) {
         this._vertices = newVertices;
     }
