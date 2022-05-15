@@ -46,8 +46,8 @@ export class Shape {
     /**
      * Loads current object's vertices into WebGL Buffer for rendering
      */
-    public load(): void {
-        this._shader = new Shader();
+    public load(shader: Shader = new Shader()): void {
+        this._shader = shader;
         this._shader.use();
         this._buffer = new GLArrayBuffer(6, gl.FLOAT, gl.TRIANGLES );
 
@@ -70,20 +70,7 @@ export class Shape {
             offset: 3 };
         this._buffer.addAttribLocation(colorAttribute);
 
-        /* this._translateUniformLocation = this._shader.getUniformLocation('u_trans');
-        gl.uniform3fv(this._translateUniformLocation, this._position.toFloat32Array()); */
-
-        this._translateUniformLocation = this._shader.getUniformLocation('u_world');
-        let tx = 0.5;
-        let ty = 0.5;
-        let tz = 0.5;
-        this._translationMatrix = new Float32Array([
-            1,0,0,0,
-            0,1,0,0,
-            0,0,1,0,
-            tx,ty,tz,1
-        ])
-        gl.uniformMatrix4fv(this._translateUniformLocation, false, this._translationMatrix);
+        this._translateUniformLocation = this._shader.getUniformLocation('u_trans');
 
         this._buffer.pushData(this._vertices);
         this._buffer.upload();
@@ -91,9 +78,9 @@ export class Shape {
 
     public update(): void {
         this._shader.use();
-        
-        //gl.uniform3fv(this._translateUniformLocation, this._position.toFloat32Array());
-        gl.uniformMatrix4fv(this._translateUniformLocation, false, this._translationMatrix);
+        //console.log(gl.getUniform(this._shader.program, this._translateUniformLocation));
+        gl.uniform3fv(this._translateUniformLocation, this._position.toFloat32Array());
+        this.draw();
     }
 
     public draw(): void {
@@ -106,16 +93,8 @@ export class Shape {
         }
     }
 
-    public move(delta:any): void {
-        if ('x' in delta) {
-            this._position.x += delta.x;
-        }
-        if ('y' in delta) {
-            this._position.y += delta.y;
-        }
-        if ('z' in delta) {
-            this._position.z += delta.z;
-        }
+    public move(delta: Vector3): void {
+        this._position.add(delta);
     }
 }
 

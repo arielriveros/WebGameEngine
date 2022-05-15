@@ -39,18 +39,6 @@ export class Camera {
         this._camPosition.add(delta);
     }
 
-    private updatePosition(newPos: Vector3): void {
-        this._shader.use();
-        Matrix4x4.translate(this._worldMatrix, new Matrix4x4(), newPos);
-        gl.uniformMatrix4fv(this._worldUniformLocation, false, this._worldMatrix.toFloat32Array());
-    }
-
-    private updateRotation(angle: number, axis: Vector3): void {
-        this._shader.use();
-        Matrix4x4.rotate(this._worldMatrix, new Matrix4x4(), angle, axis);
-        gl.uniformMatrix4fv(this._worldUniformLocation, false, this._worldMatrix.toFloat32Array());
-    }
-
     private updateLookAt(focalPoint: Vector3): void {
         this._shader.use();
         Matrix4x4.lookAt(this._viewMatrix, this._camPosition, focalPoint, new Vector3(0, 1, 0));
@@ -61,14 +49,15 @@ export class Camera {
      * Runs every frame.
      */
     public update(): void {
+        this._shader.use();
         this.updateLookAt(this._focalPosition);
     }
 
     /**
      * Initializes Camera shader and uniforms.
      */
-    public initialize(): void {
-        this._shader = new Shader();
+    public initialize(shader: Shader = new Shader()): void {
+        this._shader = shader;
         this._shader.use();
         this._worldUniformLocation = this._shader.getUniformLocation('u_world');
         this._viewUniformLocation = this._shader.getUniformLocation('u_view');

@@ -1,5 +1,6 @@
 import { Camera } from "./graphics/camera";
 import { Scene } from "../world/scene";
+import { Shader } from "./shaders/shader";
 
 
 /**
@@ -34,8 +35,10 @@ export class Render{
      */
     public render(camera: Camera, scene: Scene): void {
         this._scene = scene;
+        this._scene.initialize();
+        let shader: Shader = this._scene.shader;
         this._camera = camera;
-        this._camera.initialize();
+        this._camera.initialize(shader);
     }
 
     /**
@@ -44,9 +47,8 @@ export class Render{
     public update(): void {
         // clears buffers to preset values.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        this._scene.update();
         this._camera.update();
-        this._scene.draw();
+        this._scene.update();
     }
 
     /**
