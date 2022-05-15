@@ -1,7 +1,5 @@
 import { Camera } from "./graphics/camera";
 import { Scene } from "../world/scene";
-import { Shader } from "./shaders/shader";
-
 
 /**
  * WebGL Global interface for rendering context

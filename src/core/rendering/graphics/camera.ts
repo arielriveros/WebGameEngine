@@ -1,7 +1,6 @@
-import { Matrix4x4 } from "../../math/matrix";
-import { Shader } from "../shaders/shader";
 import { gl } from "../render";
 import { Vector3 } from "../../math/vector";
+import { Matrix4x4 } from "../../math/matrix";
 import { Scene } from "../../world/scene";
 
 export class Camera {
@@ -13,10 +12,6 @@ export class Camera {
     private _worldMatrix: Matrix4x4;
     private _viewMatrix: Matrix4x4;
     private _projectionMatrix: Matrix4x4;
-
-    private _uWorld!: WebGLUniformLocation;
-    private _uView!: WebGLUniformLocation;
-    private _uProj!: WebGLUniformLocation;
 
     public constructor(initialPosition: Vector3 = new Vector3(0.0, 0.0, 0.0), orthographic: boolean = false) {
         this._camPosition = initialPosition;
@@ -37,18 +32,19 @@ export class Camera {
         this._camPosition.add(delta);
     }
 
-    private updateLookAt(focalPoint: Vector3): void {
-        Matrix4x4.lookAt(this._viewMatrix, this._camPosition, focalPoint, new Vector3(0, 1, 0));
-        gl.uniformMatrix4fv(this._uView, false, this._viewMatrix.toFloat32Array());
-    }
-
     /**
      * Runs every frame.
      */
     public update(): void {
         for (const s of this._scene.shapes){
             s.shader.use();
-            this.updateLookAt(this._focalPosition);
+            Matrix4x4.lookAt(this._viewMatrix, this._camPosition, this._focalPosition, new Vector3(0, 1, 0));
+            let uWorld: WebGLUniformLocation = s.shader.getUniformLocation('u_world');
+            let uView: WebGLUniformLocation = s.shader.getUniformLocation('u_view');
+            let uProj: WebGLUniformLocation = s.shader.getUniformLocation('u_proj');
+            gl.uniformMatrix4fv(uWorld, false, this._worldMatrix.toFloat32Array());
+            gl.uniformMatrix4fv(uView, false, this._viewMatrix.toFloat32Array());
+            gl.uniformMatrix4fv(uProj, false, this._projectionMatrix.toFloat32Array());
         }
     }
 
@@ -56,16 +52,6 @@ export class Camera {
      * Initializes Camera shader and uniforms.
      */
     public initialize(scene: Scene): void {
-        this._scene = scene;
-        for (const s of this._scene.shapes){
-            s.shader.use();
-            this._uWorld = s.shader.getUniformLocation('u_world');
-            this._uView = s.shader.getUniformLocation('u_view');
-            this._uProj = s.shader.getUniformLocation('u_proj');
-            gl.uniformMatrix4fv(this._uWorld, false, this._worldMatrix.toFloat32Array());
-            gl.uniformMatrix4fv(this._uView, false, this._viewMatrix.toFloat32Array());
-            gl.uniformMatrix4fv(this._uProj, false, this._projectionMatrix.toFloat32Array());
-        }
-        
+        this._scene = scene;       
     }
 }

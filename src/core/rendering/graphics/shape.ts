@@ -3,7 +3,6 @@ import { GLArrayBuffer } from "../gl/arrayBuffer";
 import { GLElementArrayBuffer } from "../gl/elementArrayBuffer";
 import { AttributeInformation } from "../interfaces";
 import { Shader } from "../shaders/shader";
-import { Matrix4x4 } from "../../math/matrix";
 import { Vector3 } from "../../math/vector";
 
 interface Options{
@@ -61,8 +60,8 @@ export class Shape {
     /**
      * Loads current object's vertices into WebGL Buffer for rendering
      */
-    public load(shader: Shader = new Shader()): void {
-        this._shader = shader;
+    public load(): void {
+        this._shader = new Shader();
         this._shader.use();
         this._buffer = new GLArrayBuffer(6, gl.FLOAT, gl.TRIANGLES );
 
@@ -93,7 +92,6 @@ export class Shape {
 
     public update(): void {
         this._shader.use();
-        //console.log(gl.getUniform(this._shader.program, this._translateUniformLocation));
         gl.uniform3fv(this._translateUniformLocation, this._position.toFloat32Array());
         this.draw();
     }

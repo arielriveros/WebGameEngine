@@ -1,9 +1,6 @@
 import { Game } from '../game/game';
 import { InputManager } from './input/manager';
-import { Vector3 } from './math/vector';
-import { Camera } from './rendering/graphics/camera';
 import { Render } from './rendering/render';
-import { Scene } from './world/scene';
 
 /**
  *  Main Engine Class 
