@@ -131,6 +131,14 @@ export class Matrix4x4 {
         return out;
     } 
 
+    public static translation( out: Matrix4x4, trans: Vector3) {
+        out._data[13] = trans.x;
+        out._data[14] = trans.y;
+        out._data[15] = trans.z;
+
+        return out;
+    }
+
     public static translate(out:Matrix4x4, a:Matrix4x4, v: Vector3) {
         /* GLMATRIX LIBRARY IMPLEMENTATION */
         let x = v.x,

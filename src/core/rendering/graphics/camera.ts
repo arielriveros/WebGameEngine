@@ -35,16 +35,8 @@ export class Camera {
         }
     }
 
-    public move(delta:any): void {
-        if ('x' in delta) {
-            this._camPosition.x += delta.x;
-        }
-        if ('y' in delta) {
-            this._camPosition.y += delta.y;
-        }
-        if ('z' in delta) {
-            this._camPosition.z += delta.z;
-        }
+    public move(delta: Vector3): void {
+        this._camPosition.add(delta);
     }
 
     private updatePosition(newPos: Vector3): void {

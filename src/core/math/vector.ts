@@ -44,6 +44,12 @@ export class Vector2 {
         out += '}';
         return out;
     }
+
+    public add(v: Vector3): void {
+        for (const i in this._data) {
+            this._data[i] += v._data[i];
+        }
+    }
 }
 
 export class Vector3 extends Vector2{

@@ -34,16 +34,16 @@ export class Game{
 
     public inputListen(input: InputManager): void {
         if(input.isKeyDown('ArrowLeft')) {
-            this._camera.move({'x': 0.0, 'y': 0.0, 'z': 0.02});
+            this._camera.move(new Vector3(0, 0, 0.02));
         }
         if(input.isKeyDown('ArrowRight')) {
-            this._camera.move({'x': 0.0, 'y': 0.0, 'z': -0.02});
+            this._camera.move(new Vector3(0, 0, -0.02));
         }
         if(input.isKeyDown('ArrowUp')) {
-            this._camera.move({'x': 0.0, 'y': 0.02, 'z': 0.0});
+            this._camera.move(new Vector3(0, 0.02, 0));
         }
         if(input.isKeyDown('ArrowDown')) {
-            this._camera.move({'x': 0.0, 'y': -0.02, 'z': 0.0});
+            this._camera.move(new Vector3(0, -0.02, 0));
         }
         if(input.isKeyDown('KeyQ')) {
             console.log('Q');
