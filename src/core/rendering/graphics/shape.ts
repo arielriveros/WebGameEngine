@@ -6,6 +6,13 @@ import { Shader } from "../shaders/shader";
 import { Matrix4x4 } from "../../math/matrix";
 import { Vector3 } from "../../math/vector";
 
+interface Options{
+    height?: number,
+    base?: number,
+    color?: number[],
+    position?: Vector3
+}
+
 /**
  * Basic Shape class for rendering vertices on screen using a shader
  */
@@ -107,8 +114,13 @@ export class Triangle extends Shape {
      * @param height Length from the base to the opposite vertex. i.e. Height of a triangle.
      * @param color RGB Color of the triangle.
      */
-    public constructor(name: string, base: number = 1, height: number = 1, color: number[] = [1.0, 1.0, 1.0]) {
-        super(name);
+    public constructor(
+        name: string, options: Options = {}) {
+        let base: number = options.base ? options.base : 1;
+        let height: number = options.height ? options.height : 1;
+        let color: number[] = options.color ? options.color : [0, 0, 0];
+        let position: Vector3 = options.position ? options.position : new Vector3(0, 0, 0);
+        super(name, position);
         this.vertices = [
         //  X       Y          Z    R         G         B
            -base/2, -height/2, 0.0, color[0], color[1], color[2],
@@ -126,8 +138,12 @@ export class Quad extends Shape {
      * @param height Length of Quad height.
      * @param color RGB Color of the Quad.
      */
-    public constructor(name: string, base: number = 1, height: number = 1, color: number[] = [1.0, 1.0, 1.0]) {
-        super(name);
+    public constructor(name: string, options: Options = {}) {
+        let base: number = options.base ? options.base : 1;
+        let height: number = options.height ? options.height : 1;
+        let color: number[] = options.color ? options.color : [0, 0, 0];
+        let position: Vector3 = options.position ? options.position : new Vector3(0, 0, 0);
+        super(name, position);
         this.vertices = [
         //  X       Y          Z    R         G         B
            -base/2, -height/2, 0.0, color[0], color[1], color[2],
@@ -145,32 +161,35 @@ export class Cube extends Shape {
     /**
      * Cube Basic 3D Shape. Consists of 6 Quads, 1 for each face.
      * @param name Custom name of this object.
-     * @param length Length of each cube's edge.
+     * @param base Length of each cube's edge.
      * @param color Color of the cube
      */
-    public constructor(name: string, length: number = 1, color: number[] = [1.0, 1.0, 1.0]) {
-        super(name);
-        const l2 = length/2;
+    public constructor(name: string, options: Options = {}) {
+        let base: number = options.base ? options.base : 1;
+        let color: number[] = options.color ? options.color : [0, 0, 0];
+        let position: Vector3 = options.position ? options.position : new Vector3(0, 0, 0);
+        super(name, position);
+        const l2 = base/2;
         this.indices = [
-                // Top
-                0, 1, 2,
-                0, 2, 3,
-                // Left
-                5, 4, 6,
-                6, 4, 7,
-                // Right
-                8, 9, 10,
-                8, 10, 11,
-                // Front
-                13, 12, 14,
-                15, 14, 12,
-                // Back
-                16, 17, 18,
-                16, 18, 19,
-                // Bottom
-                21, 20, 22,
-                22, 20, 23
-            ];
+            // Top
+            0, 1, 2,
+            0, 2, 3,
+            // Left
+            5, 4, 6,
+            6, 4, 7,
+            // Right
+            8, 9, 10,
+            8, 10, 11,
+            // Front
+            13, 12, 14,
+            15, 14, 12,
+            // Back
+            16, 17, 18,
+            16, 18, 19,
+            // Bottom
+            21, 20, 22,
+            22, 20, 23
+        ];
         this.vertices = [
         //   X   Y    Z   R         G         B
             // TOP
@@ -234,46 +253,46 @@ export class Cube extends Shape {
 }
 
 export class ColorCube extends Cube {
-    public constructor(name: string, length: number = 1) {
-        super(name);
-        const l2 = length/2;
+    public constructor(name: string, options: Options = {}) {
+        super(name, options);
+        const l2 = options.base ? options.base/2 : 0.5;
         this.vertices = [
-            //   X   Y    Z    R    G    B
-                // TOP
-                -l2,  l2, -l2, 1.0, 0.0, 0.0,
-                -l2,  l2,  l2, 1.0, 0.0, 0.0,
-                 l2,  l2,  l2, 1.0, 0.0, 0.0,
-                 l2,  l2, -l2, 1.0, 0.0, 0.0,
-     
-                // LEFT
-                -l2,  l2,  l2, 0.0, 1.0, 0.0,
-                -l2, -l2,  l2, 0.0, 1.0, 0.0,
-                -l2, -l2, -l2, 0.0, 1.0, 0.0,
-                -l2,  l2, -l2, 0.0, 1.0, 0.0,
+        //   X   Y    Z    R    G    B
+            // TOP
+            -l2,  l2, -l2, 1.0, 0.0, 0.0,
+            -l2,  l2,  l2, 1.0, 0.0, 0.0,
+             l2,  l2,  l2, 1.0, 0.0, 0.0,
+             l2,  l2, -l2, 1.0, 0.0, 0.0,
     
-                // Right
-                 l2,  l2,  l2, 0.0, 0.0, 1.0,
-                 l2, -l2,  l2, 0.0, 0.0, 1.0,
-                 l2, -l2, -l2, 0.0, 0.0, 1.0,
-                 l2,  l2, -l2, 0.0, 0.0, 1.0,
-    
-                // Front
-                l2,  l2,  l2, 1.0, 1.0, 0.0,
-                l2, -l2,  l2, 1.0, 1.0, 0.0,
-               -l2, -l2,  l2, 1.0, 1.0, 0.0,
-               -l2,  l2,  l2, 1.0, 1.0, 0.0,
-    
-                // Back
-                l2,  l2, -l2, 1.0, 0.0, 1.0,
-                l2, -l2, -l2, 1.0, 0.0, 1.0,
-               -l2, -l2, -l2, 1.0, 0.0, 1.0,
-               -l2,  l2, -l2, 1.0, 0.0, 1.0,
-    
-                // Bottom
-               -l2, -l2, -l2, 0.0, 1.0, 1.0,
-               -l2, -l2,  l2, 0.0, 1.0, 1.0,
-                l2, -l2,  l2, 0.0, 1.0, 1.0,
-                l2, -l2, -l2, 0.0, 1.0, 1.0,
-            ];
+            // LEFT
+            -l2,  l2,  l2, 0.0, 1.0, 0.0,
+            -l2, -l2,  l2, 0.0, 1.0, 0.0,
+            -l2, -l2, -l2, 0.0, 1.0, 0.0,
+            -l2,  l2, -l2, 0.0, 1.0, 0.0,
+
+            // Right
+             l2,  l2,  l2, 0.0, 0.0, 1.0,
+             l2, -l2,  l2, 0.0, 0.0, 1.0,
+             l2, -l2, -l2, 0.0, 0.0, 1.0,
+             l2,  l2, -l2, 0.0, 0.0, 1.0,
+
+            // Front
+            l2,  l2,  l2, 1.0, 1.0, 0.0,
+            l2, -l2,  l2, 1.0, 1.0, 0.0,
+           -l2, -l2,  l2, 1.0, 1.0, 0.0,
+           -l2,  l2,  l2, 1.0, 1.0, 0.0,
+
+            // Back
+            l2,  l2, -l2, 1.0, 0.0, 1.0,
+            l2, -l2, -l2, 1.0, 0.0, 1.0,
+           -l2, -l2, -l2, 1.0, 0.0, 1.0,
+           -l2,  l2, -l2, 1.0, 0.0, 1.0,
+
+            // Bottom
+           -l2, -l2, -l2, 0.0, 1.0, 1.0,
+           -l2, -l2,  l2, 0.0, 1.0, 1.0,
+            l2, -l2,  l2, 0.0, 1.0, 1.0,
+            l2, -l2, -l2, 0.0, 1.0, 1.0,
+        ];
     }
 }
