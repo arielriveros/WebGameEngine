@@ -2,14 +2,15 @@ import { gl } from "../render";
 import { GLArrayBuffer } from "../gl/arrayBuffer";
 import { GLElementArrayBuffer } from "../gl/elementArrayBuffer";
 import { AttributeInformation } from "../interfaces";
-import { Shader } from "../shaders/shader";
+import { Shader, SimpleShader, SimpleShaderTest } from "../shaders/shader";
 import { Vector3 } from "../../math/vector";
 
 interface Options{
     height?: number,
     base?: number,
     color?: number[],
-    position?: Vector3
+    position?: Vector3,
+    shader?: Shader
 }
 
 /**
@@ -23,7 +24,6 @@ export class Shape {
     private _indices: number[] | null;
     private _shader!:Shader;
     private _position: Vector3;
-    private _translationMatrix!: Float32Array;
     private _translateUniformLocation!: WebGLUniformLocation;
 
     public get name(): string {
@@ -46,7 +46,7 @@ export class Shape {
         this._indices = newIndices;
     }
 
-    public constructor(name:string, position: Vector3 = new Vector3() ) {
+    public constructor(name:string, position: Vector3 = new Vector3(), shader: Shader = new SimpleShader() ) {
         this._name = name;
         this._vertices = [
         // X   Y    Z    R    G    B
@@ -55,13 +55,13 @@ export class Shape {
          0.0,  0.5, 0.0, 0.0, 0.0, 1.0];
          this._indices = null;
          this._position = position;
+         this._shader = shader;
     }
 
     /**
      * Loads current object's vertices into WebGL Buffer for rendering
      */
     public load(): void {
-        this._shader = new Shader();
         this._shader.use();
         this._buffer = new GLArrayBuffer(6, gl.FLOAT, gl.TRIANGLES );
 
@@ -126,7 +126,8 @@ export class Triangle extends Shape {
         let height: number = options.height ? options.height : 1;
         let color: number[] = options.color ? options.color : [0, 0, 0];
         let position: Vector3 = options.position ? options.position : new Vector3(0, 0, 0);
-        super(name, position);
+        let shader: Shader = options.shader ? options.shader : new SimpleShader();
+        super(name, position, shader);
         this.vertices = [
         //  X       Y          Z    R         G         B
            -base/2, -height/2, 0.0, color[0], color[1], color[2],
@@ -149,7 +150,8 @@ export class Quad extends Shape {
         let height: number = options.height ? options.height : 1;
         let color: number[] = options.color ? options.color : [0, 0, 0];
         let position: Vector3 = options.position ? options.position : new Vector3(0, 0, 0);
-        super(name, position);
+        let shader: Shader = options.shader ? options.shader : new SimpleShader();
+        super(name, position, shader);
         this.vertices = [
         //  X       Y          Z    R         G         B
            -base/2, -height/2, 0.0, color[0], color[1], color[2],
@@ -174,7 +176,8 @@ export class Cube extends Shape {
         let base: number = options.base ? options.base : 1;
         let color: number[] = options.color ? options.color : [0, 0, 0];
         let position: Vector3 = options.position ? options.position : new Vector3(0, 0, 0);
-        super(name, position);
+        let shader: Shader = options.shader ? options.shader : new SimpleShader();
+        super(name, position, shader);
         const l2 = base/2;
         this.indices = [
             // Top
@@ -259,7 +262,7 @@ export class Cube extends Shape {
 }
 
 export class ColorCube extends Cube {
-    public constructor(name: string, options: Options = {}) {
+    public constructor(name: string, options: Options = {shader: new SimpleShaderTest()}) {
         super(name, options);
         const l2 = options.base ? options.base/2 : 0.5;
         this.vertices = [

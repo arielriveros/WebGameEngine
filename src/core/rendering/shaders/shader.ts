@@ -1,4 +1,3 @@
-import { SIMPLE_VERTEX_SHADER, SIMPLE_FRAGMENT_SHADER } from "./shaderSources";
 import { gl } from "../render";
 
 export class Shader {
@@ -10,10 +9,10 @@ export class Shader {
         return this._program;
     }
 
-    public constructor() {
+    public constructor(vs: string, fs: string) {
 
-        let vertexShader: WebGLShader = this.loadSource(SIMPLE_VERTEX_SHADER, gl.VERTEX_SHADER);
-        let fragmentShader: WebGLShader = this.loadSource(SIMPLE_FRAGMENT_SHADER, gl.FRAGMENT_SHADER);
+        let vertexShader: WebGLShader = this.loadSource(vs, gl.VERTEX_SHADER);
+        let fragmentShader: WebGLShader = this.loadSource(fs, gl.FRAGMENT_SHADER);
         this._program = this.createProgram(vertexShader, fragmentShader);    
     }
 
@@ -69,5 +68,77 @@ export class Shader {
 
     public use(): void {
         gl.useProgram(this._program);
+    }
+}
+
+export class SimpleShader extends Shader {
+    public constructor() {
+        super(
+            // Vertex Shader
+            `
+            precision mediump float;
+
+            attribute vec3 a_position;
+            attribute vec3 a_color;
+        
+            varying vec3 v_color;
+        
+            uniform vec3 u_trans;
+            uniform mat4 u_world;
+            uniform mat4 u_view;
+            uniform mat4 u_proj;
+        
+            void main() {
+                v_color = a_color;
+                mat4 model_view = u_proj * u_view * u_world;
+                gl_Position = model_view * vec4(u_trans + a_position, 1.0);
+            }`
+            ,
+            // Fragment Shader
+            `
+            precision mediump float;
+
+            varying vec3 v_color;
+
+            void main() {
+                gl_FragColor = vec4(v_color, 1.0);
+            }`
+        )
+    }
+}
+
+export class SimpleShaderTest extends Shader {
+    public constructor() {
+        super(
+            // Vertex Shader
+            `
+            precision mediump float;
+
+            attribute vec3 a_position;
+            attribute vec3 a_color;
+        
+            varying vec3 v_color;
+        
+            uniform vec3 u_trans;
+            uniform mat4 u_world;
+            uniform mat4 u_view;
+            uniform mat4 u_proj;
+        
+            void main() {
+                v_color = a_color + u_trans;
+                mat4 model_view = u_proj * u_view * u_world;
+                gl_Position = model_view * vec4(u_trans + a_position, 1.0);
+            }`
+            ,
+            // Fragment Shader
+            `
+            precision mediump float;
+
+            varying vec3 v_color;
+
+            void main() {
+                gl_FragColor = vec4(v_color, 0.7);
+            }`
+        )
     }
 }
