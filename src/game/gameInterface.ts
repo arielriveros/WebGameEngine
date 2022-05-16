@@ -7,12 +7,10 @@ export class GameInterface{
 
     protected _camera!: Camera;
     protected _scene!: Scene;
-    protected _controllable!: Shape;
 
     public constructor() { }
     public get camera(): Camera { return this._camera; }
     public get scene(): Scene { return this._scene; }
-    public get controllable(): Shape { return this._controllable; }
     public start(): void { }
     public inputListen(input: InputManager): void { }
 }
