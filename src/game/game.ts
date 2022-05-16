@@ -20,16 +20,16 @@ export class Game extends GameInterface{
 
     public override inputListen(input: InputManager): void {
         if(input.isKeyDown('ArrowLeft')) {
-            this._camera.move(new Vector3(0, 0, 0.02));
+            this.camera.move(new Vector3(0, 0, 0.02));
         }
         if(input.isKeyDown('ArrowRight')) {
-            this._camera.move(new Vector3(0, 0, -0.02));
+            this.camera.move(new Vector3(0, 0, -0.02));
         }
         if(input.isKeyDown('ArrowUp')) {
-            this._camera.move(new Vector3(0, 0.02, 0));
+            this.camera.move(new Vector3(0, 0.02, 0));
         }
         if(input.isKeyDown('ArrowDown')) {
-            this._camera.move(new Vector3(0, -0.02, 0));
+            this.camera.move(new Vector3(0, -0.02, 0));
         }
 
         if(input.isKeyDown('KeyA')) {
@@ -50,6 +50,11 @@ export class Game extends GameInterface{
         }
         if(input.isKeyDown('KeyE')) {
             this.scene.controllable.move(new Vector3(0, 0, -0.02));
+        }
+
+        if(input.isKeyDown('Space')) {
+            console.log("Space");
+            this.camera.setFocalPoint(this.scene.controllable.position);
         }
     }
 }

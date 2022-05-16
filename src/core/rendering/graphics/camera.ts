@@ -37,6 +37,10 @@ export class Camera {
         }
     }
 
+    public setFocalPoint(focus: Vector3): void {
+        this._focalPosition = focus;
+    }
+
     /**
      * Runs every frame.
      */
