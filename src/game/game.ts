@@ -9,7 +9,7 @@ import { SimpleShaderTest } from '../core/rendering/shaders/shader';
 export class Game extends GameBase{
 
     public override setUp(): void {
-        this.camera = new Camera(new Vector3(0, 0, 1));
+        this.camera = new Camera(new Vector3(1, 0, 1));
         this.scene = new Scene();
     }
 
@@ -33,6 +33,12 @@ export class Game extends GameBase{
         }
         if(input.isKeyDown('ArrowDown')) {
             this.camera.move(new Vector3(0, -0.02, 0));
+        }
+        if(input.isKeyDown('ControlLeft')) {
+            this.camera.move(new Vector3(0, 0, 0.02));
+        }
+        if(input.isKeyDown('AltLeft')) {
+            this.camera.move(new Vector3(0, 0, -0.02));
         }
 
         if(input.isKeyDown('KeyA')) {
