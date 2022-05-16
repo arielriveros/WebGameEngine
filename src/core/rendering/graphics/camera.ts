@@ -11,25 +11,30 @@ export class Camera {
 
     private _worldMatrix: Matrix4x4;
     private _viewMatrix: Matrix4x4;
-    private _projectionMatrix: Matrix4x4;
+    private _projectionMatrix!: Matrix4x4;
+
+    private _orthographic: boolean;
 
     public constructor(initialPosition: Vector3 = new Vector3(0.0, 0.0, 0.0), orthographic: boolean = false) {
         this._camPosition = initialPosition;
         this._focalPosition = new Vector3(0, 0, 0);
-
+        this._orthographic = orthographic;
         this._worldMatrix = new Matrix4x4();
         this._viewMatrix = new Matrix4x4();
+        this.setProjection();
+    }
 
-        if(orthographic) {
+    public move(delta: Vector3): void {
+        this._camPosition.add(delta);
+    }
+
+    public setProjection(): void {
+        if(this._orthographic) {
             this._projectionMatrix = Matrix4x4.orthographic(new Matrix4x4(), -1, 1, -1, 1, 0.01, 1000.0);
         }
         else {
             this._projectionMatrix = Matrix4x4.perspective(new Matrix4x4(), 1.1, window.innerWidth/window.innerHeight, 0.01, 1000.0);
         }
-    }
-
-    public move(delta: Vector3): void {
-        this._camPosition.add(delta);
     }
 
     /**

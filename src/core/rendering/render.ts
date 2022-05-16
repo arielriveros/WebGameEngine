@@ -55,7 +55,10 @@ export class Render{
         if (this._canvas) {
             this._canvas.width = window.innerWidth;
             this._canvas.height = window.innerHeight;
-            gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+            if(this._camera) {
+                this._camera.setProjection();
+            }
+            gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
         }
     }
 
