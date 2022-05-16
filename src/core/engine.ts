@@ -15,13 +15,15 @@ export class Engine{
         this._render = new Render();
         this._input = new InputManager();
         this._game = new Game();
+
+        this._input.initialize();
+        this._render.initialize("render-viewport");
+        this._game.setUp();
     }
     /** 
      * Initializes the engine and starts the game loop.
      */
     public start(): void {
-        this._input.initialize();
-        this._render.initialize("render-viewport");
         this._game.start();
         this._render.render(this._game.camera, this._game.scene);
         this.loop();

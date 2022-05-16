@@ -17,7 +17,6 @@ interface Options{
  * Basic Shape class for rendering vertices on screen using a shader
  */
 export class Shape {
-    private _name: string;
     private _buffer!: GLArrayBuffer;
     private _indexBuffer!: GLElementArrayBuffer;
     private _vertices: number[];
@@ -25,10 +24,6 @@ export class Shape {
     private _shader!:Shader;
     private _position: Vector3;
     private _translateUniformLocation!: WebGLUniformLocation;
-
-    public get name(): string {
-        return this._name;
-    }
 
     public get shader(): Shader {
         return this._shader;
@@ -46,8 +41,7 @@ export class Shape {
         this._indices = newIndices;
     }
 
-    public constructor(name:string, position: Vector3 = new Vector3(), shader: Shader = new SimpleShader() ) {
-        this._name = name;
+    public constructor(position: Vector3 = new Vector3(), shader: Shader = new SimpleShader() ) {
         this._vertices = [
         // X   Y    Z    R    G    B
         -0.5, -0.5, 0.0, 1.0, 0.0, 0.0,
@@ -120,14 +114,13 @@ export class Triangle extends Shape {
      * @param height Length from the base to the opposite vertex. i.e. Height of a triangle.
      * @param color RGB Color of the triangle.
      */
-    public constructor(
-        name: string, options: Options = {}) {
+    public constructor(options: Options = {}) {
         let base: number = options.base ? options.base : 1;
         let height: number = options.height ? options.height : 1;
         let color: number[] = options.color ? options.color : [0, 0, 0];
         let position: Vector3 = options.position ? options.position : new Vector3(0, 0, 0);
         let shader: Shader = options.shader ? options.shader : new SimpleShader();
-        super(name, position, shader);
+        super(position, shader);
         this.vertices = [
         //  X       Y          Z    R         G         B
            -base/2, -height/2, 0.0, color[0], color[1], color[2],
@@ -145,13 +138,13 @@ export class Quad extends Shape {
      * @param height Length of Quad height.
      * @param color RGB Color of the Quad.
      */
-    public constructor(name: string, options: Options = {}) {
+    public constructor(options: Options = {}) {
         let base: number = options.base ? options.base : 1;
         let height: number = options.height ? options.height : 1;
         let color: number[] = options.color ? options.color : [0, 0, 0];
         let position: Vector3 = options.position ? options.position : new Vector3(0, 0, 0);
         let shader: Shader = options.shader ? options.shader : new SimpleShader();
-        super(name, position, shader);
+        super(position, shader);
         this.vertices = [
         //  X       Y          Z    R         G         B
            -base/2, -height/2, 0.0, color[0], color[1], color[2],
@@ -172,12 +165,12 @@ export class Cube extends Shape {
      * @param base Length of each cube's edge.
      * @param color Color of the cube
      */
-    public constructor(name: string, options: Options = {}) {
+    public constructor(options: Options = {}) {
         let base: number = options.base ? options.base : 1;
         let color: number[] = options.color ? options.color : [0, 0, 0];
         let position: Vector3 = options.position ? options.position : new Vector3(0, 0, 0);
         let shader: Shader = options.shader ? options.shader : new SimpleShader();
-        super(name, position, shader);
+        super(position, shader);
         const l2 = base/2;
         this.indices = [
             // Top
@@ -262,8 +255,8 @@ export class Cube extends Shape {
 }
 
 export class ColorCube extends Cube {
-    public constructor(name: string, options: Options = {shader: new SimpleShaderTest()}) {
-        super(name, options);
+    public constructor(options: Options = {shader: new SimpleShaderTest()}) {
+        super(options);
         const l2 = options.base ? options.base/2 : 0.5;
         this.vertices = [
         //   X   Y    Z    R    G    B
