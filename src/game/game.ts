@@ -9,7 +9,7 @@ import { SimpleShaderTest } from '../core/rendering/shaders/shader';
 export class Game extends GameBase{
 
     public override setUp(): void {
-        this.camera = new Camera(new Vector3(1, 0, 1));
+        this.camera = new Camera(new Vector3(0, 0, 1));
         this.scene = new Scene();
     }
 
@@ -62,6 +62,9 @@ export class Game extends GameBase{
         }
 
         if(input.isKeyDown('Space')) {
+            let index = Math.floor(Math.random() * this.scene.shapes.length);
+            let selectedShape = this.scene.shapes[index];
+            this.scene.setControllable(selectedShape);
             this.camera.setFocalPoint(this.scene.controllable.position);
         }
     }

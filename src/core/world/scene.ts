@@ -16,12 +16,16 @@ export class Scene {
     public get controllable() {
         return this._controllable;
     }
-    
+
     public addControllable(controllable: Shape): void {
         if(!this._controllable) {
             this._controllable = controllable;
             this.addShape(controllable);
         }
+    }
+
+    public setControllable(controllable: Shape): void {
+        this._controllable = controllable;
     }
 
     public moveControllable(delta: Vector3): void {
