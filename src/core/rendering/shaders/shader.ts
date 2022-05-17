@@ -13,11 +13,19 @@ export class Shader {
         this._program = this.createProgram(vertexShader, fragmentShader);    
     }
 
-    private loadSource(source: string, type: number): WebGLShader {
+    private getSourceSync(url: string) {
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", url, false);
+        xhr.send(null);
+        return (xhr.status == 200) ? xhr.responseText : null;
+      }; 
+
+    private loadSource(sourceUrl: string, type: number): WebGLShader {
+        let source = this.getSourceSync(`./shaders/${sourceUrl}`);
         let shader: WebGLShader|null = gl.createShader(type);
         if(shader) {
             // Sets shader source and compiles it
-            gl.shaderSource(shader, source);
+            gl.shaderSource(shader, source as string);
             gl.compileShader(shader);
             if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
                 throw new Error(`Error compiling vertex shader.\n${gl.getShaderInfoLog(shader)}`);
@@ -67,7 +75,7 @@ export class Shader {
         gl.useProgram(this._program);
     }
 }
-
+/* 
 export class SimpleShader extends Shader {
     public constructor() {
         super(
@@ -101,9 +109,22 @@ export class SimpleShader extends Shader {
             }`
         )
     }
+} */
+
+
+export class SimpleShader extends Shader {
+    public constructor() {
+        super('simple.vs.glsl', 'simple.fs.glsl')
+    }
 }
 
 export class SimpleShaderTest extends Shader {
+    public constructor() {
+        super('simple.vs.glsl', 'simple.fs.glsl')
+    }
+}
+
+/* export class SimpleShaderTest extends Shader {
     public constructor() {
         super(
             // Vertex Shader
@@ -137,4 +158,4 @@ export class SimpleShaderTest extends Shader {
             }`
         )
     }
-}
+} */
