@@ -15,4 +15,5 @@ export abstract class GameBase{
     public setUp(): void { }
     public start(): void { }
     public inputListen(input: InputManager): void { }
+    public onUpdate(): void { }
 }

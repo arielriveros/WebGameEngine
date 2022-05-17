@@ -9,6 +9,8 @@ import { LOG } from '../core/logger';
 
 export class Game extends GameBase{
 
+    private _cameraSpeed = 0.1;
+
     public override setUp(): void {
         this.camera = new Camera(new Vector3(0, 0, 1));
         this.scene = new Scene();
@@ -21,28 +23,47 @@ export class Game extends GameBase{
         this.scene.addShape(new SHAPE.Quad());
         this.scene.addShape(new SHAPE.Shape(new Vector3(0, 0, 0.001)));
         for(let i = 0; i < 99; i++) {
-            this.scene.addShape(new SHAPE.Cube({ base: 0.1, position: new Vector3(Math.random() * 10, Math.random() * 10, Math.random() * 10), color: [Math.random(), Math.random(), Math.random()]}))
+            this.scene.addShape(new SHAPE.Cube({ 
+                base: 0.1, 
+                position: new Vector3(
+                    (Math.random()-Math.random()) * 10,
+                    (Math.random()-Math.random()) * 10,
+                    (Math.random()-Math.random()) * 10
+                    ),
+                color: [Math.random(), Math.random(), Math.random()]}))
         }
     }
 
+    public override onUpdate(): void {
+        /* this.scene.addShape(new SHAPE.Cube({ 
+            base: 0.1, 
+            position: new Vector3(
+                (Math.random()-Math.random()) * 10,
+                (Math.random()-Math.random()) * 10,
+                (Math.random()-Math.random()) * 10
+                ),
+            color: [Math.random(), Math.random(), Math.random()]})) */
+    }
+
     public override inputListen(input: InputManager): void {
+        
         if(input.isKeyDown('ArrowLeft')) {
-            this.camera.move(new Vector3(-0.02, 0));
+            this.camera.move(new Vector3(-this._cameraSpeed, 0));
         }
         if(input.isKeyDown('ArrowRight')) {
-            this.camera.move(new Vector3(0.02, 0, 0));
+            this.camera.move(new Vector3(this._cameraSpeed, 0, 0));
         }
         if(input.isKeyDown('ArrowUp')) {
-            this.camera.move(new Vector3(0, 0.02, 0));
+            this.camera.move(new Vector3(0, this._cameraSpeed, 0));
         }
         if(input.isKeyDown('ArrowDown')) {
-            this.camera.move(new Vector3(0, -0.02, 0));
+            this.camera.move(new Vector3(0, -this._cameraSpeed, 0));
         }
         if(input.isKeyDown('ControlLeft')) {
-            this.camera.move(new Vector3(0, 0, 0.02));
+            this.camera.move(new Vector3(0, 0, this._cameraSpeed));
         }
         if(input.isKeyDown('AltLeft')) {
-            this.camera.move(new Vector3(0, 0, -0.02));
+            this.camera.move(new Vector3(0, 0, -this._cameraSpeed));
         }
 
         if(input.isKeyDown('KeyA')) {

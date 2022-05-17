@@ -9,14 +9,19 @@ canvas {
     height: 100vh;
 }
 
-#console {
+#debug-hud {
     position: absolute;
     padding-top: 1%;
     width: 33%;
     height: 45%;
     color: white;
     background-color: rgba(0, 0, 0, 0.33);
+    
+}
+
+#console {
     overflow-y: scroll;
+    height: 90%;
 }
 
 #console .console-entry {

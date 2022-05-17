@@ -33,13 +33,12 @@ export class Scene {
     }
 
     public addShape(shape: Shape): void {
+        shape.load();
         this._shapes.push(shape);
     }
 
     public initialize(): void {
-        for (const i of this._shapes) {
-            i.load();
-        }
+        
     }
 
     public update(): void {
