@@ -15,7 +15,7 @@ module.exports = {
     resolve: {
         extensions: ['.ts', '.js'],
         alias: {
-            math: path.resolve(__dirname, 'src/core/math/'),
+            math: path.resolve(__dirname, 'src/core/math/math.ts'),
             core: path.resolve(__dirname, 'src/core/core.ts')
         }
     },
