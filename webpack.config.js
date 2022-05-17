@@ -1,4 +1,5 @@
 const path = require('path');
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
     entry: './src/app.ts',
@@ -19,5 +20,8 @@ module.exports = {
         filename: 'app.js',
         path: path.resolve(__dirname, 'public')
     },
-    mode: 'development'
+    mode: 'development',
+    plugins: [
+        new CopyWebpackPlugin({patterns: [{ from: 'src/core/rendering/shaders/sources', to: 'shaders' }]})
+    ]
 }
