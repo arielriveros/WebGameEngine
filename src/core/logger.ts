@@ -1,4 +1,4 @@
-export function LOG(input: string, type: string = 'normal') {
+export function LOG(input: string, type: string = 'normal', onBrowser: boolean = false) {
     let entry: HTMLDivElement = document.createElement('div');
     entry.className = 'console-entry';
 
@@ -6,16 +6,28 @@ export function LOG(input: string, type: string = 'normal') {
     switch(type){
         case 'error': 
             text.className = 'console-error'; 
+            if(onBrowser){
+                console.error(input);
+            }
             break;
         case 'info':
-        text.className = 'console-info';
-        break;
+            text.className = 'console-info';
+            if(onBrowser){
+                console.info(input);
+            }
+            break;
         case 'warning':
             text.className = 'console-warning';
+            if(onBrowser){
+                console.warn(input);
+            }
             break;
         case 'normal':
         default:
             text.className = 'console-text';
+            if(onBrowser){
+                console.log(input);
+            }
             break;
 
     }
@@ -30,7 +42,7 @@ export function LOG(input: string, type: string = 'normal') {
     entry.appendChild(text);
     entry.appendChild(time);
 
-    let console = document.getElementById('console');
-    console?.append(entry);
-    console?.scrollTo(0, console.scrollHeight);
+    let debugConsole = document.getElementById('console');
+    debugConsole?.append(entry);
+    debugConsole?.scrollTo(0, debugConsole.scrollHeight);
 }

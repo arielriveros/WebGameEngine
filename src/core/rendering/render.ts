@@ -69,7 +69,7 @@ export class Render{
         if (elementID !== undefined) {
             canvas = document.getElementById(elementID) as HTMLCanvasElement;
             if (canvas === undefined) {
-                throw new Error(`No canvas element of id ${elementID}`);
+                LOG(`No canvas element of id ${elementID}`, 'error', true);
             }
         }
 
@@ -82,7 +82,7 @@ export class Render{
         this._canvas = canvas;
 
         if (!this._canvas.getContext("webgl")) {
-            throw new Error("Cannot initialize WebGL by the browser");
+            LOG("Cannot initialize WebGL by the browser", 'error', true);
         }
 
         // gets webGL context object from the canvas and stores it in _context

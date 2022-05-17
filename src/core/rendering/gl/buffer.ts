@@ -1,3 +1,4 @@
+import { LOG } from "../../logger";
 import { gl } from "../render";
 
 /**
@@ -62,7 +63,9 @@ export class Buffer{
                 this._typeSize = 1;
                 break;
             default:
-                throw new Error(`Invalid datatype ${dataType.toString()}`);
+                LOG(`Invalid datatype ${dataType.toString()}`, 'error', true);
+                throw new Error()
+                break;
         }
 
         // Creates a not null WebGLBuffer object and asigns it to this buffer object.
