@@ -5,6 +5,7 @@ import * as SHAPE from '../core/rendering/graphics/shape'
 import { InputManager } from '../core/input/manager';
 import { GameBase } from './gameInterface';
 import { SimpleShaderTest } from '../core/rendering/shaders/shader';
+import { LOG } from '../core/logger';
 
 export class Game extends GameBase{
 
@@ -19,6 +20,9 @@ export class Game extends GameBase{
         this.scene.addShape(new SHAPE.Triangle({ color: [0, 0.5, 0.5], position: new Vector3(0, 0, 0.5) }));
         this.scene.addShape(new SHAPE.Quad());
         this.scene.addShape(new SHAPE.Shape(new Vector3(0, 0, 0.001)));
+        for(let i = 0; i < 99; i++) {
+            this.scene.addShape(new SHAPE.Cube({ base: 0.1, position: new Vector3(Math.random() * 10, Math.random() * 10, Math.random() * 10), color: [Math.random(), Math.random(), Math.random()]}))
+        }
     }
 
     public override inputListen(input: InputManager): void {

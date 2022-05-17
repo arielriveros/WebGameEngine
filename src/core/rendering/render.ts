@@ -1,5 +1,6 @@
 import { Camera } from "./graphics/camera";
 import { Scene } from "../world/scene";
+import { LOG } from "../logger";
 
 /**
  * WebGL Global interface for rendering context
@@ -13,7 +14,7 @@ export class Render{
     private _scene!: Scene;
 
     public constructor() {
-        console.log("New Render Instance")
+        LOG("New Render Instance", 'info')
     }
 
     public get canvas(): HTMLCanvasElement { return this._canvas; }

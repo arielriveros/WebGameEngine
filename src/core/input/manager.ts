@@ -1,13 +1,14 @@
+import { LOG } from "../logger";
 import { KeyHandler } from "./keyHandler";
 
 export class InputManager {
 
     public constructor() {
-        console.log("New Input Instance")
+        LOG("New Input Instance", 'info')
     }
 
     public initialize() {
-        console.log("Input poller initialized");
+        LOG("Input poller initialized");
         KeyHandler.inititialize();
         let body = document.querySelector("body") as HTMLBodyElement;
         body.addEventListener("keydown", this.KeyDown, false);
@@ -36,18 +37,13 @@ export class InputManager {
 
     private MouseLeftClick(event: MouseEvent): void {
         event.preventDefault();
-        //console.log(event);
     }
 
     private MouseRightClick(event: MouseEvent): void { 
         event.preventDefault();
-        //console.log(event);
     }
 
     private MouseMove(event: MouseEvent): void {
         event.preventDefault();
-        //console.log(event);
     }
-
-    
 }
