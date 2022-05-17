@@ -4,6 +4,7 @@ import { GLElementArrayBuffer } from "../gl/elementArrayBuffer";
 import { AttributeInformation } from "../interfaces";
 import { Shader, SimpleShader, SimpleShaderTest } from "../shaders/shader";
 import { Vector3 } from "../../math/vector";
+import { Matrix4x4 } from "../../math/matrix";
 
 interface Options{
     height?: number,
@@ -24,6 +25,7 @@ export class Shape {
     private _shader!:Shader;
     private _position: Vector3;
     private _translateUniformLocation!: WebGLUniformLocation;
+    private _worldMatrix: Matrix4x4
 
     public get shader(): Shader {
         return this._shader;
@@ -50,6 +52,7 @@ export class Shape {
          this._indices = null;
          this._position = position;
          this._shader = shader;
+         this._worldMatrix = new Matrix4x4();
     }
 
     /**
@@ -78,15 +81,16 @@ export class Shape {
             offset: 3 };
         this._buffer.addAttribLocation(colorAttribute);
 
-        this._translateUniformLocation = this._shader.getUniformLocation('u_trans');
-
+        this._translateUniformLocation = this._shader.getUniformLocation('u_world');
+        
         this._buffer.pushData(this._vertices);
         this._buffer.upload();
     }
 
     public update(): void {
         this._shader.use();
-        gl.uniform3fv(this._translateUniformLocation, this._position.toFloat32Array());
+        Matrix4x4.translation(this._worldMatrix, this._position);
+        gl.uniformMatrix4fv(this._translateUniformLocation, false, this._worldMatrix.toFloat32Array());
         this.draw();
     }
 

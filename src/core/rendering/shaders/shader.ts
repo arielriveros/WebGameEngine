@@ -2,15 +2,12 @@ import { gl } from "../render";
 
 export class Shader {
     private _program: WebGLProgram;
-    //private _attributes: {[name:string]: number} = {};
-    //private _uniforms: {[name:string]: WebGLUniformLocation} = {};
 
     public get program(): WebGLProgram {
         return this._program;
     }
 
     public constructor(vs: string, fs: string) {
-
         let vertexShader: WebGLShader = this.loadSource(vs, gl.VERTEX_SHADER);
         let fragmentShader: WebGLShader = this.loadSource(fs, gl.FRAGMENT_SHADER);
         this._program = this.createProgram(vertexShader, fragmentShader);    
@@ -82,8 +79,7 @@ export class SimpleShader extends Shader {
             attribute vec3 a_color;
         
             varying vec3 v_color;
-        
-            uniform vec3 u_trans;
+
             uniform mat4 u_world;
             uniform mat4 u_view;
             uniform mat4 u_proj;
@@ -91,7 +87,7 @@ export class SimpleShader extends Shader {
             void main() {
                 v_color = a_color;
                 mat4 model_view = u_proj * u_view * u_world;
-                gl_Position = model_view * vec4(u_trans + a_position, 1.0);
+                gl_Position = model_view * vec4(a_position, 1.0);
             }`
             ,
             // Fragment Shader

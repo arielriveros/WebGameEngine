@@ -132,9 +132,15 @@ export class Matrix4x4 {
     } 
 
     public static translation( out: Matrix4x4, trans: Vector3) {
-        out._data[13] = trans.x;
-        out._data[14] = trans.y;
-        out._data[15] = trans.z;
+        let ident = new Matrix4x4();
+
+        for(let i = 0; i < 12; i++) {
+            out._data[i] = ident._data[i];
+        }
+        out._data[12] = trans.x;
+        out._data[13] = trans.y;
+        out._data[14] = trans.z;
+        out._data[15] = ident._data[15];
 
         return out;
     }
