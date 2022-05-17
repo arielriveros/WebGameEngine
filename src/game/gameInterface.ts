@@ -1,6 +1,4 @@
-import { Camera } from '../core/rendering/graphics/camera';
-import { Scene } from '../core/world/scene';
-import { InputManager } from '../core/input/manager';
+import { Camera, Scene, InputManager } from 'core';
 
 export abstract class GameBase{
 

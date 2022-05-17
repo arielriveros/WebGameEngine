@@ -1,5 +1,5 @@
 import { GameBase } from './gameInterface';
-import { Vector3, Camera, Scene, InputManager, Shapes, Shaders } from '../core/core';
+import { Vector3, Camera, Scene, InputManager, Shapes, Shaders } from 'core';
 
 export class Game extends GameBase{
 
