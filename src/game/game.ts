@@ -1,11 +1,5 @@
-import { Vector3 } from '../core/math/vector';
-import { Camera } from '../core/rendering/graphics/camera';
-import { Scene } from '../core/world/scene';
-import * as SHAPE from '../core/rendering/graphics/shape'
-import { InputManager } from '../core/input/manager';
 import { GameBase } from './gameInterface';
-import { SimpleShaderTest } from '../core/rendering/shaders/shader';
-import { LOG } from '../core/logger';
+import { Vector3, Camera, Scene, InputManager, Shapes, Shaders } from '../core/core';
 
 export class Game extends GameBase{
 
@@ -17,13 +11,13 @@ export class Game extends GameBase{
     }
 
     public override start(): void { 
-        let controllable = new SHAPE.ColorCube({ base: 0.2,color: [0, 0.5, 0.5], position: new Vector3(0, 0.2, 0.0), shader: new SimpleShaderTest() });
+        let controllable = new Shapes.ColorCube({ base: 0.2,color: [0, 0.5, 0.5], position: new Vector3(0, 0.2, 0.0), shader: new Shaders.SimpleShaderTest() });
         this.scene.addControllable(controllable);
-        this.scene.addShape(new SHAPE.Triangle({ color: [0, 0.5, 0.5], position: new Vector3(0, 0, 0.5) }));
-        this.scene.addShape(new SHAPE.Quad());
-        this.scene.addShape(new SHAPE.Shape(new Vector3(0, 0, 0.001)));
+        this.scene.addShape(new Shapes.Triangle({ color: [0, 0.5, 0.5], position: new Vector3(0, 0, 0.5) }));
+        this.scene.addShape(new Shapes.Quad());
+        this.scene.addShape(new Shapes.Shape(new Vector3(0, 0, 0.001)));
         for(let i = 0; i < 99; i++) {
-            this.scene.addShape(new SHAPE.Cube({ 
+            this.scene.addShape(new Shapes.Cube({ 
                 base: 0.1, 
                 position: new Vector3(
                     (Math.random()-Math.random()) * 10,
