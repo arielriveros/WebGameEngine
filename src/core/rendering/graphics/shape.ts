@@ -107,6 +107,10 @@ export class Shape {
     public move(delta: Vector3): void {
         this._position.add(delta);
     }
+
+    public rotate(rad: number, axis: Vector3): void {
+        Matrix4x4.rotate(this._worldMatrix, new Matrix4x4(), rad, axis);
+    }
 }
 
 export class Triangle extends Shape {

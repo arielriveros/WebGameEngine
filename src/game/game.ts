@@ -34,16 +34,7 @@ export class Game extends GameBase{
         }
     }
 
-    public override onUpdate(): void {
-        /* this.scene.addShape(new SHAPE.Cube({ 
-            base: 0.1, 
-            position: new Vector3(
-                (Math.random()-Math.random()) * 10,
-                (Math.random()-Math.random()) * 10,
-                (Math.random()-Math.random()) * 10
-                ),
-            color: [Math.random(), Math.random(), Math.random()]})) */
-    }
+    public override onUpdate(): void { }
 
     public override inputListen(input: InputManager): void {
         
@@ -80,10 +71,10 @@ export class Game extends GameBase{
         }
 
         if(input.isKeyDown('KeyQ')) {
-            this.scene.controllable.move(new Vector3(0, 0, 0.02));
+            this.scene.controllable.rotate(  -3.14/4, new Vector3(0, 0, 1));
         }
         if(input.isKeyDown('KeyE')) {
-            this.scene.controllable.move(new Vector3(0, 0, -0.02));
+            this.scene.controllable.rotate( 3.14/4, new Vector3(0, 1, ));
         }
 
         if(input.isKeyDown('Space')) {
