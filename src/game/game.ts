@@ -65,10 +65,10 @@ export class Game extends GameBase{
         }
 
         if(input.isKeyDown('KeyQ')) {
-            this.scene.controllable.rotate(  -3.14/4, new Vector3(0, 0, 1));
+            this.scene.controllable.rotate(  -0.01, new Vector3(0, 0, 1));
         }
         if(input.isKeyDown('KeyE')) {
-            this.scene.controllable.rotate( 3.14/4, new Vector3(0, 1, ));
+            this.scene.controllable.rotate( 0.01, new Vector3(0, 1, ));
         }
 
         if(input.isKeyDown('Space')) {

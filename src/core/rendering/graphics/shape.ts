@@ -3,14 +3,14 @@ import { GLArrayBuffer } from "../gl/arrayBuffer";
 import { GLElementArrayBuffer } from "../gl/elementArrayBuffer";
 import { AttributeInformation } from "../interfaces";
 import { Shader, SimpleShader, SimpleShaderTest } from "../shaders/shader";
-import { Vector3 } from "../../math/vector";
-import { Matrix4x4 } from "../../math/matrix";
+import { Vector3, Matrix4x4 } from "math";
 
 interface Options{
     height?: number,
     base?: number,
     color?: number[],
     position?: Vector3,
+    rotation?: number,
     shader?: Shader
 }
 
@@ -24,7 +24,8 @@ export class Shape {
     private _indices: number[] | null;
     private _shader!:Shader;
     private _position: Vector3;
-    private _translateUniformLocation!: WebGLUniformLocation;
+    private _rotation: number;
+    private _uWorld!: WebGLUniformLocation;
     private _worldMatrix: Matrix4x4
 
     public get shader(): Shader {
@@ -43,7 +44,7 @@ export class Shape {
         this._indices = newIndices;
     }
 
-    public constructor(position: Vector3 = new Vector3(), shader: Shader = new SimpleShader() ) {
+    public constructor(position: Vector3 = new Vector3(), rotation: number = 0, shader: Shader = new SimpleShader() ) {
         this._vertices = [
         // X   Y    Z    R    G    B
         -0.5, -0.5, 0.0, 1.0, 0.0, 0.0,
@@ -51,6 +52,7 @@ export class Shape {
          0.0,  0.5, 0.0, 0.0, 0.0, 1.0];
          this._indices = null;
          this._position = position;
+         this._rotation = rotation;
          this._shader = shader;
          this._worldMatrix = new Matrix4x4();
     }
@@ -81,7 +83,7 @@ export class Shape {
             offset: 3 };
         this._buffer.addAttribLocation(colorAttribute);
 
-        this._translateUniformLocation = this._shader.getUniformLocation('u_world');
+        this._uWorld = this._shader.getUniformLocation('u_world');
         
         this._buffer.pushData(this._vertices);
         this._buffer.upload();
@@ -90,7 +92,7 @@ export class Shape {
     public update(): void {
         this._shader.use();
         Matrix4x4.translation(this._worldMatrix, this._position);
-        gl.uniformMatrix4fv(this._translateUniformLocation, false, this._worldMatrix.toFloat32Array());
+        gl.uniformMatrix4fv(this._uWorld, false, this._worldMatrix.toFloat32Array());
         this.draw();
     }
 
@@ -109,7 +111,8 @@ export class Shape {
     }
 
     public rotate(rad: number, axis: Vector3): void {
-        Matrix4x4.rotate(this._worldMatrix, new Matrix4x4(), rad, axis);
+        this._rotation += rad;
+        Matrix4x4.rotate(this._worldMatrix, new Matrix4x4(), this._rotation, axis);
     }
 }
 
@@ -127,8 +130,9 @@ export class Triangle extends Shape {
         let height: number = options.height ? options.height : 1;
         let color: number[] = options.color ? options.color : [0, 0, 0];
         let position: Vector3 = options.position ? options.position : new Vector3(0, 0, 0);
+        let rotation: number = options.rotation ? options.rotation : 0;
         let shader: Shader = options.shader ? options.shader : new SimpleShader();
-        super(position, shader);
+        super(position, rotation, shader);
         this.vertices = [
         //  X       Y          Z    R         G         B
            -base/2, -height/2, 0.0, color[0], color[1], color[2],
@@ -151,8 +155,9 @@ export class Quad extends Shape {
         let height: number = options.height ? options.height : 1;
         let color: number[] = options.color ? options.color : [0, 0, 0];
         let position: Vector3 = options.position ? options.position : new Vector3(0, 0, 0);
+        let rotation: number = options.rotation ? options.rotation : 0;
         let shader: Shader = options.shader ? options.shader : new SimpleShader();
-        super(position, shader);
+        super(position, rotation, shader);
         this.vertices = [
         //  X       Y          Z    R         G         B
            -base/2, -height/2, 0.0, color[0], color[1], color[2],
@@ -178,7 +183,8 @@ export class Cube extends Shape {
         let color: number[] = options.color ? options.color : [0, 0, 0];
         let position: Vector3 = options.position ? options.position : new Vector3(0, 0, 0);
         let shader: Shader = options.shader ? options.shader : new SimpleShader();
-        super(position, shader);
+        let rotation: number = options.rotation ? options.rotation : 0;
+        super(position, rotation, shader);
         const l2 = base/2;
         this.indices = [
             // Top

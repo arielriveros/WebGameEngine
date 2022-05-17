@@ -1,6 +1,5 @@
 import { gl } from "../render";
-import { Vector3 } from "../../math/vector";
-import { Matrix4x4 } from "../../math/matrix";
+import { Vector3, Matrix4x4 } from "math";
 import { Scene } from "../../world/scene";
 
 export class Camera {

@@ -13,7 +13,10 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: ['.ts', '.js']
+        extensions: ['.ts', '.js'],
+        alias: {
+            math: path.resolve(__dirname, 'src/core/math/')
+        }
     },
     output: {
         publicPath: 'auto',

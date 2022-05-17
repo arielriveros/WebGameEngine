@@ -1,4 +1,4 @@
-import { Vector3 } from "../math/vector";
+import { Vector3 } from "math";
 import { Shape } from "../rendering/graphics/shape";
 
 export class Scene {
