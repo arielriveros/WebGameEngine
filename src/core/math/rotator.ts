@@ -24,7 +24,6 @@ export class Rotator {
     public getRadiansPitch(): number { return this._pitch * PI_180; }
 
     public add(rotator: Rotator): void {
-        console.log(this);
         this.roll = (this._roll + rotator.roll);
         this.yaw = (this._yaw + rotator.yaw);
         this.pitch = (this._pitch + rotator.pitch);
