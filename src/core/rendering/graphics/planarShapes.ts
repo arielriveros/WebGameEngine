@@ -85,9 +85,9 @@ export class Line extends Shape {
         let shader: Shaders.Shader = options.shader ? options.shader : new Shaders.SimpleShader();
         super(position, rotation, shader);
         this.vertices = [
-        //  X                Y                Z    R         G         B
-        position.x,        position.y, position.z, color[0], color[1], color[2],
-        position.x + base, position.y, position.z, color[0], color[1], color[2]];
+        //  X Y  Z  R         G         B
+        0,    0, 0, color[0], color[1], color[2],
+        base, 0, 0, color[0], color[1], color[2]];
         }
 
         public override load(): void {
