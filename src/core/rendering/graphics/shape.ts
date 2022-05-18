@@ -112,9 +112,15 @@ export class Shape {
 
     public rotate(delta: Rotator): void {
         this._rotation.add(delta);
-        Matrix4x4.rotate(this._worldMatrix, new Matrix4x4(), this._rotation.getRadiansPitch(), new Vector3(1, 0, 0));
-        Matrix4x4.rotate(this._worldMatrix, new Matrix4x4(), this._rotation.getRadiansYaw(), new Vector3(0, 1, 0));
-        Matrix4x4.rotate(this._worldMatrix, new Matrix4x4(), this._rotation.getRadiansRoll(), new Vector3(0, 0, 1));
+        if(delta.pitch !== 0) {
+            Matrix4x4.rotate(this._worldMatrix, new Matrix4x4(), this._rotation.getRadiansPitch(), new Vector3(1, 0, 0));
+        }
+        if(delta.yaw !== 0) {
+            Matrix4x4.rotate(this._worldMatrix, new Matrix4x4(), this._rotation.getRadiansYaw(), new Vector3(0, 1, 0));
+        }
+        if(delta.roll !== 0) {
+            Matrix4x4.rotate(this._worldMatrix, new Matrix4x4(), this._rotation.getRadiansRoll(), new Vector3(0, 0, 1));
+        }
     }
 }
 
