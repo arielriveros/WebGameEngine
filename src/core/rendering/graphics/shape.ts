@@ -18,15 +18,15 @@ export interface Options{
  * Basic Shape class for rendering vertices on screen using a shader
  */
 export abstract class Shape {
-    private _buffer!: GLArrayBuffer;
-    private _indexBuffer!: GLElementArrayBuffer;
-    private _vertices: number[];
-    private _indices: number[] | null;
-    private _shader!:Shader;
-    private _position: Vector3;
-    private _rotation: Rotator;
-    private _uWorld!: WebGLUniformLocation;
-    private _worldMatrix: Matrix4x4
+    protected _buffer!: GLArrayBuffer;
+    protected _indexBuffer!: GLElementArrayBuffer;
+    protected _vertices: number[];
+    protected _indices: number[] | null;
+    protected _shader!:Shader;
+    protected _position: Vector3;
+    protected _rotation: Rotator;
+    protected _uWorld!: WebGLUniformLocation;
+    protected _worldMatrix: Matrix4x4
 
     public get shader(): Shader {
         return this._shader;
@@ -87,7 +87,10 @@ export abstract class Shape {
 
     public update(): void {
         this._shader.use();
-        Matrix4x4.translation(this._worldMatrix, this._position);
+        let trans = Matrix4x4.translate(this._worldMatrix, new Matrix4x4(),this._position);
+        let pitchRot = Matrix4x4.rotate(this._worldMatrix, trans , this._rotation.getRadiansPitch(), new Vector3(1, 0, 0));
+        let yawRot = Matrix4x4.rotate(this._worldMatrix, pitchRot, this._rotation.getRadiansYaw(), new Vector3(0, 1, 0));
+        let rollRot = Matrix4x4.rotate(this._worldMatrix, yawRot, this._rotation.getRadiansRoll(), new Vector3(0, 0, 1));
         gl.uniformMatrix4fv(this._uWorld, false, this._worldMatrix.toFloat32Array());
         this.draw();
     }
@@ -108,8 +111,6 @@ export abstract class Shape {
 
     public rotate(delta: Rotator): void {
         this._rotation.add(delta);
-        let pitchRot = Matrix4x4.rotate(this._worldMatrix, new Matrix4x4(), this._rotation.getRadiansPitch(), new Vector3(1, 0, 0));
-        let yawRot = Matrix4x4.rotate(this._worldMatrix, pitchRot, this._rotation.getRadiansYaw(), new Vector3(0, 1, 0));
-        Matrix4x4.rotate(this._worldMatrix, yawRot, this._rotation.getRadiansRoll(), new Vector3(0, 0, 1));
+        
     }
 }

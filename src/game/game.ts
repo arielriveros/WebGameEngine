@@ -11,12 +11,22 @@ export class Game extends GameBase{
         this.scene = new Scene();
     }
 
+    private addGrid(scene: Scene) {
+        for(let i = -10; i < 10; i++) {
+            scene.addShape(new Shapes.Line({position: new Vector3(i, 0, 0), rotation: new Rotator(45, 0, 0), base:10}));
+            scene.addShape(new Shapes.Line({position: new Vector3(0, 0, i), rotation: new Rotator(0, 0, 0), base: 10, color: [0.7, 0.7, 0.7]}));
+        }
+    }
+
     public override start(): void { 
         let controllable = new Shapes.ColorCube({ base: 0.2,color: [0, 0.5, 0.5], position: new Vector3(0, 0.2, 0.0), shader: new Shaders.SimpleShaderTest() });
         this.scene.addControllable(controllable);
-        this.scene.addShape(new Shapes.Triangle({ color: [0, 0.5, 0.5], position: new Vector3(0, 0, 0.5) }));
+        this.camera.setFocalPoint(this.scene.controllable.position);
+        this.scene.addShape(new Shapes.Triangle({ color: [0, 0.5, 0.5], position: new Vector3(0, 1, -0.5) }));
         this.scene.addShape(new Shapes.Quad());
         this.scene.addShape(new Shapes.ColorTriangle({position: new Vector3(0, 0, 0.001)}));
+    //  this.scene.addShape(new Shapes.Line({base: 1, color: [0.2, 0, 0.8]}))
+        this.addGrid(this.scene);
         for(let i = 0; i < 9; i++) {
             this.scene.addShape(new Shapes.Cube({ 
                 base: 0.1, 
