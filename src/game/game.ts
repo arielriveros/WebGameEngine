@@ -69,7 +69,7 @@ export class Game extends GameBase{
             this.scene.controllable.rotate(  new Rotator(0, 10, 0));
         }
         if(input.isKeyDown('KeyE')) {
-            this.scene.controllable.rotate( new Rotator(0, -10, 0));
+            this.scene.controllable.rotate( new Rotator(0, 0, -10));
         }
 
         if(input.isKeyDown('Space')) {
