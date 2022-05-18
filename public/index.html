@@ -6,6 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script type="text/javascript" src="app.js"></script>
+    <script>
+        function filterConsole(entryType) {
+            let entries = document.getElementsByClassName("console-entry");
+            for (let i = 0; i < entries.length; i++) {
+                let entry = entries[i];
+                if(entry.getElementsByClassName('console-text')[0].classList.contains(entryType)) {
+                    entry.style.display = "flex";
+                }
+                else {
+                    entry.style.display = "none";
+                }
+            }
+        }        
+    </script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,6 +28,15 @@
         <br>
         Frame time: <span id="frametime-meter"></span>
         <br>
+        <div id="console-filter">
+            <select  onchange="filterConsole(this.value)">
+                <option value="console-text">All</option>
+                <option value="console-normal">Log</option>
+                <option value="console-warning">Warnings</option>
+                <option value="console-error">Errors</option>
+                <option value="console-info">Info</option>
+            </select>
+        </div>
         <div id="console"></div>
     </div>
     <canvas id="render-viewport"></canvas>

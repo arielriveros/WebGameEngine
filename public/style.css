@@ -21,7 +21,12 @@ canvas {
 
 #console {
     overflow-y: scroll;
-    height: 90%;
+    height: 80%;
+}
+
+#console-filter {
+    display: flex;
+    justify-content: end;
 }
 
 #console .console-entry {
