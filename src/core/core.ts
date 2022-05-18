@@ -4,7 +4,7 @@ import { Scene } from '../core/world/scene';
 import { InputManager } from '../core/input/manager';
 import { Vector2, Vector3, Vector4, Matrix4x4 } from 'math';
 import * as Shaders from '../core/rendering/shaders/shader';
-import * as Shapes from '../core/rendering/graphics/shape';
+import * as Shapes from '../core/rendering/graphics/shapes';
 
 export { 
     Engine,

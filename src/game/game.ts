@@ -16,7 +16,7 @@ export class Game extends GameBase{
         this.scene.addControllable(controllable);
         this.scene.addShape(new Shapes.Triangle({ color: [0, 0.5, 0.5], position: new Vector3(0, 0, 0.5) }));
         this.scene.addShape(new Shapes.Quad());
-        this.scene.addShape(new Shapes.Shape(new Vector3(0, 0, 0.001)));
+        this.scene.addShape(new Shapes.ColorTriangle({position: new Vector3(0, 0, 0.001)}));
         for(let i = 0; i < 9; i++) {
             this.scene.addShape(new Shapes.Cube({ 
                 base: 0.1, 
