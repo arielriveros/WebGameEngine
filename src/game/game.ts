@@ -33,22 +33,22 @@ export class Game extends GameBase{
 
     public override inputListen(input: InputManager): void {
         
-        if(input.isKeyDown('ArrowLeft')) {
+        if(input.isKeyDown('Numpad4')) {
             this.camera.move(new Vector3(-this._cameraSpeed, 0));
         }
-        if(input.isKeyDown('ArrowRight')) {
+        if(input.isKeyDown('Numpad6')) {
             this.camera.move(new Vector3(this._cameraSpeed, 0, 0));
         }
-        if(input.isKeyDown('ArrowUp')) {
+        if(input.isKeyDown('Numpad8')) {
             this.camera.move(new Vector3(0, this._cameraSpeed, 0));
         }
-        if(input.isKeyDown('ArrowDown')) {
+        if(input.isKeyDown('Numpad2')) {
             this.camera.move(new Vector3(0, -this._cameraSpeed, 0));
         }
-        if(input.isKeyDown('ControlLeft')) {
+        if(input.isKeyDown('Numpad3')) {
             this.camera.move(new Vector3(0, 0, this._cameraSpeed));
         }
-        if(input.isKeyDown('AltLeft')) {
+        if(input.isKeyDown('Numpad1')) {
             this.camera.move(new Vector3(0, 0, -this._cameraSpeed));
         }
 
@@ -64,11 +64,29 @@ export class Game extends GameBase{
         if(input.isKeyDown('KeyS')) {
             this.scene.controllable.move(new Vector3(0, -0.02, 0));
         }
-
         if(input.isKeyDown('KeyQ')) {
-            this.scene.controllable.rotate(  new Rotator(0, 10, 0));
+            this.scene.controllable.move(new Vector3(0, 0, 0.02));
         }
         if(input.isKeyDown('KeyE')) {
+            this.scene.controllable.move(new Vector3(0, 0, -0.02));
+        }
+
+        if(input.isKeyDown('Digit1')) {
+            this.scene.controllable.rotate(  new Rotator(10, 0, 0));
+        }
+        if(input.isKeyDown('Digit2')) {
+            this.scene.controllable.rotate( new Rotator(-10, 0, 0));
+        }
+        if(input.isKeyDown('Digit3')) {
+            this.scene.controllable.rotate(  new Rotator(0, 10, 0));
+        }
+        if(input.isKeyDown('Digit4')) {
+            this.scene.controllable.rotate( new Rotator(0, -10, 0));
+        }
+        if(input.isKeyDown('Digit5')) {
+            this.scene.controllable.rotate(  new Rotator(0, 0, 10));
+        }
+        if(input.isKeyDown('Digit6')) {
             this.scene.controllable.rotate( new Rotator(0, 0, -10));
         }
 
