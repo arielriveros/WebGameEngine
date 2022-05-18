@@ -6,20 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script type="text/javascript" src="app.js"></script>
-    <script>
-        function filterConsole(entryType) {
-            let entries = document.getElementsByClassName("console-entry");
-            for (let i = 0; i < entries.length; i++) {
-                let entry = entries[i];
-                if(entry.getElementsByClassName('console-text')[0].classList.contains(entryType)) {
-                    entry.style.display = "flex";
-                }
-                else {
-                    entry.style.display = "none";
-                }
-            }
-        }        
-    </script>
+    <script type="text/javascript" src="utils.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
