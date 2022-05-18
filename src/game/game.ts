@@ -1,5 +1,6 @@
 import { GameBase } from './gameInterface';
 import { Vector3, Camera, Scene, InputManager, Shapes, Shaders } from 'core';
+import { Rotator } from 'math';
 
 export class Game extends GameBase{
 
@@ -16,7 +17,7 @@ export class Game extends GameBase{
         this.scene.addShape(new Shapes.Triangle({ color: [0, 0.5, 0.5], position: new Vector3(0, 0, 0.5) }));
         this.scene.addShape(new Shapes.Quad());
         this.scene.addShape(new Shapes.Shape(new Vector3(0, 0, 0.001)));
-        for(let i = 0; i < 99; i++) {
+        for(let i = 0; i < 9; i++) {
             this.scene.addShape(new Shapes.Cube({ 
                 base: 0.1, 
                 position: new Vector3(
@@ -65,10 +66,10 @@ export class Game extends GameBase{
         }
 
         if(input.isKeyDown('KeyQ')) {
-            this.scene.controllable.rotate(  -0.01, new Vector3(0, 0, 1));
+            this.scene.controllable.rotate(  new Rotator(0, 0.01, 0));
         }
         if(input.isKeyDown('KeyE')) {
-            this.scene.controllable.rotate( 0.01, new Vector3(0, 1, ));
+            this.scene.controllable.rotate( new Rotator(0, -0.01, 0));
         }
 
         if(input.isKeyDown('Space')) {

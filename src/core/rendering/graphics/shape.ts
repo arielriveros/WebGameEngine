@@ -3,14 +3,14 @@ import { GLArrayBuffer } from "../gl/arrayBuffer";
 import { GLElementArrayBuffer } from "../gl/elementArrayBuffer";
 import { AttributeInformation } from "../interfaces";
 import { Shader, SimpleShader, SimpleShaderTest } from "../shaders/shader";
-import { Vector3, Matrix4x4 } from "math";
+import { Vector3, Matrix4x4, Rotator } from "math";
 
 interface Options{
     height?: number,
     base?: number,
     color?: number[],
     position?: Vector3,
-    rotation?: number,
+    rotation?: Rotator,
     shader?: Shader
 }
 
@@ -24,7 +24,7 @@ export class Shape {
     private _indices: number[] | null;
     private _shader!:Shader;
     private _position: Vector3;
-    private _rotation: number;
+    private _rotation: Rotator;
     private _uWorld!: WebGLUniformLocation;
     private _worldMatrix: Matrix4x4
 
@@ -44,7 +44,7 @@ export class Shape {
         this._indices = newIndices;
     }
 
-    public constructor(position: Vector3 = new Vector3(), rotation: number = 0, shader: Shader = new SimpleShader() ) {
+    public constructor(position: Vector3 = new Vector3(), rotation: Rotator = new Rotator(), shader: Shader = new SimpleShader() ) {
         this._vertices = [
         // X   Y    Z    R    G    B
         -0.5, -0.5, 0.0, 1.0, 0.0, 0.0,
@@ -110,9 +110,17 @@ export class Shape {
         this._position.add(delta);
     }
 
-    public rotate(rad: number, axis: Vector3): void {
-        this._rotation += rad;
-        Matrix4x4.rotate(this._worldMatrix, new Matrix4x4(), this._rotation, axis);
+    public rotate(delta: Rotator): void {
+        this._rotation.add(delta);
+        if(delta.pitch !== 0) {
+            Matrix4x4.rotate(this._worldMatrix, new Matrix4x4(), this._rotation.pitch, new Vector3(1, 0, 0));
+        }
+        if(delta.yaw !== 0) {
+            Matrix4x4.rotate(this._worldMatrix, new Matrix4x4(), this._rotation.yaw, new Vector3(0, 1, 0));
+        }
+        if(delta.roll !== 0) {
+            Matrix4x4.rotate(this._worldMatrix, new Matrix4x4(), this._rotation.roll, new Vector3(0, 0, 1));
+        }
     }
 }
 
@@ -129,8 +137,8 @@ export class Triangle extends Shape {
         let base: number = options.base ? options.base : 1;
         let height: number = options.height ? options.height : 1;
         let color: number[] = options.color ? options.color : [0, 0, 0];
-        let position: Vector3 = options.position ? options.position : new Vector3(0, 0, 0);
-        let rotation: number = options.rotation ? options.rotation : 0;
+        let position: Vector3 = options.position ? options.position : new Vector3();
+        let rotation: Rotator = options.rotation ? options.rotation : new Rotator();
         let shader: Shader = options.shader ? options.shader : new SimpleShader();
         super(position, rotation, shader);
         this.vertices = [
@@ -154,8 +162,8 @@ export class Quad extends Shape {
         let base: number = options.base ? options.base : 1;
         let height: number = options.height ? options.height : 1;
         let color: number[] = options.color ? options.color : [0, 0, 0];
-        let position: Vector3 = options.position ? options.position : new Vector3(0, 0, 0);
-        let rotation: number = options.rotation ? options.rotation : 0;
+        let position: Vector3 = options.position ? options.position : new Vector3();
+        let rotation: Rotator = options.rotation ? options.rotation : new Rotator();
         let shader: Shader = options.shader ? options.shader : new SimpleShader();
         super(position, rotation, shader);
         this.vertices = [
@@ -181,9 +189,9 @@ export class Cube extends Shape {
     public constructor(options: Options = {}) {
         let base: number = options.base ? options.base : 1;
         let color: number[] = options.color ? options.color : [0, 0, 0];
-        let position: Vector3 = options.position ? options.position : new Vector3(0, 0, 0);
+        let position: Vector3 = options.position ? options.position : new Vector3();
+        let rotation: Rotator = options.rotation ? options.rotation : new Rotator();
         let shader: Shader = options.shader ? options.shader : new SimpleShader();
-        let rotation: number = options.rotation ? options.rotation : 0;
         super(position, rotation, shader);
         const l2 = base/2;
         this.indices = [
