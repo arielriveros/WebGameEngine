@@ -11,10 +11,17 @@
 </head>
 <body>
     <div id="debug-hud">
-        FPS: <span id="fps-meter"></span>
-        <br>
-        Frame time: <span id="frametime-meter"></span>
-        <br>
+        <div id="top">
+            <div>
+                FPS: <span id="fps-meter"></span>
+                <br>
+                Frame time: <span id="frametime-meter"></span>
+            </div>
+            <div>
+                <button onclick="location.restart()"> Restart </button>
+            </div>
+        </div>
+            <br>
         <div id="console-filter">
             <select  onchange="filterConsole(this.value)">
                 <option value="console-text">All</option>
@@ -25,6 +32,8 @@
             </select>
         </div>
         <div id="console"></div>
+        <br>
+        
     </div>
     <canvas id="render-viewport"></canvas>
 </body>
