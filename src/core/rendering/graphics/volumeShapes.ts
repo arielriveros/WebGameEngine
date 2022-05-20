@@ -1,6 +1,6 @@
 import { Rotator, Vector3 } from "math";
 import { Shaders } from "core";
-import { Options, Shape, SimpleShape } from "./shape";
+import { Options, Shape, SimpleShape, TexturedShape } from "./shape";
 
 export class Cube extends SimpleShape {
     public constructor(options: Options = {}) {
@@ -115,11 +115,9 @@ export class ColorCube extends Cube {
     }
 }
 
-export class TexturedCube extends Shape {
-    public constructor(options: Options) {
-        let base: number = options.base || 1;
-        super(options.position, options.rotation, new Shaders.TextureShader());
-        this._shader = new Shaders.SimpleShaderTest();
+export class TexturedCube extends TexturedShape {
+    public constructor(texture: HTMLImageElement, options: Options) {
+        super(options.position, options.rotation, texture);
         const l2 = options.base ? options.base/2 : 0.5;
         this.indices = [
             // Top
@@ -170,6 +168,14 @@ export class TexturedCube extends Shape {
             // Back
             l2,  l2, -l2, 1.0, 0.0,
             l2, -l2, -l2, 1.0, 1.0,
-           -l2, -l2, -l2, 0.0, 1.0];
+           -l2, -l2, -l2, 0.0, 1.0,
+           -l2,  l2, -l2, 0.0, 0.0,
+
+            // Bottom
+           -l2, -l2, -l2, 0.0, 0.0,
+           -l2, -l2,  l2, 0.0, 1.0,
+            l2, -l2,  l2, 1.0, 1.0,
+            l2, -l2, -l2, 1.0, 0.0,
+        ];
     }
 }

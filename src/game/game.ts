@@ -58,7 +58,9 @@ export class Game extends GameBase{
                 'controllable',
                 new Vector3(),
                 new Rotator(),
-                new Shapes.ColorCube({base: 0.5})
+                new Shapes.TexturedCube(
+                    document.getElementById('roma-texture') as HTMLImageElement, 
+                    {base: 0.5})
             )
         );
     }
@@ -123,22 +125,22 @@ export class Game extends GameBase{
         }
 
         if(input.isKeyDown('Digit1')) {
-            this.scene.getEntity('controllable')?.rotate(  new Rotator(10, 0, 0));
+            this.scene.getEntity('controllable')?.rotate(  new Rotator(2, 0, 0));
         }
         if(input.isKeyDown('Digit2')) {
-            this.scene.getEntity('controllable')?.rotate( new Rotator(-10, 0, 0));
+            this.scene.getEntity('controllable')?.rotate( new Rotator(-2, 0, 0));
         }
         if(input.isKeyDown('Digit3')) {
-            this.scene.getEntity('controllable')?.rotate(  new Rotator(0, 10, 0));
+            this.scene.getEntity('controllable')?.rotate(  new Rotator(0, 2, 0));
         }
         if(input.isKeyDown('Digit4')) {
-            this.scene.getEntity('controllable')?.rotate( new Rotator(0, -10, 0));
+            this.scene.getEntity('controllable')?.rotate( new Rotator(0, -2, 0));
         }
         if(input.isKeyDown('Digit5')) {
-            this.scene.getEntity('controllable')?.rotate(  new Rotator(0, 0, 10));
+            this.scene.getEntity('controllable')?.rotate(  new Rotator(0, 0, 2));
         }
         if(input.isKeyDown('Digit6')) {
-            this.scene.getEntity('controllable')?.rotate( new Rotator(0, 0, -10));
+            this.scene.getEntity('controllable')?.rotate( new Rotator(0, 0, -2));
         }
 
         if(input.isKeyDown('Space')) {

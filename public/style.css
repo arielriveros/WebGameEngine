@@ -9,6 +9,10 @@ canvas {
     height: 100vh;
 }
 
+#texture-assets {
+    display: none;
+}
+
 #debug-hud {
     position: absolute;
     padding-top: 1%;
