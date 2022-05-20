@@ -7,16 +7,16 @@ export class Game extends GameBase{
     private _cameraOptions = {cameraSpeed: 0.1};
 
     public override setUp(): void {
-        let perspectiveCamera = new PerspectiveCamera({position: new Vector3(0, 0, 1), fovy: 1.5});
-        let orthographicCamera = new OrthographicCamera({position: new Vector3(0, 0, 1)});
+        let perspectiveCamera = new PerspectiveCamera({position: new Vector3(-3, 3, 4), fovy: 1.6});
+        let orthographicCamera = new OrthographicCamera({position: new Vector3(-3, 3, 4), left: -3, right: 3, bottom: -3, top: 3, near: 0.01, far: 100});
         this.camera = perspectiveCamera;
         this.scene = new Scene();
     }
 
     private addGrid(size: number = 10) {
         for(let i = -size; i <= size; i++) {
-            this.scene.addEntity(new Entity(`line-${i}h`, new Vector3(i, 0, size), new Rotator(90, 0, 0), new Shapes.Line({base:2 * size, color: [0.5, 0.5, 0.5]}) ));
-            this.scene.addEntity(new Entity(`line-${i}v`, new Vector3(-size, 0, i), new Rotator(0, 0, 0), new Shapes.Line({base:2 * size, color: [0.7, 0.7, 0.7]}) ));
+            this.scene.addEntity(new Entity(`line-${i}h`, new Vector3(i, 0, size), new Rotator(0, 90, 0), new Shapes.Line({base:2 * size, color: [0.4, 0.4, 0.4]}) ));
+            this.scene.addEntity(new Entity(`line-${i}v`, new Vector3(-size, 0, i), new Rotator(0, 0, 0), new Shapes.Line({base:2 * size, color: [0.75, 0.75, 0.75]}) ));
         }
     }
 
@@ -44,7 +44,7 @@ export class Game extends GameBase{
                 'controllable',
                 new Vector3(),
                 new Rotator(),
-                new Shapes.ColorCube({base: 2})
+                new Shapes.ColorCube({base: 0.5})
             )
         );
     }
