@@ -1,4 +1,6 @@
 /build
 /public/app.js
 /public/shaders
+/public/assets
+/src/game/assets/textures/*
 /node_modules

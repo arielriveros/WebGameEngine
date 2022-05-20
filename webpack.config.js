@@ -26,6 +26,9 @@ module.exports = {
     },
     mode: 'development',
     plugins: [
-        new CopyWebpackPlugin({patterns: [{ from: 'src/core/rendering/shaders/sources', to: 'shaders' }]})
+        new CopyWebpackPlugin({patterns: [
+            { from: 'src/core/rendering/shaders/sources', to: 'shaders' },
+            { from: 'src/game/assets', to: 'assets' }
+        ]})
     ]
 }
