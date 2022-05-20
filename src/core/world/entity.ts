@@ -39,4 +39,9 @@ export class Entity {
     public rotate(delta: Rotator): void {
         this._rotation.add(delta);
     }
+
+    public delete(): void {
+        this._shape?.unload();
+        this._shape = null;
+    }
 }

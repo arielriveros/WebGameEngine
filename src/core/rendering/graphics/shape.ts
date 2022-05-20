@@ -89,6 +89,11 @@ export abstract class Shape {
         this.draw();
     }
 
+    public unload(): void {
+        this._shader.remove();
+        this._buffer.unbind();
+    }
+
     public draw(): void {
         this._buffer.bind();
         if(this._indices) {

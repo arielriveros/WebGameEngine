@@ -156,6 +156,12 @@ export class Game extends GameBase{
                      (${c.rotation.pitch.toFixed(2)}, ${c.rotation.yaw.toFixed(2)}, ${c.rotation.roll.toFixed(2)})`);
             }
         }
+        if(input.isKeyDown('KeyR')) {
+            let c = this.scene.getEntity('controllable');
+            if(c) {
+                this.scene.removeEntity(c.name);
+            }
+        }
 
 
     }

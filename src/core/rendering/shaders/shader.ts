@@ -87,6 +87,10 @@ export class Shader {
     public use(): void {
         gl.useProgram(this._program);
     }
+
+    public remove(): void {
+        gl.deleteProgram(this._program);
+    }
 }
 
 export class SimpleShader extends Shader {
