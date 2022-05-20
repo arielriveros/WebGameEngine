@@ -1,6 +1,6 @@
 import { GameBase } from './gameInterface';
 import { PerspectiveCamera, Scene, InputManager, Shapes, OrthographicCamera, Entity, LOG } from 'core';
-import { Vector3, Rotator } from 'math';
+import { Vector3, Rotator, randomNumber } from 'math';
 
 export class Game extends GameBase{
 
@@ -24,14 +24,12 @@ export class Game extends GameBase{
         for(let i = 0; i < count; i++) {
             let newCube = new Shapes.Cube({ 
                 base: 0.1, 
-                color: [Math.random(), Math.random(), Math.random()]})
+                color: [randomNumber(), randomNumber(), randomNumber()]})
             this.scene.addEntity(
                 new Entity(
                     `randCube-${i}`,
-                    new Vector3((Math.random()-Math.random()) * 10,
-                                (Math.random()-Math.random()) * 10,
-                                (Math.random()-Math.random()) * 10),
-                    new Rotator(Math.random() * 360, Math.random() * 360, Math.random() * 360),
+                    new Vector3(randomNumber(10, -10), randomNumber(10, -10), randomNumber(10, -10)),
+                    new Rotator(randomNumber(360), randomNumber(360), randomNumber(360)),
                     newCube
                 )
             )
