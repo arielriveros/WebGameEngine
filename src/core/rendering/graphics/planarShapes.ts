@@ -12,13 +12,10 @@ export class Triangle extends Shape {
      * Triangle Basic 2D Shape. Rendered in origin.
      */
     public constructor(options: Options = {}) {
-        let base: number = options.base ? options.base : 1;
-        let height: number = options.height ? options.height : 1;
-        let color: number[] = options.color ? options.color : [0, 0, 0];
-        let position: Vector3 = options.position ? options.position : new Vector3();
-        let rotation: Rotator = options.rotation ? options.rotation : new Rotator();
-        let shader: Shaders.Shader = options.shader ? options.shader : new Shaders.SimpleShader();
-        super(position, rotation, shader);
+        let base: number = options.base || 1;
+        let height: number = options.height || 1;
+        let color: number[] = options.color || [0, 0, 0];
+        super(options.position, options.rotation, new Shaders.SimpleShader());
         this.vertices = [
         //  X       Y          Z    R         G         B
            -base/2, -height/2, 0.0, color[0], color[1], color[2],
@@ -33,12 +30,9 @@ export class ColorTriangle extends Shape {
      * Triangle Basic 2D Shape. Rendered in origin.
      */
     public constructor(options: Options = {}) {
-        let base: number = options.base ? options.base : 1;
-        let height: number = options.height ? options.height : 1;
-        let position: Vector3 = options.position ? options.position : new Vector3();
-        let rotation: Rotator = options.rotation ? options.rotation : new Rotator();
-        let shader: Shaders.Shader = options.shader ? options.shader : new Shaders.SimpleShader();
-        super(position, rotation, shader);
+        let base: number = options.base || 1;
+        let height: number = options.height || 1;
+        super(options.position, options.rotation, new Shaders.SimpleShader());
         this.vertices = [
         //  X       Y          Z    R    G    B
            -base/2, -height/2, 0.0, 1.0, 0.0, 0.0,
@@ -53,13 +47,10 @@ export class Quad extends Shape {
      * Quad Basic 2D Shape. Rendered in origin. Consists of 2 adyacent Triangles.
      */
     public constructor(options: Options = {}) {
-        let base: number = options.base ? options.base : 1;
-        let height: number = options.height ? options.height : 1;
-        let color: number[] = options.color ? options.color : [0, 0, 0];
-        let position: Vector3 = options.position ? options.position : new Vector3();
-        let rotation: Rotator = options.rotation ? options.rotation : new Rotator();
-        let shader: Shaders.Shader = options.shader ? options.shader : new Shaders.SimpleShader();
-        super(position, rotation, shader);
+        let base: number = options.base || 1;
+        let height: number = options.height || 1;
+        let color: number[] = options.color || [0, 0, 0];
+        super(options.position, options.rotation, new Shaders.SimpleShader());
         this.vertices = [
         //  X       Y          Z    R         G         B
            -base/2, -height/2, 0.0, color[0], color[1], color[2],
@@ -78,12 +69,9 @@ export class Line extends Shape {
      * Triangle Basic 2D Shape. Rendered in origin.
      */
     public constructor(options: Options = {}) {
-        let base: number = options.base ? options.base : 1;
-        let position: Vector3 = options.position ? options.position : new Vector3();
-        let rotation: Rotator = options.rotation ? options.rotation : new Rotator();
-        let color: number[] = options.color ? options.color : [0, 0, 0];
-        let shader: Shaders.Shader = options.shader ? options.shader : new Shaders.SimpleShader();
-        super(position, rotation, shader);
+        let base: number = options.base || 1;
+        let color: number[] = options.color || [0, 0, 0];
+        super(options.position, options.rotation, new Shaders.SimpleShader());
         this.vertices = [
         //  X Y  Z  R         G         B
         0,    0, 0, color[0], color[1], color[2],

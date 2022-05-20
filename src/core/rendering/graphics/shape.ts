@@ -11,7 +11,6 @@ export interface Options{
     color?: number[],
     position?: Vector3,
     rotation?: Rotator,
-    shader?: Shader
 }
 
 /**
@@ -22,7 +21,7 @@ export abstract class Shape {
     protected _indexBuffer!: GLElementArrayBuffer;
     protected _vertices: number[];
     protected _indices: number[] | null;
-    protected _shader!:Shader;
+    protected _shader!: Shader;
     protected _position: Vector3;
     protected _rotation: Rotator;
     protected _uWorld!: WebGLUniformLocation;
