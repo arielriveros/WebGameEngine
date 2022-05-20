@@ -38,15 +38,17 @@ export abstract class Camera {
      * Runs every frame.
      */
     public update(): void {
-        for (const s of this._scene.shapes){
-            s.shader.use();
-            Matrix4x4.lookAt(this._viewMatrix, this._camPosition, this._focalPosition, new Vector3(0, 1, 0));
-            let uWorld: WebGLUniformLocation = s.shader.getUniformLocation('u_world');
-            let uView: WebGLUniformLocation = s.shader.getUniformLocation('u_view');
-            let uProj: WebGLUniformLocation = s.shader.getUniformLocation('u_proj');
-            gl.uniformMatrix4fv(uWorld, false, this._worldMatrix.toFloat32Array());
-            gl.uniformMatrix4fv(uView, false, this._viewMatrix.toFloat32Array());
-            gl.uniformMatrix4fv(uProj, false, this._projectionMatrix.toFloat32Array());
+        for (const e of this._scene.entities){
+            if(e.shape) {
+                e.shape.shader.use();
+                Matrix4x4.lookAt(this._viewMatrix, this._camPosition, this._focalPosition, new Vector3(0, 1, 0));
+                let uWorld: WebGLUniformLocation = e.shape.shader.getUniformLocation('u_world');
+                let uView: WebGLUniformLocation = e.shape.shader.getUniformLocation('u_view');
+                let uProj: WebGLUniformLocation = e.shape.shader.getUniformLocation('u_proj');
+                gl.uniformMatrix4fv(uWorld, false, this._worldMatrix.toFloat32Array());
+                gl.uniformMatrix4fv(uView, false, this._viewMatrix.toFloat32Array());
+                gl.uniformMatrix4fv(uProj, false, this._projectionMatrix.toFloat32Array());
+            }
         }
     }
 

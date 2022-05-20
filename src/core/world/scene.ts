@@ -1,40 +1,38 @@
 import { Vector3 } from "math";
-import { Shape } from "../rendering/graphics/shape";
+import { Entity } from "./entity";
 
 export class Scene {
-    private _shapes: Shape[];
-    private _controllable!: Shape;
+    private _entities: Entity[];
 
     public constructor() {
-        this._shapes = [];
+        this._entities = [];
     }
 
-    public get shapes() {
-        return this._shapes;
+    public get entities() {
+        return this._entities;
     }
 
-    public get controllable() {
-        return this._controllable;
+    public addEntity(entity: Entity): void {
+        entity.shape?.load();
+        this._entities.push(entity);
     }
 
-    public addControllable(controllable: Shape): void {
-        if(!this._controllable) {
-            this._controllable = controllable;
-            this.addShape(controllable);
+    public removeEntity(entityName: string): void { 
+        for (let i = 0; i < this._entities.length; i++) {
+            if (this._entities[i].name === entityName) {
+                this._entities.splice(i, 1);
+                break;
+            }
         }
     }
 
-    public setControllable(controllable: Shape): void {
-        this._controllable = controllable;
-    }
-
-    public moveControllable(delta: Vector3): void {
-        this._controllable.move(delta);
-    }
-
-    public addShape(shape: Shape): void {
-        shape.load();
-        this._shapes.push(shape);
+    public getEntity(entityName: string): Entity | null {
+        for (const e of this._entities) {
+            if (e.name === entityName) {
+                return e;
+            }
+        }
+        return null;
     }
 
     public initialize(): void {
@@ -42,8 +40,8 @@ export class Scene {
     }
 
     public update(): void {
-        for (const i of this._shapes) {
-            i.update();
+        for (const i of this._entities) {
+            i.shape?.update();
         }
     }
 }

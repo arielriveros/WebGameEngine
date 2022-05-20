@@ -27,21 +27,16 @@ export abstract class Shape {
     protected _uWorld!: WebGLUniformLocation;
     protected _worldMatrix: Matrix4x4
 
-    public get shader(): Shader {
-        return this._shader;
-    }
+    public get shader(): Shader { return this._shader; }
 
-    public get position(): Vector3 {
-        return this._position;
-    }
+    public get position(): Vector3 { return this._position; }
+    public set position(value: Vector3) { this._position = value; }
 
-    protected set vertices(newVertices: number[]) {
-        this._vertices = newVertices;
-    }
+    public get rotation(): Rotator { return this._rotation; }
+    public set rotation(value: Rotator) { this._rotation = value; }
 
-    protected set indices(newIndices: number[]) {
-        this._indices = newIndices;
-    }
+    protected set vertices(newVertices: number[]) { this._vertices = newVertices; }
+    protected set indices(newIndices: number[]) { this._indices = newIndices; }
 
     public constructor(position: Vector3 = new Vector3(), rotation: Rotator = new Rotator(), shader: Shader = new SimpleShader() ) {
         this._vertices = [];
@@ -102,14 +97,5 @@ export abstract class Shape {
         else{
             this._buffer.draw();
         }
-    }
-
-    public move(delta: Vector3): void {
-        this._position.add(delta);
-    }
-
-    public rotate(delta: Rotator): void {
-        this._rotation.add(delta);
-        
     }
 }
