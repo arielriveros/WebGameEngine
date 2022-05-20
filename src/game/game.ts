@@ -1,20 +1,22 @@
 import { GameBase } from './gameInterface';
-import { Vector3, Camera, Scene, InputManager, Shapes, Shaders } from 'core';
-import { Rotator } from 'math';
+import { PerspectiveCamera, Scene, InputManager, Shapes, Shaders, OrthographicCamera } from 'core';
+import { Vector3, Rotator } from 'math';
 
 export class Game extends GameBase{
 
-    private _cameraSpeed = 0.1;
+    private _cameraOptions = {cameraSpeed: 0.1, fovy: 1.1};
 
     public override setUp(): void {
-        this.camera = new Camera(new Vector3(0, 0, 1));
+        let perspectiveCamera = new PerspectiveCamera({position: new Vector3(0, 0, 1), fovy: this._cameraOptions.fovy});
+        let orthographicCamera = new OrthographicCamera({position: new Vector3(0, 0, 1)});
+        this.camera = perspectiveCamera;
         this.scene = new Scene();
     }
 
-    private addGrid(scene: Scene) {
-        for(let i = -10; i <= 10; i++) {
-            scene.addShape(new Shapes.Line({position: new Vector3(i, 0, 10), rotation: new Rotator(90, 0, 0), base:20}));
-            scene.addShape(new Shapes.Line({position: new Vector3(-10, 0, i), rotation: new Rotator(0, 0, 0), base: 20, color: [0.7, 0.7, 0.7]}));
+    private addGrid(scene: Scene, size: number = 10) {
+        for(let i = -size; i <= size; i++) {
+            scene.addShape(new Shapes.Line({position: new Vector3(i, 0, size), rotation: new Rotator(90, 0, 0), base:2 * size, color: [0.5, 0.5, 0.5]}));
+            scene.addShape(new Shapes.Line({position: new Vector3(-size, 0, i), rotation: new Rotator(0, 0, 0), base: 2 * size, color: [0.7, 0.7, 0.7]}));
         }
     }
 
@@ -46,22 +48,28 @@ export class Game extends GameBase{
     public override inputListen(input: InputManager): void {
         
         if(input.isKeyDown('Numpad4')) {
-            this.camera.move(new Vector3(-this._cameraSpeed, 0));
+            this.camera.move(new Vector3(-this._cameraOptions.cameraSpeed, 0));
         }
         if(input.isKeyDown('Numpad6')) {
-            this.camera.move(new Vector3(this._cameraSpeed, 0, 0));
+            this.camera.move(new Vector3(this._cameraOptions.cameraSpeed, 0, 0));
         }
         if(input.isKeyDown('Numpad8')) {
-            this.camera.move(new Vector3(0, this._cameraSpeed, 0));
+            this.camera.move(new Vector3(0, this._cameraOptions.cameraSpeed, 0));
         }
         if(input.isKeyDown('Numpad2')) {
-            this.camera.move(new Vector3(0, -this._cameraSpeed, 0));
-        }
-        if(input.isKeyDown('Numpad3')) {
-            this.camera.move(new Vector3(0, 0, this._cameraSpeed));
+            this.camera.move(new Vector3(0, -this._cameraOptions.cameraSpeed, 0));
         }
         if(input.isKeyDown('Numpad1')) {
-            this.camera.move(new Vector3(0, 0, -this._cameraSpeed));
+            this.camera.move(new Vector3(0, 0, this._cameraOptions.cameraSpeed));
+        }
+        if(input.isKeyDown('Numpad3')) {
+            this.camera.move(new Vector3(0, 0, -this._cameraOptions.cameraSpeed));
+        }
+        if(input.isKeyDown('Numpad7')) {
+            this._cameraOptions.fovy += 0.01;
+        }
+        if(input.isKeyDown('Numpad9')) {
+            this._cameraOptions.fovy -= 0.01;
         }
 
         if(input.isKeyDown('KeyA')) {
@@ -76,10 +84,10 @@ export class Game extends GameBase{
         if(input.isKeyDown('KeyS')) {
             this.scene.controllable.move(new Vector3(0, -0.02, 0));
         }
-        if(input.isKeyDown('KeyQ')) {
+        if(input.isKeyDown('KeyE')) {
             this.scene.controllable.move(new Vector3(0, 0, 0.02));
         }
-        if(input.isKeyDown('KeyE')) {
+        if(input.isKeyDown('KeyQ')) {
             this.scene.controllable.move(new Vector3(0, 0, -0.02));
         }
 
@@ -108,5 +116,7 @@ export class Game extends GameBase{
             this.scene.setControllable(selectedShape);
             this.camera.setFocalPoint(this.scene.controllable.position);
         }
+
+
     }
 }

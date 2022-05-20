@@ -37,6 +37,7 @@ export class Render{
         this._scene.initialize();
         this._camera = camera;
         this._camera.initialize(this._scene);
+        this.resize();
     }
 
     /**
@@ -94,6 +95,5 @@ export class Render{
         gl.frontFace(gl.CCW);
         gl.cullFace(gl.BACK);
         // gl.cullFace(gl.FRONT);
-        this.resize();
     }
 }
