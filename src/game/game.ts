@@ -9,7 +9,7 @@ export class Game extends GameBase{
     public override setUp(): void {
         let perspectiveCamera = new PerspectiveCamera({position: new Vector3(0, 0, 1), fovy: 1.5});
         let orthographicCamera = new OrthographicCamera({position: new Vector3(0, 0, 1)});
-        this.camera = orthographicCamera;
+        this.camera = perspectiveCamera;
         this.scene = new Scene();
     }
 
@@ -34,7 +34,7 @@ export class Game extends GameBase{
     }
 
     public override start(): void { 
-        let controllable = new Shapes.ColorCube({ base: 0.2,color: [0, 0.5, 0.5], position: new Vector3(0, 0.2, 0.0), shader: new Shaders.SimpleShaderTest() });
+        let controllable = new Shapes.ColorCube({ base: 0.2,color: [0, 0.5, 0.5], position: new Vector3(0, 0.2, 0.0)});
         this.scene.addControllable(controllable);
         this.camera.setFocalPoint(this.scene.controllable.position);
         this.scene.addShape(new Shapes.ColorTriangle({position: new Vector3(0, 0, 0.001)}));
