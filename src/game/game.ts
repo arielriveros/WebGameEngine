@@ -36,17 +36,17 @@ export class Game extends GameBase{
         }
     }
 
-    private addCubes(count: number) {
+    private addRandomtriangles(count: number) {
         for(let i = 0; i < count; i++) {
-            let newCube = new Shapes.Cube({ 
-                base: 0.05, 
-                color: [0, 0, 0]})
+            let newTriangle = new Shapes.Triangle({ 
+                base: 0.5, 
+                color: [randomNumber(), randomNumber(), randomNumber()]})
             this.scene.addEntity(
                 new Entity(
-                    `randCube-${i}`,
-                    new Vector3(),
-                    new Rotator(),
-                    newCube
+                    `randTriangle-${i}`,
+                    new Vector3(randomNumber(10, -10), randomNumber(10, -10), randomNumber(10, -10)),
+                    new Rotator(randomNumber(360), randomNumber(360), randomNumber(360)),
+                    newTriangle
                 )
             )
         }
@@ -74,8 +74,8 @@ export class Game extends GameBase{
         LOG(`Random cubes ${(performance.now() - previousTime).toFixed(3)} ms`);
         
         previousTime = performance.now()
-        this.addCubes(100);
-        LOG(`Normal cubes ${(performance.now() - previousTime).toFixed(3)} ms`);
+        this.addRandomtriangles(100);
+        LOG(`Random triangles ${(performance.now() - previousTime).toFixed(3)} ms`);
 
         this.addControllable();
     }

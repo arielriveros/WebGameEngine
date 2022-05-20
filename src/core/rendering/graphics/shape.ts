@@ -50,7 +50,40 @@ export abstract class Shape {
     /**
      * Loads current object's vertices into WebGL Buffer for rendering
      */
-    public load(): void {
+    public load(): void { }
+
+    public update(): void {
+        this._shader.use();
+        let trans = Matrix4x4.translate(this._worldMatrix, new Matrix4x4(),this._position);
+        let pitchRot = Matrix4x4.rotate(this._worldMatrix, trans , this._rotation.getRadiansPitch(), new Vector3(1, 0, 0));
+        let yawRot = Matrix4x4.rotate(this._worldMatrix, pitchRot, this._rotation.getRadiansYaw(), new Vector3(0, 1, 0));
+        let rollRot = Matrix4x4.rotate(this._worldMatrix, yawRot, this._rotation.getRadiansRoll(), new Vector3(0, 0, 1));
+        gl.uniformMatrix4fv(this._uWorld, false, this._worldMatrix.toFloat32Array());
+        this.draw();
+    }
+
+    public unload(): void {
+        this._shader.remove();
+        this._buffer.unbind();
+    }
+
+    public draw(): void {
+        this._buffer.bind();
+        if(this._indices) {
+            this._indexBuffer.draw();
+        }
+        else{
+            this._buffer.draw();
+        }
+    }
+}
+
+export class SimpleShape extends Shape {
+    public constructor(position: Vector3 = new Vector3(), rotation: Rotator = new Rotator()) {
+        super(position, rotation, new SimpleShader() );
+    }
+
+    public override load(): void {
         this._shader.use();
         this._buffer = new GLArrayBuffer(6, gl.FLOAT, gl.TRIANGLES );
 
@@ -77,30 +110,5 @@ export abstract class Shape {
         
         this._buffer.pushData(this._vertices);
         this._buffer.upload();
-    }
-
-    public update(): void {
-        this._shader.use();
-        let trans = Matrix4x4.translate(this._worldMatrix, new Matrix4x4(),this._position);
-        let pitchRot = Matrix4x4.rotate(this._worldMatrix, trans , this._rotation.getRadiansPitch(), new Vector3(1, 0, 0));
-        let yawRot = Matrix4x4.rotate(this._worldMatrix, pitchRot, this._rotation.getRadiansYaw(), new Vector3(0, 1, 0));
-        let rollRot = Matrix4x4.rotate(this._worldMatrix, yawRot, this._rotation.getRadiansRoll(), new Vector3(0, 0, 1));
-        gl.uniformMatrix4fv(this._uWorld, false, this._worldMatrix.toFloat32Array());
-        this.draw();
-    }
-
-    public unload(): void {
-        this._shader.remove();
-        this._buffer.unbind();
-    }
-
-    public draw(): void {
-        this._buffer.bind();
-        if(this._indices) {
-            this._indexBuffer.draw();
-        }
-        else{
-            this._buffer.draw();
-        }
     }
 }

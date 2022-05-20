@@ -1,21 +1,18 @@
 import { gl } from "../render";
-import { Rotator, Vector3 } from "math";
-import { Shaders } from "core";
-import { Options, Shape } from "./shape";
+import { Options, Shape, SimpleShape } from "./shape";
 import { GLArrayBuffer } from "../gl/arrayBuffer";
-import { GLElementArrayBuffer } from "../gl/elementArrayBuffer";
 import { AttributeInformation } from "../interfaces";
 
-export class Triangle extends Shape {
+export class Triangle extends SimpleShape {
 
     /**
      * Triangle Basic 2D Shape. Rendered in origin.
      */
     public constructor(options: Options = {}) {
         let base: number = options.base || 1;
-        let height: number = options.height || 1;
+        let height: number = options.height || base;
         let color: number[] = options.color || [0, 0, 0];
-        super(options.position, options.rotation, new Shaders.SimpleShader());
+        super(options.position, options.rotation);
         this.vertices = [
         //  X       Y          Z    R         G         B
            -base/2, -height/2, 0.0, color[0], color[1], color[2],
@@ -24,7 +21,7 @@ export class Triangle extends Shape {
         }
 }
 
-export class ColorTriangle extends Shape {
+export class ColorTriangle extends SimpleShape {
 
     /**
      * Triangle Basic 2D Shape. Rendered in origin.
@@ -32,7 +29,7 @@ export class ColorTriangle extends Shape {
     public constructor(options: Options = {}) {
         let base: number = options.base || 1;
         let height: number = options.height || 1;
-        super(options.position, options.rotation, new Shaders.SimpleShader());
+        super(options.position, options.rotation);
         this.vertices = [
         //  X       Y          Z    R    G    B
            -base/2, -height/2, 0.0, 1.0, 0.0, 0.0,
@@ -41,7 +38,7 @@ export class ColorTriangle extends Shape {
         }
 }
 
-export class Quad extends Shape {
+export class Quad extends SimpleShape {
 
     /**
      * Quad Basic 2D Shape. Rendered in origin. Consists of 2 adyacent Triangles.
@@ -50,7 +47,7 @@ export class Quad extends Shape {
         let base: number = options.base || 1;
         let height: number = options.height || 1;
         let color: number[] = options.color || [0, 0, 0];
-        super(options.position, options.rotation, new Shaders.SimpleShader());
+        super(options.position, options.rotation);
         this.vertices = [
         //  X       Y          Z    R         G         B
            -base/2, -height/2, 0.0, color[0], color[1], color[2],
@@ -63,7 +60,7 @@ export class Quad extends Shape {
         }
 }
 
-export class Line extends Shape {
+export class Line extends SimpleShape {
 
     /**
      * Triangle Basic 2D Shape. Rendered in origin.
@@ -71,7 +68,7 @@ export class Line extends Shape {
     public constructor(options: Options = {}) {
         let base: number = options.base || 1;
         let color: number[] = options.color || [0, 0, 0];
-        super(options.position, options.rotation, new Shaders.SimpleShader());
+        super(options.position, options.rotation);
         this.vertices = [
         //  X Y  Z  R         G         B
         0,    0, 0, color[0], color[1], color[2],

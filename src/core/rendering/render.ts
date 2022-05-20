@@ -91,9 +91,9 @@ export class Render{
         // Dark gray initial color
         gl.clearColor(0.2, 0.2, 0.2, 1.0);
         gl.enable(gl.DEPTH_TEST);
-        gl.enable(gl.CULL_FACE);
-        gl.frontFace(gl.CCW);
-        gl.cullFace(gl.BACK);
+        //gl.enable(gl.CULL_FACE);
+        //gl.frontFace(gl.CCW);
+        //gl.cullFace(gl.BACK);
         // gl.cullFace(gl.FRONT);
     }
 }
