@@ -1,5 +1,5 @@
 import { gl } from "../render";
-import { Options, Shape, SimpleShape } from "./shape";
+import { LineShape, Options, Shape, SimpleShape } from "./shape";
 import { GLArrayBuffer } from "../gl/arrayBuffer";
 import { AttributeInformation } from "../interfaces";
 
@@ -60,7 +60,7 @@ export class Quad extends SimpleShape {
         }
 }
 
-export class Line extends SimpleShape {
+export class Line extends LineShape {
 
     /**
      * Triangle Basic 2D Shape. Rendered in origin.
@@ -73,27 +73,5 @@ export class Line extends SimpleShape {
         //  X Y  Z  R         G         B
         0,    0, 0, color[0], color[1], color[2],
         base, 0, 0, color[0], color[1], color[2]];
-        }
-
-        public override load(): void {
-            this._shader.use();
-            this._buffer = new GLArrayBuffer(6, gl.FLOAT, gl.LINES );
-    
-            let positionAttribute:AttributeInformation = {
-                location: this._shader.getAttributeLocation("a_position"),
-                size: 3,
-                offset: 0 };
-            this._buffer.addAttribLocation(positionAttribute);
-    
-            let colorAttribute:AttributeInformation = {
-                location: this._shader.getAttributeLocation("a_color"),
-                size: 3, 
-                offset: 3 };
-            this._buffer.addAttribLocation(colorAttribute);
-    
-            this._uWorld = this._shader.getUniformLocation('u_world');
-            
-            this._buffer.pushData(this._vertices);
-            this._buffer.upload();
         }
 }

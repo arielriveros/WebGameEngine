@@ -153,3 +153,32 @@ export class TexturedShape extends Shape {
         this._buffer.upload();
     }
 }
+
+
+export class LineShape extends Shape {
+     public constructor(position: Vector3 = new Vector3(), rotation: Rotator = new Rotator()) {
+        super(position, rotation, new SimpleShader() );
+    }
+
+    public override load(): void {
+        this._shader.use();
+        this._buffer = new GLArrayBuffer(6, gl.FLOAT, gl.LINES );
+
+        let positionAttribute:AttributeInformation = {
+            location: this._shader.getAttributeLocation("a_position"),
+            size: 3,
+            offset: 0 };
+        this._buffer.addAttribLocation(positionAttribute);
+
+        let colorAttribute:AttributeInformation = {
+            location: this._shader.getAttributeLocation("a_color"),
+            size: 3, 
+            offset: 3 };
+        this._buffer.addAttribLocation(colorAttribute);
+
+        this._uWorld = this._shader.getUniformLocation('u_world');
+        
+        this._buffer.pushData(this._vertices);
+        this._buffer.upload();
+    }
+}
