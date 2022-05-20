@@ -104,6 +104,11 @@ export class OrthographicCamera extends Camera {
     }
 
     public override setProjection(): void {
-        this._projectionMatrix = Matrix4x4.orthographic(new Matrix4x4(), this._left, this._right, this._bottom, this._top, this._near, this._far);
+        this._projectionMatrix = Matrix4x4.orthographic
+        (new Matrix4x4(), 
+        this._left * window.innerWidth/window.innerHeight, 
+        this._right * window.innerWidth/window.innerHeight, 
+        this._bottom, this._top, this._near, this._far
+        );
     }
 }

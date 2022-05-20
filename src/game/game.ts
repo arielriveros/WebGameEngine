@@ -4,12 +4,12 @@ import { Vector3, Rotator } from 'math';
 
 export class Game extends GameBase{
 
-    private _cameraOptions = {cameraSpeed: 0.1, fovy: 1.1};
+    private _cameraOptions = {cameraSpeed: 0.1};
 
     public override setUp(): void {
-        let perspectiveCamera = new PerspectiveCamera({position: new Vector3(0, 0, 1), fovy: this._cameraOptions.fovy});
+        let perspectiveCamera = new PerspectiveCamera({position: new Vector3(0, 0, 1), fovy: 1.5});
         let orthographicCamera = new OrthographicCamera({position: new Vector3(0, 0, 1)});
-        this.camera = perspectiveCamera;
+        this.camera = orthographicCamera;
         this.scene = new Scene();
     }
 
@@ -64,12 +64,6 @@ export class Game extends GameBase{
         }
         if(input.isKeyDown('Numpad3')) {
             this.camera.move(new Vector3(0, 0, -this._cameraOptions.cameraSpeed));
-        }
-        if(input.isKeyDown('Numpad7')) {
-            this._cameraOptions.fovy += 0.01;
-        }
-        if(input.isKeyDown('Numpad9')) {
-            this._cameraOptions.fovy -= 0.01;
         }
 
         if(input.isKeyDown('KeyA')) {
