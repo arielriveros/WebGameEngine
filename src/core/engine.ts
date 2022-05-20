@@ -27,7 +27,11 @@ export class Engine{
      */
     public start(): void {
         this._input.initialize();
+
+        let previousTime = performance.now()
         this._game.start();
+        LOG(`Game set up in ${(performance.now() - previousTime).toFixed(2)} ms`, 'info');
+        
         this._render.render(this._game.camera, this._game.scene);
         this.loop();
     }

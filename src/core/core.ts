@@ -3,6 +3,7 @@ import { Camera, PerspectiveCamera, OrthographicCamera } from '../core/rendering
 import { Entity } from './world/entity';
 import { Scene } from './world/scene';
 import { InputManager } from './input/manager';
+import { LOG } from './logger';
 import * as Shaders from './rendering/shaders/shader';
 import * as Shapes from './rendering/graphics/shapes';
 
@@ -11,6 +12,7 @@ export {
     Camera, PerspectiveCamera, OrthographicCamera,
     Scene, Entity,
     InputManager,
+    LOG,
     Shaders,
     Shapes
 }

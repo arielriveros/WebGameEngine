@@ -1,5 +1,5 @@
 import { GameBase } from './gameInterface';
-import { PerspectiveCamera, Scene, InputManager, Shapes, OrthographicCamera, Entity } from 'core';
+import { PerspectiveCamera, Scene, InputManager, Shapes, OrthographicCamera, Entity, LOG } from 'core';
 import { Vector3, Rotator } from 'math';
 
 export class Game extends GameBase{
@@ -38,6 +38,22 @@ export class Game extends GameBase{
         }
     }
 
+    private addCubes(count: number) {
+        for(let i = 0; i < count; i++) {
+            let newCube = new Shapes.Cube({ 
+                base: 0.05, 
+                color: [0, 0, 0]})
+            this.scene.addEntity(
+                new Entity(
+                    `randCube-${i}`,
+                    new Vector3(),
+                    new Rotator(),
+                    newCube
+                )
+            )
+        }
+    }
+
     private addControllable() {
         this.scene.addEntity(
             new Entity(
@@ -50,8 +66,19 @@ export class Game extends GameBase{
     }
 
     public override start(): void { 
+
+        let previousTime = performance.now()
         this.addGrid();
+        LOG(`Grid ${(performance.now() - previousTime).toFixed(3)} ms`);
+
+        previousTime = performance.now()
         this.addRandomCubes(100);
+        LOG(`Random cubes ${(performance.now() - previousTime).toFixed(3)} ms`);
+        
+        previousTime = performance.now()
+        this.addCubes(100);
+        LOG(`Normal cubes ${(performance.now() - previousTime).toFixed(3)} ms`);
+
         this.addControllable();
     }
 
@@ -121,6 +148,14 @@ export class Game extends GameBase{
             if(c) {
                 this.camera.position = new Vector3(c.position.x, c.position.y, c.position.z + 2);
                 this.camera.focalPoint = c.position;
+            }
+        }
+
+        if(input.isKeyDown('KeyX')) {
+            let c = this.scene.getEntity('controllable');
+            if(c) {
+                LOG(`(${c.position.x.toFixed(2)}, ${c.position.y.toFixed(2)}, ${c.position.z.toFixed(2)})
+                     (${c.rotation.pitch.toFixed(2)}, ${c.rotation.yaw.toFixed(2)}, ${c.rotation.roll.toFixed(2)})`);
             }
         }
 
