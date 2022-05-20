@@ -8,7 +8,7 @@ export class Shader {
         return this._program;
     }
 
-    public constructor(vs: string, fs: string, debug: boolean = true) {
+    public constructor(vs: string, fs: string, debug: boolean = false) {
         this._debug = debug;
         let vertexShader: WebGLShader = this.loadSource(vs, gl.VERTEX_SHADER);
         let fragmentShader: WebGLShader = this.loadSource(fs, gl.FRAGMENT_SHADER);

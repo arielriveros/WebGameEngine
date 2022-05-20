@@ -8,7 +8,7 @@ export class InputManager {
     }
 
     public initialize() {
-        LOG("Input poller initialized");
+        LOG("Input poller initialized", "info");
         KeyHandler.inititialize();
         let body = document.querySelector("body") as HTMLBodyElement;
         body.addEventListener("keydown", this.KeyDown, false);
