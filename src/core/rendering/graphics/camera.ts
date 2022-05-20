@@ -15,8 +15,8 @@ export abstract class Camera {
     protected _near: number;
     protected _far: number;
 
-    public constructor( initialPosition: Vector3 = new Vector3(), near: number = 0.01, far: number = 1000) {
-            this._camPosition = initialPosition;
+    public constructor( position: Vector3 = new Vector3(), near: number = 0.01, far: number = 1000) {
+            this._camPosition = position;
             this._focalPosition = new Vector3();
             this._worldMatrix = new Matrix4x4();
             this._viewMatrix = new Matrix4x4();
@@ -24,16 +24,18 @@ export abstract class Camera {
             this._far = far;
         }
 
+    public get position(): Vector3 { return this._camPosition; }
+    public set position(newPos: Vector3) { this._camPosition = newPos; }
+
     public move(delta: Vector3): void {
         this._camPosition.add(delta);
     }
 
-    public setProjection(): void { }
-
-    public setFocalPoint(focus: Vector3): void {
-        this._focalPosition = focus;
-    }
-
+    
+    public set focalPoint(focus: Vector3) { this._focalPosition = focus; }
+    
+    public refreshProjection(): void { }
+        
     /**
      * Runs every frame.
      */
@@ -57,7 +59,7 @@ export abstract class Camera {
      */
     public initialize(scene: Scene): void {
         this._scene = scene;      
-        this.setProjection(); 
+        this.refreshProjection(); 
     }
 }
 
@@ -76,7 +78,7 @@ export class PerspectiveCamera extends Camera {
         this._fovy = options.fovy || 1.1;
     }
 
-    public override setProjection(): void {
+    public override refreshProjection(): void {
         this._projectionMatrix = Matrix4x4.perspective(new Matrix4x4(), this._fovy, window.innerWidth/window.innerHeight, this._near, this._far);
     }
 }
@@ -105,7 +107,7 @@ export class OrthographicCamera extends Camera {
         this._top = options.top || 1;
     }
 
-    public override setProjection(): void {
+    public override refreshProjection(): void {
         this._projectionMatrix = Matrix4x4.orthographic
         (new Matrix4x4(), 
         this._left * window.innerWidth/window.innerHeight, 

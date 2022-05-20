@@ -116,12 +116,13 @@ export class Game extends GameBase{
             this.scene.getEntity('controllable')?.rotate( new Rotator(0, 0, -10));
         }
 
-        /* if(input.isKeyDown('Space')) {
-            let index = Math.floor(Math.random() * this.scene.shapes.length);
-            let selectedShape = this.scene.shapes[index];
-            this.scene.setControllable(selectedShape);
-            this.camera.setFocalPoint(this.scene.controllable.position);
-        } */
+        if(input.isKeyDown('Space')) {
+            let c = this.scene.getEntity('controllable');
+            if(c) {
+                this.camera.position = new Vector3(c.position.x, c.position.y, c.position.z + 2);
+                this.camera.focalPoint = c.position;
+            }
+        }
 
 
     }
