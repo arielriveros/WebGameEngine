@@ -1,34 +1,34 @@
 import { Camera } from "../rendering/graphics/camera";
-import { Entity } from "./entity";
+import { ObjectEntity } from "./objectEntity";
 
 export class Scene {
-    private _entities: Entity[];
+    private _objects: ObjectEntity[];
     private _camera!: Camera;
 
     public constructor() {
-        this._entities = [];
+        this._objects = [];
     }
 
     public get entities() {
-        return this._entities;
+        return this._objects;
     }
 
-    public addEntity(entity: Entity): void {
+    public addEntity(entity: ObjectEntity): void {
         entity.shape?.load();
-        this._entities.push(entity);
+        this._objects.push(entity);
     }
 
     public removeEntity(entityName: string): void { 
-        for (let i = 0; i < this._entities.length; i++) {
-            if (this._entities[i].name === entityName) {
-                this._entities.splice(i, 1);
+        for (let i = 0; i < this._objects.length; i++) {
+            if (this._objects[i].name === entityName) {
+                this._objects.splice(i, 1);
                 break;
             }
         }
     }
 
-    public getEntity(entityName: string): Entity | null {
-        for (const e of this._entities) {
+    public getEntity(entityName: string): ObjectEntity | null {
+        for (const e of this._objects) {
             if (e.name === entityName) {
                 return e;
             }
@@ -41,7 +41,7 @@ export class Scene {
     }
 
     public update(): void {
-        for (const i of this._entities) {
+        for (const i of this._objects) {
             i.shape?.update();
             i.shape?.draw(this._camera);
         }

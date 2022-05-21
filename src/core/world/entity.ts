@@ -1,17 +1,15 @@
 import { Rotator, Vector3 } from "math";
-import { Shape } from "../rendering/graphics/shapes";
 
-export class Entity {
+export abstract class Entity {
     private _name: string;
     private _position: Vector3;
     private _rotation: Rotator;
-    private _shape!: Shape | null;
 
-    public constructor(name: string, position: Vector3 = new Vector3(), rotation: Rotator = new Rotator(), shape: Shape | null = null) {
+    public constructor(name: string, position: Vector3 = new Vector3(), rotation: Rotator = new Rotator())
+    {
         this._name = name;
         this._position = position;
         this._rotation = rotation;
-        this.shape = shape;
     }
 
     public get name(): string { return this._name; }
@@ -23,25 +21,15 @@ export class Entity {
     public get rotation(): Rotator { return this._rotation; }
     public set rotation(value: Rotator) { this._rotation = value; }
 
-    public get shape(): Shape | null { return this._shape; }
-    public set shape(shape: Shape | null) { 
-        if(shape) {
-            this._shape = shape;
-            this._shape.position = this._position;
-            this._shape.rotation = this._rotation;
-        }
-    }
-    
-    public move(delta: Vector3): void {
+    public move(delta: Vector3): void
+    {
         this._position.add(delta);
     }
 
-    public rotate(delta: Rotator): void {
+    public rotate(delta: Rotator): void
+    {
         this._rotation.add(delta);
     }
 
-    public delete(): void {
-        this._shape?.unload();
-        this._shape = null;
-    }
+    public delete(): void { }
 }
