@@ -5,6 +5,7 @@ import { Shader, SimpleShader, TextureShader } from "../shaders/shader";
 import { Vector3, Matrix4x4, Rotator } from "math";
 import { Texture } from "./texture";
 import { gl } from "../render";
+import { Camera } from "./camera";
 
 export interface Options{
     height?: number,
@@ -29,6 +30,7 @@ export abstract class Shape {
     protected _buffer!: GLArrayBuffer;
     protected _indexBuffer!: GLElementArrayBuffer;
     protected _uWorld!: WebGLUniformLocation;
+    protected _uViewProj!: WebGLUniformLocation;
     
     protected _worldMatrix: Matrix4x4;
     protected _viewProjection: Matrix4x4;;
@@ -86,10 +88,7 @@ export abstract class Shape {
     /**
      * Runs every frame.
      */
-    public update(): void
-    {
-        this.draw();
-    }
+    public update(): void { }
 
     /**
      * Deletes shader program and unbind buffer associated with this shape.
@@ -103,11 +102,12 @@ export abstract class Shape {
     /**
      * Draws data from the shape's buffers.
      */
-    public draw(): void
+    public draw(camera: Camera): void
     {
         this._shader.use();
         this.updateTransforms();
-        gl.uniformMatrix4fv(this._uWorld, false, this._worldMatrix.toFloat32Array());
+        this.updateViewProjection(camera.viewMatrix, camera.projectionMatrix);
+        gl.uniformMatrix4fv(this._uViewProj, false, this._viewProjection.toFloat32Array());
 
         this._buffer.bind();
         if(this._indices)
@@ -153,7 +153,7 @@ export class SimpleShape extends Shape
             offset: 3 };
         this._buffer.addAttribLocation(colorAttribute);
 
-        this._uWorld = this.shader.getUniformLocation('u_world');
+        this._uViewProj = this.shader.getUniformLocation('u_viewProj');
         
         this._buffer.pushData(this._vertices);
         this._buffer.upload();
@@ -196,7 +196,7 @@ export class TexturedShape extends Shape
             offset: 3 };
         this._buffer.addAttribLocation(textureAttribute);
         
-        this._uWorld = this.shader.getUniformLocation('u_world');
+        this._uViewProj = this.shader.getUniformLocation('u_viewProj');
         
         this._buffer.pushData(this._vertices);
         this._buffer.upload();
@@ -227,7 +227,7 @@ export class LineShape extends Shape {
             offset: 3 };
         this._buffer.addAttribLocation(colorAttribute);
 
-        this._uWorld = this.shader.getUniformLocation('u_world');
+        this._uViewProj = this.shader.getUniformLocation('u_viewProj');
         
         this._buffer.pushData(this._vertices);
         this._buffer.upload();

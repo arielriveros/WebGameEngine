@@ -33,10 +33,10 @@ export class Render{
      * @param scene 
      */
     public render(camera: Camera, scene: Scene): void {
-        this._scene = scene;
-        this._scene.initialize();
         this._camera = camera;
-        this._camera.initialize(this._scene);
+        this._camera.initialize();
+        this._scene = scene;
+        this._scene.initialize(this._camera);
         this.resize();
     }
 

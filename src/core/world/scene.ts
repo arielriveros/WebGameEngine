@@ -1,7 +1,9 @@
+import { Camera } from "../rendering/graphics/camera";
 import { Entity } from "./entity";
 
 export class Scene {
     private _entities: Entity[];
+    private _camera!: Camera;
 
     public constructor() {
         this._entities = [];
@@ -34,13 +36,14 @@ export class Scene {
         return null;
     }
 
-    public initialize(): void {
-        
+    public initialize(camera: Camera): void {
+        this._camera = camera;
     }
 
     public update(): void {
         for (const i of this._entities) {
             i.shape?.update();
+            i.shape?.draw(this._camera);
         }
     }
 }
