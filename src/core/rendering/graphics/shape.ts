@@ -15,44 +15,51 @@ export interface Options{
 }
 
 /**
- * Basic Shape class for rendering vertices on screen using a shader
+ * Shape parent class for rendering vertices.
  */
 export abstract class Shape {
-    protected _buffer!: GLArrayBuffer;
-    protected _indexBuffer!: GLElementArrayBuffer;
-    protected _vertices: number[];
-    protected _indices: number[] | null;
-    protected _shader!: Shader;
+
     protected _position: Vector3;
     protected _rotation: Rotator;
+
+    protected _vertices: number[];
+    protected _indices: number[] | null;
+
+    protected _shader: Shader;
+    protected _buffer!: GLArrayBuffer;
+    protected _indexBuffer!: GLElementArrayBuffer;
     protected _uWorld!: WebGLUniformLocation;
-    protected _worldMatrix: Matrix4x4
-
-    public get shader(): Shader { return this._shader; }
-
+    
+    protected _worldMatrix: Matrix4x4;
+    
+    public constructor(position: Vector3 = new Vector3(), rotation: Rotator = new Rotator(), shader: Shader = new SimpleShader() ) {
+        this._position = position;
+        this._rotation = rotation;
+        this._vertices = [];
+        this._indices = null;
+        this._shader = shader;
+        this._worldMatrix = new Matrix4x4();
+    }
+    
     public get position(): Vector3 { return this._position; }
     public set position(value: Vector3) { this._position = value; }
-
+    
     public get rotation(): Rotator { return this._rotation; }
     public set rotation(value: Rotator) { this._rotation = value; }
+
+    public get shader(): Shader { return this._shader; }
 
     protected set vertices(newVertices: number[]) { this._vertices = newVertices; }
     protected set indices(newIndices: number[]) { this._indices = newIndices; }
 
-    public constructor(position: Vector3 = new Vector3(), rotation: Rotator = new Rotator(), shader: Shader = new SimpleShader() ) {
-        this._vertices = [];
-        this._indices = null;
-        this._position = position;
-        this._rotation = rotation;
-        this._shader = shader;
-        this._worldMatrix = new Matrix4x4();
-    }
-
     /**
-     * Loads current object's vertices into WebGL Buffer for rendering
+     * Loads current object's vertices into WebGL Buffer for rendering.
      */
     public load(): void { }
-
+    
+    /**
+     * Runs every frame.
+     */
     public update(): void {
         this._shader.use();
         let trans = Matrix4x4.translate(this._worldMatrix, new Matrix4x4(),this._position);
@@ -63,11 +70,17 @@ export abstract class Shape {
         this.draw();
     }
 
+    /**
+     * Deletes shader program and unbind buffer associated with this shape.
+     */
     public unload(): void {
         this._shader.remove();
         this._buffer.unbind();
     }
 
+    /**
+     * Draws data from the shape's buffers.
+     */
     public draw(): void {
         this._buffer.bind();
         if(this._indices) {
