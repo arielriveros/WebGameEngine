@@ -19,6 +19,60 @@ export class Matrix4x4 {
         return new Float32Array(this._data);
     }
 
+    public static multiply(out: Matrix4x4, a: Matrix4x4, b: Matrix4x4) {
+        /* GLMATRIX LIBRARY IMPLEMENTATION */
+        let a00 = a._data[0],
+          a01 = a._data[1],
+          a02 = a._data[2],
+          a03 = a._data[3];
+        let a10 = a._data[4],
+          a11 = a._data[5],
+          a12 = a._data[6],
+          a13 = a._data[7];
+        let a20 = a._data[8],
+          a21 = a._data[9],
+          a22 = a._data[10],
+          a23 = a._data[11];
+        let a30 = a._data[12],
+          a31 = a._data[13],
+          a32 = a._data[14],
+          a33 = a._data[15];
+        // Cache only the current line of the second matrix
+        let b0 = b._data[0],
+          b1 = b._data[1],
+          b2 = b._data[2],
+          b3 = b._data[3];
+        out._data[0] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+        out._data[1] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+        out._data[2] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+        out._data[3] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+        b0 = b._data[4];
+        b1 = b._data[5];
+        b2 = b._data[6];
+        b3 = b._data[7];
+        out._data[4] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+        out._data[5] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+        out._data[6] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+        out._data[7] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+        b0 = b._data[8];
+        b1 = b._data[9];
+        b2 = b._data[10];
+        b3 = b._data[11];
+        out._data[8] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+        out._data[9] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+        out._data[10] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+        out._data[11] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+        b0 = b._data[12];
+        b1 = b._data[13];
+        b2 = b._data[14];
+        b3 = b._data[15];
+        out._data[12] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+        out._data[13] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+        out._data[14] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+        out._data[15] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+        return out;
+      }
+
     public static perspective(out: Matrix4x4, fovy: number, aspect: number, near: number, far: number) {
 
         /* GLMATRIX LIBRARY IMPLEMENTATION */
