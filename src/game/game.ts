@@ -1,5 +1,6 @@
 import { GameBase } from './gameInterface';
-import { PerspectiveCamera, Scene, InputManager, Shapes, OrthographicCamera, Entity, LOG } from 'core';
+import { PerspectiveCamera, Scene, InputManager, Shapes, OrthographicCamera, Entity } from 'core';
+import { LOG } from 'utils';
 import { Vector3, Rotator, randomNumber } from 'math';
 
 export class Game extends GameBase{

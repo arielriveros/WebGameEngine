@@ -1,6 +1,6 @@
 import { Camera } from "./graphics/camera";
 import { Scene } from "../world/scene";
-import { LOG } from "../logger";
+import { LOG } from "utils";
 
 /**
  * WebGL Global interface for rendering context

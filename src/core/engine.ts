@@ -1,7 +1,7 @@
 import { Game } from '../game/game';
 import { InputManager } from './input/manager';
 import { Render } from './rendering/render';
-import { LOG } from './logger';
+import { LOG } from 'utils';
 
 /**
  *  Main Engine Class 

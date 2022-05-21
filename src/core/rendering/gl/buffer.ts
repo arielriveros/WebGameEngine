@@ -1,4 +1,4 @@
-import { LOG } from "../../logger";
+import { LOG } from "utils";
 import { gl } from "../render";
 
 /**

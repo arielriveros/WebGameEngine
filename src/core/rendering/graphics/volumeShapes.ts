@@ -1,4 +1,3 @@
-import { Rotator, Vector3 } from "math";
 import { Shaders } from "core";
 import { Options, Shape, SimpleShape, TexturedShape } from "./shape";
 
