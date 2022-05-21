@@ -3,22 +3,32 @@ import { PerspectiveCamera, Scene, InputManager, Shapes, OrthographicCamera, Obj
 import { LOG } from 'utils';
 import { Vector3, Rotator, randomNumber } from 'math';
 
-export class Game extends GameBase{
-
+export class Game extends GameBase
+{
     private _cameraOptions = {cameraSpeed: 0.1};
 
-    public override setUp(): void {
-        let perspectiveCamera = new PerspectiveCamera({position: new Vector3(-3, 3, 4), fovy: 1.6});
-        let orthographicCamera = new OrthographicCamera({position: new Vector3(-3, 3, 4), left: -3, right: 3, bottom: -3, top: 3, near: 0.01, far: 100});
+    public override setUp(): void
+    {
+        let perspectiveCamera = new PerspectiveCamera({position: new Vector3(-1, 1, 2), fovy: 1.6});
+        let orthographicCamera = new OrthographicCamera({position: new Vector3(-1, 1, 2), left: -3, right: 3, bottom: -3, top: 3, near: 0.01, far: 100});
         this.camera = perspectiveCamera;
         this.scene = new Scene();
     }
 
-    private addGrid(size: number = 10) {
-        for(let i = -size; i <= size; i++) {
+    private addGrid(size: number = 10)
+    {
+        for(let i = -size; i <= size; i++)
+        {
             this.scene.addEntity(new ObjectEntity(`line-${i}h`, new Vector3(i, 0, size), new Rotator(0, 90, 0), new Shapes.Line({base:2 * size, color: [0.4, 0.4, 0.4]}) ));
             this.scene.addEntity(new ObjectEntity(`line-${i}v`, new Vector3(-size, 0, i), new Rotator(0, 0, 0), new Shapes.Line({base:2 * size, color: [0.75, 0.75, 0.75]}) ));
         }
+    }
+
+    private addAxis()
+    {
+        this.scene.addEntity(new ObjectEntity(`axis-x`, new Vector3(0, 0.001, 0), new Rotator(0, 0, 0), new Shapes.Line({base:1.5, color: [1, 0, 0]}) ));
+        this.scene.addEntity(new ObjectEntity(`axis-y`, new Vector3(0, 0, 0), new Rotator(0, 0, 90), new Shapes.Line({base:1.5, color: [0, 1, 0]}) ));
+        this.scene.addEntity(new ObjectEntity(`axis-z`, new Vector3(0, 0.001, 0), new Rotator(0, -90, 0), new Shapes.Line({base:1.5, color: [0, 0, 1]}) ));
     }
 
     private addRandomCubes(count: number)
@@ -97,7 +107,8 @@ export class Game extends GameBase{
     {
         let previousTime = performance.now()
         this.addGrid();
-        LOG(`Grid ${(performance.now() - previousTime).toFixed(3)} ms`);
+        this.addAxis();
+        LOG(`Grid - Axis ${(performance.now() - previousTime).toFixed(3)} ms`);
 
         previousTime = performance.now()
         this.addRandomCubes(50);
