@@ -71,7 +71,6 @@ export class Cube extends SimpleShape {
 export class ColorCube extends Cube {
     public constructor(options: Options) {
         super(options);
-        this._shader = new Shaders.SimpleShaderTest();
         const l2 = options.base ? options.base/2 : 0.5;
         this.vertices = [
         //   X   Y    Z    R    G    B

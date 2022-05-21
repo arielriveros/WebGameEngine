@@ -19,38 +19,64 @@ export interface Options{
  */
 export abstract class Shape {
 
-    protected _position: Vector3;
-    protected _rotation: Rotator;
+    private _position: Vector3;
+    private _rotation: Rotator;
 
     protected _vertices: number[];
     protected _indices: number[] | null;
 
-    protected _shader: Shader;
+    private _shader: Shader;
     protected _buffer!: GLArrayBuffer;
     protected _indexBuffer!: GLElementArrayBuffer;
     protected _uWorld!: WebGLUniformLocation;
     
     protected _worldMatrix: Matrix4x4;
+    protected _viewProjection: Matrix4x4;;
     
-    public constructor(position: Vector3 = new Vector3(), rotation: Rotator = new Rotator(), shader: Shader = new SimpleShader() ) {
+    public constructor(position: Vector3 = new Vector3(), rotation: Rotator = new Rotator(), shader: Shader = new SimpleShader() ) 
+    {
         this._position = position;
         this._rotation = rotation;
         this._vertices = [];
         this._indices = null;
         this._shader = shader;
         this._worldMatrix = new Matrix4x4();
+        this._viewProjection = new Matrix4x4();
     }
     
     public get position(): Vector3 { return this._position; }
-    public set position(value: Vector3) { this._position = value; }
+    public set position(pos: Vector3) { this._position = pos; }
     
     public get rotation(): Rotator { return this._rotation; }
-    public set rotation(value: Rotator) { this._rotation = value; }
+    public set rotation(rot: Rotator) { this._rotation = rot; }
 
     public get shader(): Shader { return this._shader; }
+    public set shader(shader: Shader) { this._shader=shader; }
 
     protected set vertices(newVertices: number[]) { this._vertices = newVertices; }
     protected set indices(newIndices: number[]) { this._indices = newIndices; }
+
+    private updateTransforms(): void
+    {
+        Matrix4x4.translate(this._worldMatrix, new Matrix4x4(),this._position);
+        Matrix4x4.rotate(this._worldMatrix, this._worldMatrix , this._rotation.getRadiansPitch(), new Vector3(1, 0, 0));
+        Matrix4x4.rotate(this._worldMatrix, this._worldMatrix, this._rotation.getRadiansYaw(), new Vector3(0, 1, 0));
+        Matrix4x4.rotate(this._worldMatrix, this._worldMatrix, this._rotation.getRadiansRoll(), new Vector3(0, 0, 1));
+    }
+
+    private updateViewProjection(viewMatrix: Matrix4x4 = new Matrix4x4(), projectionMatrix: Matrix4x4 = new Matrix4x4()): void
+    {
+        Matrix4x4.multiply(
+            this._viewProjection,
+            viewMatrix,
+            this._worldMatrix
+        );
+        Matrix4x4.multiply(
+            this._viewProjection,
+            projectionMatrix,
+            this._viewProjection
+        );
+    }
 
     /**
      * Loads current object's vertices into WebGL Buffer for rendering.
@@ -60,20 +86,16 @@ export abstract class Shape {
     /**
      * Runs every frame.
      */
-    public update(): void {
-        this._shader.use();
-        let trans = Matrix4x4.translate(this._worldMatrix, new Matrix4x4(),this._position);
-        let pitchRot = Matrix4x4.rotate(this._worldMatrix, trans , this._rotation.getRadiansPitch(), new Vector3(1, 0, 0));
-        let yawRot = Matrix4x4.rotate(this._worldMatrix, pitchRot, this._rotation.getRadiansYaw(), new Vector3(0, 1, 0));
-        let rollRot = Matrix4x4.rotate(this._worldMatrix, yawRot, this._rotation.getRadiansRoll(), new Vector3(0, 0, 1));
-        gl.uniformMatrix4fv(this._uWorld, false, this._worldMatrix.toFloat32Array());
+    public update(): void
+    {
         this.draw();
     }
 
     /**
      * Deletes shader program and unbind buffer associated with this shape.
      */
-    public unload(): void {
+    public unload(): void
+    {
         this._shader.remove();
         this._buffer.unbind();
     }
@@ -81,27 +103,38 @@ export abstract class Shape {
     /**
      * Draws data from the shape's buffers.
      */
-    public draw(): void {
+    public draw(): void
+    {
+        this._shader.use();
+        this.updateTransforms();
+        gl.uniformMatrix4fv(this._uWorld, false, this._worldMatrix.toFloat32Array());
+
         this._buffer.bind();
-        if(this._indices) {
+        if(this._indices)
+        {
             this._indexBuffer.draw();
         }
-        else{
+        else
+        {
             this._buffer.draw();
         }
     }
 }
 
-export class SimpleShape extends Shape {
-    public constructor(position: Vector3 = new Vector3(), rotation: Rotator = new Rotator()) {
+export class SimpleShape extends Shape
+{
+    public constructor(position: Vector3 = new Vector3(), rotation: Rotator = new Rotator())
+    {
         super(position, rotation, new SimpleShader() );
     }
 
-    public override load(): void {
-        this._shader.use();
+    public override load(): void
+    {
+        this.shader.use();
         this._buffer = new GLArrayBuffer(6, gl.FLOAT, gl.TRIANGLES );
 
-        if(this._indices) {
+        if(this._indices)
+        {
             this._indexBuffer = new GLElementArrayBuffer(gl.UNSIGNED_SHORT, gl.TRIANGLES);
             this._indexBuffer.bind();
             this._indexBuffer.pushData(this._indices);
@@ -109,38 +142,41 @@ export class SimpleShape extends Shape {
         }
 
         let positionAttribute:AttributeInformation = {
-            location: this._shader.getAttributeLocation("a_position"),
+            location: this.shader.getAttributeLocation("a_position"),
             size: 3,
             offset: 0 };
         this._buffer.addAttribLocation(positionAttribute);
 
         let colorAttribute:AttributeInformation = {
-            location: this._shader.getAttributeLocation("a_color"),
+            location: this.shader.getAttributeLocation("a_color"),
             size: 3, 
             offset: 3 };
         this._buffer.addAttribLocation(colorAttribute);
 
-        this._uWorld = this._shader.getUniformLocation('u_world');
+        this._uWorld = this.shader.getUniformLocation('u_world');
         
         this._buffer.pushData(this._vertices);
         this._buffer.upload();
     }
 }
 
-export class TexturedShape extends Shape {
-
+export class TexturedShape extends Shape
+{
     private _texture: Texture;
 
-    public constructor(position: Vector3 = new Vector3(), rotation: Rotator = new Rotator(), texture: HTMLImageElement) {
+    public constructor(position: Vector3 = new Vector3(), rotation: Rotator = new Rotator(), texture: HTMLImageElement)
+    {
         super(position, rotation, new TextureShader() );
         this._texture = new Texture(texture);
     }
 
-    public override load(): void {
-        this._shader.use();
+    public override load(): void
+    {
+        this.shader.use();
         this._buffer = new GLArrayBuffer(5, gl.FLOAT, gl.TRIANGLES );
         
-        if(this._indices) {
+        if(this._indices)
+        {
             this._indexBuffer = new GLElementArrayBuffer(gl.UNSIGNED_SHORT, gl.TRIANGLES);
             this._indexBuffer.bind();
             this._indexBuffer.pushData(this._indices);
@@ -148,19 +184,19 @@ export class TexturedShape extends Shape {
         }
         
         let positionAttribute:AttributeInformation = {
-            location: this._shader.getAttributeLocation("a_position"),
+            location: this.shader.getAttributeLocation("a_position"),
             size: 3,
             offset: 0 };
             this._buffer.addAttribLocation(positionAttribute);
             
         this._texture.load();
         let textureAttribute:AttributeInformation = {
-            location: this._shader.getAttributeLocation("a_texCoord"),
+            location: this.shader.getAttributeLocation("a_texCoord"),
             size: 2, 
             offset: 3 };
         this._buffer.addAttribLocation(textureAttribute);
         
-        this._uWorld = this._shader.getUniformLocation('u_world');
+        this._uWorld = this.shader.getUniformLocation('u_world');
         
         this._buffer.pushData(this._vertices);
         this._buffer.upload();
@@ -169,27 +205,29 @@ export class TexturedShape extends Shape {
 
 
 export class LineShape extends Shape {
-     public constructor(position: Vector3 = new Vector3(), rotation: Rotator = new Rotator()) {
+    public constructor(position: Vector3 = new Vector3(), rotation: Rotator = new Rotator())
+    {
         super(position, rotation, new SimpleShader() );
     }
 
-    public override load(): void {
-        this._shader.use();
+    public override load(): void
+    {
+        this.shader.use();
         this._buffer = new GLArrayBuffer(6, gl.FLOAT, gl.LINES );
 
         let positionAttribute:AttributeInformation = {
-            location: this._shader.getAttributeLocation("a_position"),
+            location: this.shader.getAttributeLocation("a_position"),
             size: 3,
             offset: 0 };
         this._buffer.addAttribLocation(positionAttribute);
 
         let colorAttribute:AttributeInformation = {
-            location: this._shader.getAttributeLocation("a_color"),
+            location: this.shader.getAttributeLocation("a_color"),
             size: 3, 
             offset: 3 };
         this._buffer.addAttribLocation(colorAttribute);
 
-        this._uWorld = this._shader.getUniformLocation('u_world');
+        this._uWorld = this.shader.getUniformLocation('u_world');
         
         this._buffer.pushData(this._vertices);
         this._buffer.upload();
