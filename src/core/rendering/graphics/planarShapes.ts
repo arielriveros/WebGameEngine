@@ -1,7 +1,4 @@
-import { gl } from "../render";
-import { LineShape, Options, Shape, SimpleShape } from "./shape";
-import { GLArrayBuffer } from "../gl/arrayBuffer";
-import { AttributeInformation } from "../interfaces";
+import { LineShape, Options, SimpleShape } from "./shape";
 
 export class Triangle extends SimpleShape {
 

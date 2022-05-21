@@ -1,4 +1,3 @@
-import { Vector3 } from "math";
 import { Entity } from "./entity";
 
 export class Scene {

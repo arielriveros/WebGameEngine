@@ -1,10 +1,10 @@
-import { gl } from "../render";
 import { GLArrayBuffer } from "../gl/arrayBuffer";
 import { GLElementArrayBuffer } from "../gl/elementArrayBuffer";
 import { AttributeInformation } from "../interfaces";
-import { Shader, SimpleShader, SimpleShaderTest, TextureShader } from "../shaders/shader";
+import { Shader, SimpleShader, TextureShader } from "../shaders/shader";
 import { Vector3, Matrix4x4, Rotator } from "math";
 import { Texture } from "./texture";
+import { gl } from "../render";
 
 export interface Options{
     height?: number,
