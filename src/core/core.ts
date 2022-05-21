@@ -1,5 +1,5 @@
 import { Engine } from './engine';
-import { Camera, PerspectiveCamera, OrthographicCamera } from '../core/rendering/graphics/camera';
+import { Camera, PerspectiveCamera, OrthographicCamera } from './world/camera';
 import { Entity } from './world/entity';
 import { ObjectEntity } from './world/objectEntity';
 import { Scene } from './world/scene';

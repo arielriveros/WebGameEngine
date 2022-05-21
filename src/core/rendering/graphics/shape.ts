@@ -5,9 +5,10 @@ import { Shader, SimpleShader, TextureShader } from "../shaders/shader";
 import { Vector3, Matrix4x4, Rotator } from "math";
 import { Texture } from "./texture";
 import { gl } from "../render";
-import { Camera } from "./camera";
+import { Camera } from "../../world/camera";
 
-export interface Options{
+export interface Options
+{
     height?: number,
     base?: number,
     color?: number[],
@@ -18,8 +19,8 @@ export interface Options{
 /**
  * Shape parent class for rendering vertices.
  */
-export abstract class Shape {
-
+export abstract class Shape
+{
     private _position: Vector3;
     private _rotation: Rotator;
 

@@ -1,9 +1,8 @@
 import { Vector3, Matrix4x4, Rotator } from "math";
+import { Entity } from "./entity";
 
-export abstract class Camera {
-
-    private _position: Vector3;
-    private _rotator: Rotator;
+export abstract class Camera extends Entity
+{
     private _focalPosition: Vector3;
 
     private _worldMatrix: Matrix4x4;
@@ -15,8 +14,7 @@ export abstract class Camera {
 
     public constructor( position: Vector3 = new Vector3(), near: number = 0.01, far: number = 1000)
     {
-        this._position = position;
-        this._rotator = new Rotator();
+        super('camera', position, new Rotator());
         this._focalPosition = new Vector3();
         this._worldMatrix = new Matrix4x4();
         this._viewMatrix = new Matrix4x4();
@@ -24,41 +22,24 @@ export abstract class Camera {
         this._far = far;
     }
 
-    public get position(): Vector3 { return this._position; }
-    public set position(newPos: Vector3) { this._position = newPos; }
-
-    public get rotator(): Rotator { return this._rotator; }
-    public set rotator(newRot: Rotator) { this._rotator = newRot; }
-
     public get worldMatrix(): Matrix4x4 { return this._worldMatrix; }
     public set worldMatrix(newMatrix: Matrix4x4) { this._worldMatrix = newMatrix; }
 
     public get viewMatrix(): Matrix4x4
     {
-        Matrix4x4.lookAt(this._viewMatrix, this._position, this._focalPosition, new Vector3(0, 1, 0));
-        Matrix4x4.rotate(this._viewMatrix, this._viewMatrix, this._rotator.getRadiansPitch(), new Vector3(1, 0, 0));
-        Matrix4x4.rotate(this._viewMatrix, this._viewMatrix, this._rotator.getRadiansYaw(), new Vector3(0, 1, 0));
-        Matrix4x4.rotate(this._viewMatrix, this._viewMatrix, this._rotator.getRadiansRoll(), new Vector3(0, 0, 1));
+        Matrix4x4.lookAt(this._viewMatrix, this.position, this._focalPosition, new Vector3(0, 1, 0));
+        Matrix4x4.rotate(this._viewMatrix, this._viewMatrix, this.rotation.getRadiansPitch(), new Vector3(1, 0, 0));
+        Matrix4x4.rotate(this._viewMatrix, this._viewMatrix, this.rotation.getRadiansRoll(), new Vector3(0, 0, 1));
+        Matrix4x4.rotate(this._viewMatrix, this._viewMatrix, this.rotation.getRadiansYaw(), new Vector3(0, 1, 0));
         return this._viewMatrix;
      }
-    protected set viewMatrix(newMatrix: Matrix4x4) { this._viewMatrix = newMatrix; }
 
     public get projectionMatrix(): Matrix4x4 { return this._projectionMatrix; }
     protected set projectionMatrix(newMatrix: Matrix4x4) { this._projectionMatrix = newMatrix; }
-
-    public move(delta: Vector3): void
-    {
-        this._position.add(delta);
-    }
     
     public set focalPoint(focus: Vector3) { this._focalPosition = focus; }
     
     public refreshProjection(): void { }
-
-    /**
-     * Runs every frame.
-     */
-    public update(): void { }
 
     /**
      * Initializes Camera shader and uniforms.
@@ -69,7 +50,8 @@ export abstract class Camera {
     }
 }
 
-interface PerspectiveCameraOptions {
+interface PerspectiveCameraOptions
+{
     position?: Vector3;
     fovy?: number;
     near?: number;

@@ -1,4 +1,4 @@
-import { Camera } from "./graphics/camera";
+import { Camera } from "../world/camera";
 import { Scene } from "../world/scene";
 import { LOG } from "utils";
 
@@ -7,8 +7,8 @@ import { LOG } from "utils";
  */
 export let gl: WebGLRenderingContext; 
 
-export class Render{
-
+export class Render
+{
     private _canvas!: HTMLCanvasElement ;
     private _camera!: Camera;
     private _scene!: Scene;
@@ -32,7 +32,8 @@ export class Render{
      * @param camera
      * @param scene 
      */
-    public render(camera: Camera, scene: Scene): void {
+    public render(camera: Camera, scene: Scene): void
+    {
         this._camera = camera;
         this._camera.initialize();
         this._scene = scene;
@@ -43,10 +44,10 @@ export class Render{
     /**
      * Gets called every frame
      */
-    public update(): void {
+    public update(): void
+    {
         // clears buffers to preset values.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        this._camera.update();
         this._scene.update();
     }
 
@@ -64,17 +65,21 @@ export class Render{
         }
     }
 
-    private initializeContext(elementID: string): void {
+    private initializeContext(elementID: string): void
+    {
         let canvas: HTMLCanvasElement;
         
-        if (elementID !== undefined) {
+        if (elementID !== undefined)
+        {
             canvas = document.getElementById(elementID) as HTMLCanvasElement;
-            if (canvas === undefined) {
+            if (canvas === undefined)
+            {
                 LOG(`No canvas element of id ${elementID}`, 'error', true);
             }
         }
 
-        else {
+        else
+        {
             // If there is no element of id elementID then its created and appended
             canvas = document.createElement("canvas") as HTMLCanvasElement;
             document.body.appendChild(canvas);
@@ -82,7 +87,8 @@ export class Render{
         
         this._canvas = canvas;
 
-        if (!this._canvas.getContext("webgl")) {
+        if (!this._canvas.getContext("webgl"))
+        {
             LOG("Cannot initialize WebGL by the browser", 'error', true);
         }
 
