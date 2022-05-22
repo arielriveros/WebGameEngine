@@ -185,6 +185,52 @@ export class Matrix4x4 {
         return out;
     } 
 
+    public static targetTo(out: Matrix4x4, eye: Vector3, target: Vector3, up: Vector3): Matrix4x4 {
+      let eyex = eye.x,
+        eyey = eye.y,
+        eyez = eye.z,
+        upx = up.x,
+        upy = up.y,
+        upz = up.z;
+      let z0 = eyex - target.x,
+        z1 = eyey - target.y,
+        z2 = eyez - target.z;
+      let len = z0 * z0 + z1 * z1 + z2 * z2;
+      if (len > 0) {
+        len = 1 / Math.sqrt(len);
+        z0 *= len;
+        z1 *= len;
+        z2 *= len;
+      }
+      let x0 = upy * z2 - upz * z1,
+        x1 = upz * z0 - upx * z2,
+        x2 = upx * z1 - upy * z0;
+      len = x0 * x0 + x1 * x1 + x2 * x2;
+      if (len > 0) {
+        len = 1 / Math.sqrt(len);
+        x0 *= len;
+        x1 *= len;
+        x2 *= len;
+      }
+      out._data[0] = x0;
+      out._data[1] = x1;
+      out._data[2] = x2;
+      out._data[3] = 0;
+      out._data[4] = z1 * x2 - z2 * x1;
+      out._data[5] = z2 * x0 - z0 * x2;
+      out._data[6] = z0 * x1 - z1 * x0;
+      out._data[7] = 0;
+      out._data[8] = z0;
+      out._data[9] = z1;
+      out._data[10] = z2;
+      out._data[11] = 0;
+      out._data[12] = eyex;
+      out._data[13] = eyey;
+      out._data[14] = eyez;
+      out._data[15] = 1;
+      return out;
+    }
+
     public static translation( out: Matrix4x4, trans: Vector3) {
         out._data[12] = trans.x;
         out._data[13] = trans.y;
