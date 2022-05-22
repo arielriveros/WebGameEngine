@@ -90,6 +90,10 @@ export class Vector3 extends Vector2
     {
         this._data[2] = value;
     }
+
+    public clone(): Vector3 {
+        return new Vector3(this.x, this.y, this.z);
+    }
 }
 
 export class Vector4 extends Vector3
