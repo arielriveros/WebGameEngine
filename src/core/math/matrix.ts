@@ -305,4 +305,106 @@ export class Matrix4x4 {
         return out;
     }
 
+    public static rotateX(out: Matrix4x4, a: Matrix4x4, rad: number) {
+        let s = Math.sin(rad);
+        let c = Math.cos(rad);
+        let a10 = a._data[4];
+        let a11 = a._data[5];
+        let a12 = a._data[6];
+        let a13 = a._data[7];
+        let a20 = a._data[8];
+        let a21 = a._data[9];
+        let a22 = a._data[10];
+        let a23 = a._data[11];
+        if (a !== out) {
+          // If the source and destination differ, copy the unchanged rows
+          out._data[0] = a._data[0];
+          out._data[1] = a._data[1];
+          out._data[2] = a._data[2];
+          out._data[3] = a._data[3];
+          out._data[12] = a._data[12];
+          out._data[13] = a._data[13];
+          out._data[14] = a._data[14];
+          out._data[15] = a._data[15];
+        }
+        // Perform axis-specific matrix multiplication
+        out._data[4] = a10 * c + a20 * s;
+        out._data[5] = a11 * c + a21 * s;
+        out._data[6] = a12 * c + a22 * s;
+        out._data[7] = a13 * c + a23 * s;
+        out._data[8] = a20 * c - a10 * s;
+        out._data[9] = a21 * c - a11 * s;
+        out._data[10] = a22 * c - a12 * s;
+        out._data[11] = a23 * c - a13 * s;
+        return out;
+      }
+
+    public static rotateY(out: Matrix4x4, a: Matrix4x4, rad: number) {
+        let s = Math.sin(rad);
+        let c = Math.cos(rad);
+        let a00 = a._data[0];
+        let a01 = a._data[1];
+        let a02 = a._data[2];
+        let a03 = a._data[3];
+        let a20 = a._data[8];
+        let a21 = a._data[9];
+        let a22 = a._data[10];
+        let a23 = a._data[11];
+        if (a !== out) {
+          // If the source and destination differ, copy the unchanged rows
+          out._data[4] = a._data[4];
+          out._data[5] = a._data[5];
+          out._data[6] = a._data[6];
+          out._data[7] = a._data[7];
+          out._data[12] = a._data[12];
+          out._data[13] = a._data[13];
+          out._data[14] = a._data[14];
+          out._data[15] = a._data[15];
+        }
+        // Perform axis-specific matrix multiplication
+        out._data[0] = a00 * c - a20 * s;
+        out._data[1] = a01 * c - a21 * s;
+        out._data[2] = a02 * c - a22 * s;
+        out._data[3] = a03 * c - a23 * s;
+        out._data[8] = a00 * s + a20 * c;
+        out._data[9] = a01 * s + a21 * c;
+        out._data[10] = a02 * s + a22 * c;
+        out._data[11] = a03 * s + a23 * c;
+        return out;
+      }
+
+    public static rotateZ(out: Matrix4x4, a: Matrix4x4, rad: number) {
+        let s = Math.sin(rad);
+        let c = Math.cos(rad);
+        let a00 = a._data[0];
+        let a01 = a._data[1];
+        let a02 = a._data[2];
+        let a03 = a._data[3];
+        let a10 = a._data[4];
+        let a11 = a._data[5];
+        let a12 = a._data[6];
+        let a13 = a._data[7];
+        if (a !== out) {
+          // If the source and destination differ, copy the unchanged last row
+          out._data[8] = a._data[8];
+          out._data[9] = a._data[9];
+          out._data[10] = a._data[10];
+          out._data[11] = a._data[11];
+          out._data[12] = a._data[12];
+          out._data[13] = a._data[13];
+          out._data[14] = a._data[14];
+          out._data[15] = a._data[15];
+        }
+        // Perform axis-specific matrix multiplication
+        out._data[0] = a00 * c + a10 * s;
+        out._data[1] = a01 * c + a11 * s;
+        out._data[2] = a02 * c + a12 * s;
+        out._data[3] = a03 * c + a13 * s;
+        out._data[4] = a10 * c - a00 * s;
+        out._data[5] = a11 * c - a01 * s;
+        out._data[6] = a12 * c - a02 * s;
+        out._data[7] = a13 * c - a03 * s;
+        return out;
+      }
+
 }
