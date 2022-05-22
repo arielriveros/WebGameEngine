@@ -16,6 +16,11 @@ export class Scene
         return this._objects;
     }
 
+    public get camera()
+    {
+        return this._camera;
+    }
+
     public addEntity(entity: ObjectEntity): void
     {
         entity.shape?.load();

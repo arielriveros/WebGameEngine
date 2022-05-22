@@ -218,14 +218,15 @@ export class Game extends GameBase
             let c = this.scene.getEntity('controllable');
             if(c)
             {
-                this.camera.position = new Vector3(c.position.x, c.position.y, c.position.z + 2);
+                this.camera.position = new Vector3(c.position.x, c.position.y + 1, c.position.z + 2);
                 this.camera.focalPoint = c.position;
             }
         }
 
         if(input.isKeyDown('KeyX'))
         {
-            let c = this.scene.getEntity('controllable');
+            //let c = this.scene.getEntity('controllable');
+            let c = this.scene.camera;
             if(c)
             {
                 LOG(`(${c.position.x.toFixed(2)}, ${c.position.y.toFixed(2)}, ${c.position.z.toFixed(2)})
