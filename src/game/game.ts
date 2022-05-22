@@ -5,7 +5,7 @@ import { Vector3, Rotator, randomNumber } from 'math';
 
 export class Game extends GameBase
 {
-    private _cameraOptions = {cameraSpeed: 0.1};
+    private _cameraOptions = {cameraSpeed: 0.1, cameraRotationScale: 2};
 
     public override setUp(): void
     {
@@ -240,6 +240,11 @@ export class Game extends GameBase
             {
                 this.scene.removeEntity(c.name);
             }
+        }
+
+        if( Math.abs(input.getMouseSpeed().x) > 0  )
+        {
+            this.camera.rotate( new Rotator(0, input.getMouseSpeed().x * this._cameraOptions.cameraRotationScale, 0 ) );
         }
     }
 }

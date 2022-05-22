@@ -61,3 +61,12 @@ export const KeyboardMapping: {[name: string]: {[name: string]: number}} = {
     'Numpad8':  {'keyCode': 104},
     'Numpad9':  {'keyCode': 105}
 }
+
+export const MouseMapping: {[name: string]: {[name: string]: number}} = {
+    //  Code: MouseButton
+    'Left': {'button': 0},
+    'Middle': {'button': 1},
+    'Right': {'button': 2},
+    'Button4': {'button': 3},
+    'Button5': {'button': 4},
+}
