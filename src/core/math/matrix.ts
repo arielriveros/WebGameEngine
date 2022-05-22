@@ -1,3 +1,4 @@
+import { Rotator } from './rotator';
 import { Vector2, Vector3, Vector4 } from './vector'
 
 export class Matrix4x4 {
@@ -383,7 +384,7 @@ export class Matrix4x4 {
         out._data[10] = a22 * c - a12 * s;
         out._data[11] = a23 * c - a13 * s;
         return out;
-      }
+    }
 
     public static rotateY(out: Matrix4x4, a: Matrix4x4, rad: number) {
         let s = Math.sin(rad);
@@ -417,7 +418,7 @@ export class Matrix4x4 {
         out._data[10] = a02 * s + a22 * c;
         out._data[11] = a03 * s + a23 * c;
         return out;
-      }
+    }
 
     public static rotateZ(out: Matrix4x4, a: Matrix4x4, rad: number) {
         let s = Math.sin(rad);
@@ -451,6 +452,22 @@ export class Matrix4x4 {
         out._data[6] = a12 * c - a02 * s;
         out._data[7] = a13 * c - a03 * s;
         return out;
-      }
+    }
 
+    public static rotateWithRotator(out: Matrix4x4, a: Matrix4x4, rotator: Rotator): Matrix4x4 {
+        Matrix4x4.rotateY(out, out, rotator.getRadiansYaw());
+        Matrix4x4.rotateZ(out, out, rotator.getRadiansRoll());
+        Matrix4x4.rotateX(out, out, rotator.getRadiansPitch());
+        return out;
+    }
+
+    public static rotateAroundPivot(out: Matrix4x4, a: Matrix4x4, rotator: Rotator, pivot: Vector3): Matrix4x4 {
+      // T(-x,-y,-z) * ROTATION * T(x,y,z) * PIVOT
+      let opposPivot = pivot.clone();
+      opposPivot.opposite();
+      Matrix4x4.translate(out, a, pivot);
+      Matrix4x4.rotateWithRotator(out, out, rotator);
+      Matrix4x4.translate(out, out, opposPivot);
+      return out;
+    }
 }

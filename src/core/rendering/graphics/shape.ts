@@ -62,9 +62,7 @@ export abstract class Shape
     private updateTransforms(): void
     {
         Matrix4x4.translate(this._worldMatrix, new Matrix4x4(),this._position);
-        Matrix4x4.rotateY(this._worldMatrix, this._worldMatrix, this._rotation.getRadiansYaw());
-        Matrix4x4.rotateZ(this._worldMatrix, this._worldMatrix, this._rotation.getRadiansRoll());
-        Matrix4x4.rotateX(this._worldMatrix, this._worldMatrix , this._rotation.getRadiansPitch());
+        Matrix4x4.rotateWithRotator(this._worldMatrix, this._worldMatrix, this._rotation);
     }
 
     private updateViewProjection(viewMatrix: Matrix4x4 = new Matrix4x4(), projectionMatrix: Matrix4x4 = new Matrix4x4()): void
