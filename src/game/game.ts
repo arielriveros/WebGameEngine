@@ -5,7 +5,7 @@ import { Vector3, Rotator, randomNumber } from 'math';
 
 export class Game extends GameBase
 {
-    private _cameraOptions = {cameraSpeed: 0.1, cameraRotationScale: 2};
+    private _cameraOptions = {cameraSpeed: 0.1, cameraRotationScale: 3};
 
     public override setUp(): void
     {
@@ -242,9 +242,16 @@ export class Game extends GameBase
             }
         }
 
-        if( Math.abs(input.getMouseSpeed().x) > 0  )
+        if( input.isMouseMoving() && input.isMouseButtonPressed('Left'))
         {
-            this.camera.rotate( new Rotator(0, input.getMouseSpeed().x * this._cameraOptions.cameraRotationScale, 0 ) );
+            let scale = this._cameraOptions.cameraRotationScale;
+            this.camera.rotate( 
+                new Rotator(
+                    input.getMouseSpeed().y * scale, 
+                    input.getMouseSpeed().x * 1.5 * scale, 
+                    input.getMouseSpeed().y * scale, 
+                ) 
+            );
         }
     }
 }
