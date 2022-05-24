@@ -1,5 +1,6 @@
 import { Renderable } from "./renderable";
-import { Triangle, ColorTriangle, Quad, Line } from "./planarShapes";
+import { Line } from "./fiberShape";
+import { Triangle, ColorTriangle, Quad } from "./planarShapes";
 import { Cube, ColorCube, TexturedCube } from "./volumeShapes";
 
 export { 
