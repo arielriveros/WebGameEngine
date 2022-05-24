@@ -35,7 +35,7 @@ export class Render
         this._camera = camera;
         this._camera.initialize();
         this._scene = scene;
-        this._scene.initialize(this._camera);
+        this._scene.initialize();
         this.resize();
     }
 

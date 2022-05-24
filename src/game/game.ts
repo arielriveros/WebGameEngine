@@ -281,7 +281,7 @@ export class Game extends GameBase
         if(input.isKeyDown('KeyX'))
         {
             //let c = this.scene.getEntity('controllable');
-            let c = this.scene.camera;
+            let c = this.camera;
             if(c)
             {
                 //LOG(`(${c.position.x.toFixed(2)}, ${c.position.y.toFixed(2)}, ${c.position.z.toFixed(2)})

@@ -4,7 +4,6 @@ import { ObjectEntity } from "./objectEntity";
 export class Scene
 {
     private _objects: ObjectEntity[];
-    private _camera!: Camera;
 
     public constructor()
     {
@@ -14,11 +13,6 @@ export class Scene
     public get entities()
     {
         return this._objects;
-    }
-
-    public get camera()
-    {
-        return this._camera;
     }
 
     public addEntity(entity: ObjectEntity): void
@@ -52,9 +46,9 @@ export class Scene
         return null;
     }
 
-    public initialize(camera: Camera): void
+    public initialize(): void
     {
-        this._camera = camera;
+
     }
 
     public update(): void { }
