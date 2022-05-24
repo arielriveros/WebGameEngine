@@ -33,6 +33,7 @@ export class Scene
         {
             if (this._objects[i].name === entityName)
             {
+                this._objects[i].delete();
                 this._objects.splice(i, 1);
                 break;
             }
