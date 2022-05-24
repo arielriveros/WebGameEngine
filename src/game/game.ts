@@ -270,12 +270,12 @@ export class Game extends GameBase
 
         if(input.isKeyDown('KeyY'))
         {
-            this.scene.getEntity('controllable')?.scale(new Vector3(0, 0.1, 0));
+            this.scene.getEntity('controllable')?.rescale(new Vector3(0, 0.1, 0));
         }
 
         if(input.isKeyDown('KeyT'))
         {
-            this.scene.getEntity('controllable')?.scale(new Vector3(0, -0.1, 0));
+            this.scene.getEntity('controllable')?.rescale(new Vector3(0, -0.1, 0));
         }
 
         if(input.isKeyDown('KeyX'))
@@ -284,7 +284,8 @@ export class Game extends GameBase
             let c = this.scene.camera;
             if(c)
             {
-                LOG(`(${c.position.x.toFixed(2)}, ${c.position.y.toFixed(2)}, ${c.position.z.toFixed(2)})
+                //LOG(`(${c.position.x.toFixed(2)}, ${c.position.y.toFixed(2)}, ${c.position.z.toFixed(2)})
+                LOG(`(${c.getWorldPosition().x.toFixed(2)}, ${c.getWorldPosition().y.toFixed(2)}, ${c.getWorldPosition().z.toFixed(2)})
                      (${c.rotation.pitch.toFixed(2)}, ${c.rotation.yaw.toFixed(2)}, ${c.rotation.roll.toFixed(2)})`);
             }
         }

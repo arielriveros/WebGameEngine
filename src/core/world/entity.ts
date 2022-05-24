@@ -1,10 +1,12 @@
-import { Rotator, Vector3 } from "math";
+import { Matrix4x4, Rotator, Vector3 } from "math";
 
 export abstract class Entity {
     private _name: string;
     private _position: Vector3;
     private _rotation: Rotator;
     private _scale: Vector3;
+
+    protected _worldMatrix: Matrix4x4;
 
     public constructor(
         name: string,
@@ -16,19 +18,41 @@ export abstract class Entity {
             this._position = position;
             this._rotation = rotation;
             this._scale = scale;
+            this._worldMatrix = new Matrix4x4();
+            this.updateTransforms();
         }
 
     public get name(): string { return this._name; }
     public set name(value: string) { this._name = value; }
 
+    /**
+    * Gets the position of the object.
+    */
     public get position(): Vector3 { return this._position; }
-    public set position(value: Vector3) { this._position = value; }
+    /**
+     * Sets the position of the object.
+     */
+    public set position(pos: Vector3) { this._position = pos; }
 
+    /**
+     * Gets the rotation of the object.
+     */
     public get rotation(): Rotator { return this._rotation; }
-    public set rotation(value: Rotator) { this._rotation = value; }
+    /**
+     * Sets the rotation of the object.
+     */
+    public set rotation(rot: Rotator) { this._rotation = rot; }
 
-    public get scaleVec(): Vector3 { return this._scale; }
-    public set scaleVec(value: Vector3) { this._scale = value; }
+    /**
+     * Gets the scale of the object.
+     */
+    public get scale(): Vector3 { return this._scale; }
+    /**
+     * Sets the scale of the object.
+     */
+    public set scale(scale: Vector3) { this._scale = scale; }
+
+    public get worldMatrix(): Matrix4x4 { return this._worldMatrix; }
 
     public move(delta: Vector3): void
     {
@@ -40,10 +64,26 @@ export abstract class Entity {
         this._rotation.add(delta);
     }
 
-    public scale(delta: Vector3): void
+    public rescale(delta: Vector3): void
     {
         this._scale.add(delta);
     }
 
     public delete(): void { }
+
+    /**
+     * Updates the world matrix of the object.
+     */
+    public updateTransforms(): Matrix4x4
+    {
+        Matrix4x4.translate(this._worldMatrix, new Matrix4x4(),this._position);
+        Matrix4x4.rotateWithRotator(this._worldMatrix, this._worldMatrix, this._rotation);
+        return Matrix4x4.scale(this._worldMatrix, this._worldMatrix, this._scale);
+    }
+
+    public getWorldPosition(): Vector3
+    {
+        this.updateTransforms();
+        return Matrix4x4.getTranslation(this._worldMatrix);
+    }
 }

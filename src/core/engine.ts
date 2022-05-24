@@ -84,9 +84,9 @@ export class Engine{
         }
         // END DEBUG
 
-        this._render.render();    
         this._game.inputListen(this._input);
         this._game.onUpdate();
+        this._render.update();
         requestAnimationFrame(this.loop.bind( this ));
     }
 }

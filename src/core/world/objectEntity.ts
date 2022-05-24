@@ -23,9 +23,7 @@ export class ObjectEntity extends Entity {
         if(newRenderable)
         {
             this._renderable = newRenderable;
-            this._renderable.position = this.position;
-            this._renderable.rotation = this.rotation;
-            this._renderable.scale = this.scaleVec;
+            this._renderable.worldMatrix = this._worldMatrix;
         }
     }
 

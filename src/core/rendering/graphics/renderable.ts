@@ -19,10 +19,6 @@ export interface Options
  */
 export abstract class Renderable
 {
-    private _position: Vector3;
-    private _rotation: Rotator;
-    private _scale: Vector3;
-
     protected _vertices: number[];
     protected _indices: number[] | null;
 
@@ -40,9 +36,6 @@ export abstract class Renderable
      */
     public constructor(shader: Shader = new SimpleShader() ) 
     {
-        this._position = new Vector3();
-        this._rotation = new Rotator();
-        this._scale = new Vector3(1, 1, 1);
         this._vertices = [];
         this._indices = null;
         this._shader = shader;
@@ -51,31 +44,9 @@ export abstract class Renderable
     }
     
     /**
-     * Gets the position of the object in world space.
+     * Sets the world matrix.
      */
-    public get position(): Vector3 { return this._position; }
-    /**
-     * Sets the position of the object in world space.
-     */
-    public set position(pos: Vector3) { this._position = pos; }
-    
-    /**
-     * Gets the rotation of the object in world space.
-     */
-    public get rotation(): Rotator { return this._rotation; }
-    /**
-     * Sets the rotation of the object in world space.
-     */
-    public set rotation(rot: Rotator) { this._rotation = rot; }
-
-    /**
-     * Gets the scale of the object in world space.
-     */
-    public get scale(): Vector3 { return this._scale; }
-    /**
-     * Sets the scale of the object in world space.
-     */
-    public set scale(scale: Vector3) { this._scale = scale; }
+    public set worldMatrix(matrix: Matrix4x4) { this._worldMatrix = matrix; }
 
     /**
      * Gets the shader used for rendering.
@@ -95,15 +66,6 @@ export abstract class Renderable
      */
     protected set indices(newIndices: number[]) { this._indices = newIndices; }
 
-    /**
-     * Updates the world matrix of the object.
-     */
-    private updateTransforms(): void
-    {
-        Matrix4x4.translate(this._worldMatrix, new Matrix4x4(),this._position);
-        Matrix4x4.rotateWithRotator(this._worldMatrix, this._worldMatrix, this._rotation);
-        Matrix4x4.scale(this._worldMatrix, this._worldMatrix, this._scale);
-    }
 
     /**
      * Updates the view projection matrix of the object.
@@ -150,7 +112,7 @@ export abstract class Renderable
     public draw(camera: Camera): void
     {
         this._shader.use();
-        this.updateTransforms();
+        
         this.updateViewProjection(camera.viewMatrix, camera.projectionMatrix);
         gl.uniformMatrix4fv(this._uViewProj, false, this._viewProjection.toFloat32Array());
 

@@ -5,7 +5,6 @@ export abstract class Camera extends Entity
 {
     private _focalPosition: Vector3;
 
-    private _worldMatrix: Matrix4x4;
     private _viewMatrix: Matrix4x4;
     private _projectionMatrix!: Matrix4x4;
 
@@ -16,14 +15,10 @@ export abstract class Camera extends Entity
     {
         super('camera', position, new Rotator());
         this._focalPosition = new Vector3();
-        this._worldMatrix = new Matrix4x4();
         this._viewMatrix = new Matrix4x4();
         this._near = near;
         this._far = far;
     }
-
-    public get worldMatrix(): Matrix4x4 { return this._worldMatrix; }
-    public set worldMatrix(newMatrix: Matrix4x4) { this._worldMatrix = newMatrix; }
 
     public get viewMatrix(): Matrix4x4
     {

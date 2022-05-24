@@ -42,12 +42,13 @@ export class Render
     /**
      * Draws renderable elements every frame.
      */
-    public render(): void
+    private render(): void
     {
         // clears buffers to preset values.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         for(const e of this._scene.entities)
         { 
+            e.updateTransforms();
             e.renderable?.draw(this._camera); 
         };
     }
@@ -55,7 +56,9 @@ export class Render
     /**
      * Gets called every frame
      */
-    public update(): void { }
+    public update(): void {
+        this.render();
+    }
 
     /**
      * Resizes canvas to fit window.
