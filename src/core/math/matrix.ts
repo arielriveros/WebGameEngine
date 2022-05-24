@@ -502,4 +502,8 @@ export class Matrix4x4 {
       out._data[15] = a._data[15];
       return out;
     }
+
+    public static getTranslation(mat: Matrix4x4): Vector3 {
+      return new Vector3(mat._data[12], mat._data[13], mat._data[14]);
+    }
 }
