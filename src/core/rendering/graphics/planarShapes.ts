@@ -1,4 +1,4 @@
-import { LineShape, Options, SimpleShape } from "./shape";
+import { LineShape, Options, SimpleShape } from "./renderable";
 
 export class Triangle extends SimpleShape {
 

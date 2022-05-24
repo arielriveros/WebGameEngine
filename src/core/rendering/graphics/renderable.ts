@@ -17,9 +17,9 @@ export interface Options
 }
 
 /**
- * Shape parent class for rendering vertices.
+ * Parent class for any object that can be rendered on scene.
  */
-export abstract class Shape
+export abstract class Renderable
 {
     private _position: Vector3;
     private _rotation: Rotator;
@@ -36,6 +36,12 @@ export abstract class Shape
     protected _worldMatrix: Matrix4x4;
     protected _viewProjection: Matrix4x4;;
     
+    /**
+     *  
+     * @param position Position of the object in world space.
+     * @param rotation Rotation of the object in world space.
+     * @param shader   Shader to use for rendering.
+     */
     public constructor(position: Vector3 = new Vector3(), rotation: Rotator = new Rotator(), shader: Shader = new SimpleShader() ) 
     {
         this._position = position;
@@ -47,24 +53,56 @@ export abstract class Shape
         this._viewProjection = new Matrix4x4();
     }
     
+    /**
+     * Gets the position of the object in world space.
+     */
     public get position(): Vector3 { return this._position; }
+    /**
+     * Sets the position of the object in world space.
+     */
     public set position(pos: Vector3) { this._position = pos; }
     
+    /**
+     * Gets the rotation of the object in world space.
+     */
     public get rotation(): Rotator { return this._rotation; }
+    /**
+     * Sets the rotation of the object in world space.
+     */
     public set rotation(rot: Rotator) { this._rotation = rot; }
 
+    /**
+     * Gets the shader used for rendering.
+     */
     public get shader(): Shader { return this._shader; }
+    /**
+     * Sets the shader used for rendering.
+     */
     public set shader(shader: Shader) { this._shader=shader; }
 
+    /**
+     * Sets the vertices of the object for the vertex array buffer.
+     */
     protected set vertices(newVertices: number[]) { this._vertices = newVertices; }
+    /**
+     * Sets the indices of the object for the element array buffer.
+     */
     protected set indices(newIndices: number[]) { this._indices = newIndices; }
 
+    /**
+     * Updates the world matrix of the object.
+     */
     private updateTransforms(): void
     {
         Matrix4x4.translate(this._worldMatrix, new Matrix4x4(),this._position);
         Matrix4x4.rotateWithRotator(this._worldMatrix, this._worldMatrix, this._rotation);
     }
 
+    /**
+     * Updates the view projection matrix of the object.
+     * @param viewMatrix Camera View matrix.
+     * @param projectionMatrix Camera Projection Matrix
+     */
     private updateViewProjection(viewMatrix: Matrix4x4 = new Matrix4x4(), projectionMatrix: Matrix4x4 = new Matrix4x4()): void
     {
         Matrix4x4.multiply(
@@ -100,6 +138,7 @@ export abstract class Shape
 
     /**
      * Draws data from the shape's buffers.
+     * @param camera Camera to use for rendering.
      */
     public draw(camera: Camera): void
     {
@@ -120,7 +159,7 @@ export abstract class Shape
     }
 }
 
-export class SimpleShape extends Shape
+export class SimpleShape extends Renderable
 {
     public constructor(position: Vector3 = new Vector3(), rotation: Rotator = new Rotator())
     {
@@ -159,7 +198,7 @@ export class SimpleShape extends Shape
     }
 }
 
-export class TexturedShape extends Shape
+export class TexturedShape extends Renderable
 {
     private _texture: Texture;
 
@@ -203,7 +242,7 @@ export class TexturedShape extends Shape
 }
 
 
-export class LineShape extends Shape {
+export class LineShape extends Renderable {
     public constructor(position: Vector3 = new Vector3(), rotation: Rotator = new Rotator())
     {
         super(position, rotation, new SimpleShader() );

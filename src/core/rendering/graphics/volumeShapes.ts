@@ -1,5 +1,4 @@
-import { Shaders } from "core";
-import { Options, SimpleShape, TexturedShape } from "./shape";
+import { Options, SimpleShape, TexturedShape } from "./renderable";
 
 export class Cube extends SimpleShape {
     public constructor(options: Options = {}) {

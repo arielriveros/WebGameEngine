@@ -1,8 +1,8 @@
-import { Shape } from "./shape";
+import { Renderable } from "./renderable";
 import { Triangle, ColorTriangle, Quad, Line } from "./planarShapes";
 import { Cube, ColorCube, TexturedCube } from "./volumeShapes";
 
 export { 
-    Shape, 
+    Renderable as Shape, 
     Triangle, ColorTriangle, Quad, Line,
     Cube, ColorCube, TexturedCube};
