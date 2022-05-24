@@ -48,7 +48,7 @@ export class Render
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         for(const e of this._scene.entities)
         { 
-            e.shape?.draw(this._camera); 
+            e.renderable?.draw(this._camera); 
         };
     }
 

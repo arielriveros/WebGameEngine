@@ -19,16 +19,57 @@ export class Game extends GameBase
     {
         for(let i = -size; i <= size; i++)
         {
-            this.scene.addEntity(new ObjectEntity(`line-${i}h`, new Vector3(i, 0, size), new Rotator(0, 90, 0), new Shapes.Line({base:2 * size, color: [0.4, 0.4, 0.4]}) ));
-            this.scene.addEntity(new ObjectEntity(`line-${i}v`, new Vector3(-size, 0, i), new Rotator(0, 0, 0), new Shapes.Line({base:2 * size, color: [0.75, 0.75, 0.75]}) ));
+            this.scene.addEntity(
+                new ObjectEntity(
+                    `line-${i}h`, 
+                    new Vector3(i, 0, size), 
+                    new Rotator(0, 90, 0), 
+                    new Vector3(1, 1, 1),
+                    new Shapes.Line({base:2 * size, color: [0.4, 0.4, 0.4]})
+                )
+            );
+            this.scene.addEntity(
+                new ObjectEntity(
+                    `line-${i}v`,
+                    new Vector3(-size, 0, i),
+                    new Rotator(0, 0, 0),
+                    new Vector3(1, 1, 1),
+                    new Shapes.Line({base:2 * size, color: [0.75, 0.75, 0.75]})
+                )
+            );
         }
     }
 
     private addAxis()
     {
-        this.scene.addEntity(new ObjectEntity(`axis-x`, new Vector3(0, 0.001, 0), new Rotator(0, 0, 0), new Shapes.Line({base:1.5, color: [1, 0, 0]}) ));
-        this.scene.addEntity(new ObjectEntity(`axis-y`, new Vector3(0, 0, 0), new Rotator(0, 0, 90), new Shapes.Line({base:1.5, color: [0, 1, 0]}) ));
-        this.scene.addEntity(new ObjectEntity(`axis-z`, new Vector3(0, 0.001, 0), new Rotator(0, -90, 0), new Shapes.Line({base:1.5, color: [0, 0, 1]}) ));
+        this.scene.addEntity(
+            new ObjectEntity(
+                `axis-x`,
+                new Vector3(0, 0.001, 0),
+                new Rotator(0, 0, 0),
+                new Vector3(1, 1, 1),
+                new Shapes.Line({base:1.5, color: [1, 0, 0]})
+            )
+        );
+        this.scene.addEntity(
+            new ObjectEntity(
+                `axis-y`,
+                new Vector3(0, 0, 0),
+                new Rotator(0, 0, 90),
+                new Vector3(1, 1, 1),
+                new Shapes.Line({base:1.5, color: [0, 1, 0]}
+                )
+            )
+        );
+        this.scene.addEntity(
+            new ObjectEntity(
+                `axis-z`,
+                new Vector3(0, 0.001, 0),
+                new Rotator(0, -90, 0),
+                new Vector3(1, 1, 1),
+                new Shapes.Line({base:1.5, color: [0, 0, 1]}) 
+            )
+        );
     }
 
     private addRandomCubes(count: number)
@@ -43,6 +84,7 @@ export class Game extends GameBase
                     `randCube-${i}`,
                     new Vector3(randomNumber(10, -10), randomNumber(10, -10), randomNumber(10, -10)),
                     new Rotator(randomNumber(360), randomNumber(360), randomNumber(360)),
+                    new Vector3(randomNumber(0.5, 1.5), randomNumber(0.5, 1.5), randomNumber(0.5, 1.5)),
                     newCube
                 )
             )
@@ -62,6 +104,7 @@ export class Game extends GameBase
                     `randTriangle-${i}`,
                     new Vector3(randomNumber(10, -10), randomNumber(10, -10), randomNumber(10, -10)),
                     new Rotator(randomNumber(360), randomNumber(360), randomNumber(360)),
+                    new Vector3(randomNumber(0.5, 1.5), randomNumber(0.5, 1.5), randomNumber(0.5, 1.5)),
                     newTriangle
                 )
             )
@@ -81,6 +124,7 @@ export class Game extends GameBase
                     `randTexCube-${i}`,
                     new Vector3(randomNumber(10, -10), randomNumber(10, -10), randomNumber(10, -10)),
                     new Rotator(randomNumber(360), randomNumber(360), randomNumber(360)),
+                    new Vector3(randomNumber(0.5, 1.5), randomNumber(0.5, 1.5), randomNumber(0.5, 1.5)),
                     newCube
                 )
             )
@@ -95,6 +139,7 @@ export class Game extends GameBase
                 'controllable',
                 new Vector3(),
                 new Rotator(),
+                new Vector3(0.75, 2.5, 0.75),
                 new Shapes.TexturedCube(
                     document.getElementById('roma-texture') as HTMLImageElement, 
                     {base: 0.5}
@@ -221,6 +266,16 @@ export class Game extends GameBase
                 this.camera.position = new Vector3(c.position.x, c.position.y + 1, c.position.z + 2);
                 this.camera.focalPoint = c.position;
             }
+        }
+
+        if(input.isKeyDown('KeyY'))
+        {
+            this.scene.getEntity('controllable')?.scale(new Vector3(0, 0.1, 0));
+        }
+
+        if(input.isKeyDown('KeyT'))
+        {
+            this.scene.getEntity('controllable')?.scale(new Vector3(0, -0.1, 0));
         }
 
         if(input.isKeyDown('KeyX'))

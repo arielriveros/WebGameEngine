@@ -21,6 +21,7 @@ export abstract class Renderable
 {
     private _position: Vector3;
     private _rotation: Rotator;
+    private _scale: Vector3;
 
     protected _vertices: number[];
     protected _indices: number[] | null;
@@ -41,6 +42,7 @@ export abstract class Renderable
     {
         this._position = new Vector3();
         this._rotation = new Rotator();
+        this._scale = new Vector3(1, 1, 1);
         this._vertices = [];
         this._indices = null;
         this._shader = shader;
@@ -67,6 +69,15 @@ export abstract class Renderable
     public set rotation(rot: Rotator) { this._rotation = rot; }
 
     /**
+     * Gets the scale of the object in world space.
+     */
+    public get scale(): Vector3 { return this._scale; }
+    /**
+     * Sets the scale of the object in world space.
+     */
+    public set scale(scale: Vector3) { this._scale = scale; }
+
+    /**
      * Gets the shader used for rendering.
      */
     public get shader(): Shader { return this._shader; }
@@ -91,6 +102,7 @@ export abstract class Renderable
     {
         Matrix4x4.translate(this._worldMatrix, new Matrix4x4(),this._position);
         Matrix4x4.rotateWithRotator(this._worldMatrix, this._worldMatrix, this._rotation);
+        Matrix4x4.scale(this._worldMatrix, this._worldMatrix, this._scale);
     }
 
     /**

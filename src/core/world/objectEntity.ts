@@ -4,23 +4,28 @@ import { Rotator, Vector3 } from "math";
 
 export class ObjectEntity extends Entity {
 
-    private _renderable: Renderable | null;
+    private _renderable: Renderable | null = null;
 
-    public constructor(name: string, position: Vector3 = new Vector3(), rotation: Rotator = new Rotator(), shape: Renderable | null = null)
-    {
-        super(name, position, rotation);
-        this._renderable = shape;
-        this.shape = shape;
-    }
-
-    public get shape(): Renderable | null { return this._renderable; }
-    public set shape(shape: Renderable | null)
-    { 
-        if(shape)
+    public constructor(
+        name: string,
+        position: Vector3 = new Vector3(),
+        rotation: Rotator = new Rotator(),
+        scale: Vector3 = new Vector3(1, 1, 1),
+        newRenderable: Renderable | null = null)
         {
-            this._renderable = shape;
+            super(name, position, rotation, scale);
+            this.renderable = newRenderable;
+        }
+
+    public get renderable(): Renderable | null { return this._renderable; }
+    public set renderable(newRenderable: Renderable | null)
+    { 
+        if(newRenderable)
+        {
+            this._renderable = newRenderable;
             this._renderable.position = this.position;
             this._renderable.rotation = this.rotation;
+            this._renderable.scale = this.scaleVec;
         }
     }
 

@@ -23,7 +23,7 @@ export class Scene
 
     public addEntity(entity: ObjectEntity): void
     {
-        entity.shape?.load();
+        entity.renderable?.load();
         this._objects.push(entity);
     }
 

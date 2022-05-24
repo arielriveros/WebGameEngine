@@ -470,4 +470,36 @@ export class Matrix4x4 {
       Matrix4x4.translate(out, out, opposPivot);
       return out;
     }
+
+    /**
+     * Scales the mat4 by the dimensions in the given vec3 not using vectorization
+     *
+     * @param {Matrix4x4} out the receiving matrix
+     * @param {Matrix4x4} a the matrix to scale
+     * @param {Vector3} v the vec3 to scale the matrix by
+     * @returns {Matrix4x4} out
+     **/
+    public static scale(out: Matrix4x4, a: Matrix4x4, v: Vector3): Matrix4x4 {
+      /* GLMATRIX LIBRARY IMPLEMENTATION */
+      let x = v.x,
+        y = v.y,
+        z = v.z;
+      out._data[0] = a._data[0] * x;
+      out._data[1] = a._data[1] * x;
+      out._data[2] = a._data[2] * x;
+      out._data[3] = a._data[3] * x;
+      out._data[4] = a._data[4] * y;
+      out._data[5] = a._data[5] * y;
+      out._data[6] = a._data[6] * y;
+      out._data[7] = a._data[7] * y;
+      out._data[8] = a._data[8] * z;
+      out._data[9] = a._data[9] * z;
+      out._data[10] = a._data[10] * z;
+      out._data[11] = a._data[11] * z;
+      out._data[12] = a._data[12];
+      out._data[13] = a._data[13];
+      out._data[14] = a._data[14];
+      out._data[15] = a._data[15];
+      return out;
+    }
 }
