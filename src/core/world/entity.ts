@@ -19,7 +19,6 @@ export abstract class Entity {
             this._rotation = rotation;
             this._scale = scale;
             this._worldMatrix = new Matrix4x4();
-            this.updateTransforms();
         }
 
     public get name(): string { return this._name; }
@@ -74,11 +73,11 @@ export abstract class Entity {
     /**
      * Updates the world matrix of the object.
      */
-    public updateTransforms(): Matrix4x4
+    public updateTransforms(): void
     {
         Matrix4x4.translate(this._worldMatrix, new Matrix4x4(),this._position);
         Matrix4x4.rotateWithRotator(this._worldMatrix, this._worldMatrix, this._rotation);
-        return Matrix4x4.scale(this._worldMatrix, this._worldMatrix, this._scale);
+        Matrix4x4.scale(this._worldMatrix, this._worldMatrix, this._scale);
     }
 
     public getWorldPosition(): Vector3
