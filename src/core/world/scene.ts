@@ -56,12 +56,5 @@ export class Scene
         this._camera = camera;
     }
 
-    public update(): void
-    {
-        for (const i of this._objects)
-        {
-            i.shape?.update();
-            i.shape?.draw(this._camera);
-        }
-    }
+    public update(): void { }
 }

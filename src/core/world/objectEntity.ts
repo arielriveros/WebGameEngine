@@ -1,32 +1,32 @@
-import { Shape } from "../rendering/graphics/shapes";
+import { Renderable } from "../rendering/graphics/shapes";
 import { Entity } from "./entity";
 import { Rotator, Vector3 } from "math";
 
 export class ObjectEntity extends Entity {
 
-    private _shape: Shape | null;
+    private _renderable: Renderable | null;
 
-    public constructor(name: string, position: Vector3 = new Vector3(), rotation: Rotator = new Rotator(), shape: Shape | null = null)
+    public constructor(name: string, position: Vector3 = new Vector3(), rotation: Rotator = new Rotator(), shape: Renderable | null = null)
     {
         super(name, position, rotation);
-        this._shape = shape;
+        this._renderable = shape;
         this.shape = shape;
     }
 
-    public get shape(): Shape | null { return this._shape; }
-    public set shape(shape: Shape | null)
+    public get shape(): Renderable | null { return this._renderable; }
+    public set shape(shape: Renderable | null)
     { 
         if(shape)
         {
-            this._shape = shape;
-            this._shape.position = this.position;
-            this._shape.rotation = this.rotation;
+            this._renderable = shape;
+            this._renderable.position = this.position;
+            this._renderable.rotation = this.rotation;
         }
     }
 
     public override delete(): void
     {
-        this._shape?.unload();
-        this._shape = null;
+        this._renderable?.unload();
+        this._renderable = null;
     }
 }

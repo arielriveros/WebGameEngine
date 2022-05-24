@@ -14,12 +14,11 @@ export class Engine{
 
     public constructor() {
         LOG("New Game Instance", 'info');
-        this._render = new Render();
+        this._render = new Render("render-viewport");
         this._input = new InputManager();
         this._game = new Game();
-
-        this._render.initialize("render-viewport");
         this._game.setUp();
+        this._render.initialize(this._game.camera, this._game.scene);
         this._performance = {showPerformance: true, frameTime: 0, fps: 0, previousTime: 0};
     }
     /** 
@@ -31,8 +30,6 @@ export class Engine{
         let previousTime = performance.now()
         this._game.start();
         LOG(`Game set up in ${(performance.now() - previousTime).toFixed(2)} ms`, 'info');
-        
-        this._render.render(this._game.camera, this._game.scene);
         this.loop();
     }
 
@@ -87,7 +84,7 @@ export class Engine{
         }
         // END DEBUG
 
-        this._render.update();        
+        this._render.render();    
         this._game.inputListen(this._input);
         this._game.onUpdate();
         requestAnimationFrame(this.loop.bind( this ));

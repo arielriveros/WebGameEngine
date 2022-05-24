@@ -13,26 +13,24 @@ export class Render
     private _camera!: Camera;
     private _scene!: Scene;
 
-    public constructor() {
-        LOG("New Render Instance", 'info')
-    }
-
-    public get canvas(): HTMLCanvasElement { return this._canvas; }
-
     /**
     * Initializes WebGL rendering context. 
     * @param elementID Id of the canvas element to render in.
     */
-    public initialize(elementID: string): void {
+    public constructor(elementID: string)
+    {
+        LOG("New Render Instance", 'info');
         this.initializeContext(elementID);
     }
+
+    public get canvas(): HTMLCanvasElement { return this._canvas; }
 
     /**
      * Renders the camera and scene.
      * @param camera
      * @param scene 
      */
-    public render(camera: Camera, scene: Scene): void
+    public initialize(camera: Camera, scene: Scene): void
     {
         this._camera = camera;
         this._camera.initialize();
@@ -42,23 +40,34 @@ export class Render
     }
 
     /**
-     * Gets called every frame
+     * Draws renderable elements every frame.
      */
-    public update(): void
+    public render(): void
     {
         // clears buffers to preset values.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        this._scene.update();
+        for(const e of this._scene.entities)
+        { 
+            e.shape?.draw(this._camera); 
+        };
     }
+
+    /**
+     * Gets called every frame
+     */
+    public update(): void { }
 
     /**
      * Resizes canvas to fit window.
      */
-    public resize(): void {
-        if (this._canvas) {
+    public resize(): void
+    {
+        if (this._canvas)
+        {
             this._canvas.width = window.innerWidth;
             this._canvas.height = window.innerHeight;
-            if(this._camera) {
+            if(this._camera)
+            {
                 this._camera.refreshProjection();
             }
             gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -77,7 +86,6 @@ export class Render
                 LOG(`No canvas element of id ${elementID}`, 'error', true);
             }
         }
-
         else
         {
             // If there is no element of id elementID then its created and appended
