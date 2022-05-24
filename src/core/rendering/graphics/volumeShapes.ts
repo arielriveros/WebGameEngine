@@ -1,10 +1,12 @@
 import { Options, SimpleShape, TexturedShape } from "./renderable";
 
-export class Cube extends SimpleShape {
-    public constructor(options: Options = {}) {
+export class Cube extends SimpleShape
+{
+    public constructor(options: Options = {})
+    {
         let base: number = options.base || 1;
         let color: number[] = options.color || [0, 0, 0];
-        super(options.position, options.rotation);
+        super();
         const l2 = base/2;
         this.indices = [
             // Top
@@ -67,7 +69,8 @@ export class Cube extends SimpleShape {
     }
 }
 
-export class ColorCube extends Cube {
+export class ColorCube extends Cube
+{
     public constructor(options: Options) {
         super(options);
         const l2 = options.base ? options.base/2 : 0.5;
@@ -112,9 +115,10 @@ export class ColorCube extends Cube {
     }
 }
 
-export class TexturedCube extends TexturedShape {
+export class TexturedCube extends TexturedShape
+{
     public constructor(texture: HTMLImageElement, options: Options) {
-        super(options.position, options.rotation, texture);
+        super(texture);
         const l2 = options.base ? options.base/2 : 0.5;
         this.indices = [
             // Top

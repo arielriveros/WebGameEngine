@@ -1,15 +1,17 @@
-import { LineShape, Options, SimpleShape } from "./renderable";
+import { Options, SimpleShape } from "./renderable";
 
-export class Triangle extends SimpleShape {
+export class Triangle extends SimpleShape
+{
 
     /**
-     * Triangle Basic 2D Shape. Rendered in origin.
+     * Triangle Basic 2D Shape. Rendered at origin.
      */
-    public constructor(options: Options = {}) {
+    public constructor(options: Options = {})
+    {
         let base: number = options.base || 1;
         let height: number = options.height || base;
         let color: number[] = options.color || [0, 0, 0];
-        super(options.position, options.rotation);
+        super();
         this.vertices = [
         //  X       Y          Z    R         G         B
            -base/2, -height/2, 0.0, color[0], color[1], color[2],
@@ -18,15 +20,16 @@ export class Triangle extends SimpleShape {
         }
 }
 
-export class ColorTriangle extends SimpleShape {
-
+export class ColorTriangle extends SimpleShape
+{
     /**
-     * Triangle Basic 2D Shape. Rendered in origin.
+     * Triangle Basic 2D Shape. Rendered at origin.
      */
-    public constructor(options: Options = {}) {
+    public constructor(options: Options = {})
+    {
         let base: number = options.base || 1;
         let height: number = options.height || 1;
-        super(options.position, options.rotation);
+        super();
         this.vertices = [
         //  X       Y          Z    R    G    B
            -base/2, -height/2, 0.0, 1.0, 0.0, 0.0,
@@ -40,11 +43,12 @@ export class Quad extends SimpleShape {
     /**
      * Quad Basic 2D Shape. Rendered in origin. Consists of 2 adyacent Triangles.
      */
-    public constructor(options: Options = {}) {
+    public constructor(options: Options = {})
+    {
         let base: number = options.base || 1;
         let height: number = options.height || 1;
         let color: number[] = options.color || [0, 0, 0];
-        super(options.position, options.rotation);
+        super();
         this.vertices = [
         //  X       Y          Z    R         G         B
            -base/2, -height/2, 0.0, color[0], color[1], color[2],

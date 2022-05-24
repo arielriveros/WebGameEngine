@@ -12,8 +12,6 @@ export interface Options
     height?: number,
     base?: number,
     color?: number[],
-    position?: Vector3,
-    rotation?: Rotator,
 }
 
 /**
@@ -37,15 +35,12 @@ export abstract class Renderable
     protected _viewProjection: Matrix4x4;;
     
     /**
-     *  
-     * @param position Position of the object in world space.
-     * @param rotation Rotation of the object in world space.
      * @param shader   Shader to use for rendering.
      */
-    public constructor(position: Vector3 = new Vector3(), rotation: Rotator = new Rotator(), shader: Shader = new SimpleShader() ) 
+    public constructor(shader: Shader = new SimpleShader() ) 
     {
-        this._position = position;
-        this._rotation = rotation;
+        this._position = new Vector3();
+        this._rotation = new Rotator();
         this._vertices = [];
         this._indices = null;
         this._shader = shader;
@@ -161,9 +156,9 @@ export abstract class Renderable
 
 export class SimpleShape extends Renderable
 {
-    public constructor(position: Vector3 = new Vector3(), rotation: Rotator = new Rotator())
+    public constructor()
     {
-        super(position, rotation, new SimpleShader() );
+        super(new SimpleShader() );
     }
 
     public override load(): void
@@ -202,9 +197,9 @@ export class TexturedShape extends Renderable
 {
     private _texture: Texture;
 
-    public constructor(position: Vector3 = new Vector3(), rotation: Rotator = new Rotator(), texture: HTMLImageElement)
+    public constructor(texture: HTMLImageElement)
     {
-        super(position, rotation, new TextureShader() );
+        super(new TextureShader() );
         this._texture = new Texture(texture);
     }
 
@@ -241,11 +236,10 @@ export class TexturedShape extends Renderable
     }
 }
 
-
 export class LineShape extends Renderable {
-    public constructor(position: Vector3 = new Vector3(), rotation: Rotator = new Rotator())
+    public constructor()
     {
-        super(position, rotation, new SimpleShader() );
+        super(new SimpleShader() );
     }
 
     public override load(): void
