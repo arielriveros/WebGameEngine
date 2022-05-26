@@ -2,6 +2,7 @@ import { GameBase } from './gameInterface';
 import { PerspectiveCamera, Scene, InputManager, Shapes, OrthographicCamera, ObjectEntity } from 'core';
 import { LOG } from 'utils';
 import { Vector3, Rotator, randomNumber } from 'math';
+import { addGrid, addAxis, addRandomCubes, addRandomTexturedCubes, addRandomtriangles, addControllable } from './sceneSetup';
 
 export class Game extends GameBase
 {
@@ -15,159 +16,28 @@ export class Game extends GameBase
         this.scene = new Scene();
     }
 
-    private addGrid(size: number = 10)
-    {
-        for(let i = -size; i <= size; i++)
-        {
-            this.scene.addEntity(
-                new ObjectEntity(
-                    `line-${i}h`, 
-                    new Vector3(i, 0, size), 
-                    new Rotator(0, 90, 0), 
-                    new Vector3(1, 1, 1),
-                    new Shapes.Line({base:2 * size, color: [0.4, 0.4, 0.4]})
-                )
-            );
-            this.scene.addEntity(
-                new ObjectEntity(
-                    `line-${i}v`,
-                    new Vector3(-size, 0, i),
-                    new Rotator(0, 0, 0),
-                    new Vector3(1, 1, 1),
-                    new Shapes.Line({base:2 * size, color: [0.75, 0.75, 0.75]})
-                )
-            );
-        }
-    }
-
-    private addAxis()
-    {
-        this.scene.addEntity(
-            new ObjectEntity(
-                `axis-x`,
-                new Vector3(0, 0.001, 0),
-                new Rotator(0, 0, 0),
-                new Vector3(1, 1, 1),
-                new Shapes.Line({base:1.5, color: [1, 0, 0]})
-            )
-        );
-        this.scene.addEntity(
-            new ObjectEntity(
-                `axis-y`,
-                new Vector3(0, 0, 0),
-                new Rotator(0, 0, 90),
-                new Vector3(1, 1, 1),
-                new Shapes.Line({base:1.5, color: [0, 1, 0]}
-                )
-            )
-        );
-        this.scene.addEntity(
-            new ObjectEntity(
-                `axis-z`,
-                new Vector3(0, 0.001, 0),
-                new Rotator(0, -90, 0),
-                new Vector3(1, 1, 1),
-                new Shapes.Line({base:1.5, color: [0, 0, 1]}) 
-            )
-        );
-    }
-
-    private addRandomCubes(count: number)
-    {
-        for(let i = 0; i < count; i++)
-        {
-            let newCube = new Shapes.Cube({ 
-                base: randomNumber(0.2, 1.5), 
-                color: [randomNumber(), randomNumber(), randomNumber()]})
-            this.scene.addEntity(
-                new ObjectEntity(
-                    `randCube-${i}`,
-                    new Vector3(randomNumber(10, -10), randomNumber(10, -10), randomNumber(10, -10)),
-                    new Rotator(randomNumber(360), randomNumber(360), randomNumber(360)),
-                    new Vector3(randomNumber(0.5, 1.5), randomNumber(0.5, 1.5), randomNumber(0.5, 1.5)),
-                    newCube
-                )
-            )
-        }
-    }
-
-    private addRandomtriangles(count: number)
-    {
-        for(let i = 0; i < count; i++)
-        {
-            let newTriangle = new Shapes.Triangle({
-                base: randomNumber(0.2, 1.5),
-                height: randomNumber(0.2, 1.5),
-                color: [randomNumber(), randomNumber(), randomNumber()]})
-            this.scene.addEntity(
-                new ObjectEntity(
-                    `randTriangle-${i}`,
-                    new Vector3(randomNumber(10, -10), randomNumber(10, -10), randomNumber(10, -10)),
-                    new Rotator(randomNumber(360), randomNumber(360), randomNumber(360)),
-                    new Vector3(randomNumber(0.5, 1.5), randomNumber(0.5, 1.5), randomNumber(0.5, 1.5)),
-                    newTriangle
-                )
-            )
-        }
-    }
-
-    private addRandomTexturedCubes(count: number)
-    {
-        for(let i = 0; i < count; i++)
-        {
-            let newCube = new Shapes.TexturedCube(
-                    document.getElementById('roma-texture') as HTMLImageElement, 
-                    { base: randomNumber(0.2, 1.5) }
-                )
-            this.scene.addEntity(
-                new ObjectEntity(
-                    `randTexCube-${i}`,
-                    new Vector3(randomNumber(10, -10), randomNumber(10, -10), randomNumber(10, -10)),
-                    new Rotator(randomNumber(360), randomNumber(360), randomNumber(360)),
-                    new Vector3(randomNumber(0.5, 1.5), randomNumber(0.5, 1.5), randomNumber(0.5, 1.5)),
-                    newCube
-                )
-            )
-        }
-    }
-
-
-    private addControllable()
-    {
-        this.scene.addEntity(
-            new ObjectEntity(
-                'controllable',
-                new Vector3(),
-                new Rotator(),
-                new Vector3(0.75, 2.5, 0.75),
-                new Shapes.TexturedCube(
-                    document.getElementById('roma-texture') as HTMLImageElement, 
-                    {base: 0.5}
-                )
-            )
-        );
-    }
+    
 
     public override start(): void
     {
         let previousTime = performance.now()
-        this.addGrid();
-        this.addAxis();
+        addGrid(this._scene);
+        addAxis(this._scene);
         LOG(`Grid - Axis ${(performance.now() - previousTime).toFixed(3)} ms`);
 
         previousTime = performance.now()
-        this.addRandomCubes(50);
+        addRandomCubes(this._scene, 50);
         LOG(`Random cubes ${(performance.now() - previousTime).toFixed(3)} ms`);
 
         previousTime = performance.now()
-        this.addRandomTexturedCubes(50);
+        addRandomTexturedCubes(this._scene, 50);
         LOG(`Random textured cubes ${(performance.now() - previousTime).toFixed(3)} ms`);
         
         previousTime = performance.now()
-        this.addRandomtriangles(100);
+        addRandomtriangles(this._scene, 100);
         LOG(`Random triangles ${(performance.now() - previousTime).toFixed(3)} ms`);
 
-        this.addControllable();
+        addControllable(this._scene);
     }
 
     public override onUpdate(): void { }
