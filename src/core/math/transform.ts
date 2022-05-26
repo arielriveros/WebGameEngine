@@ -5,6 +5,7 @@ export class Transform
     private _position: Vector3;
     private _rotation: Rotator;
     private _scale: Vector3;
+    private _matrix: Matrix4x4;
 
     public constructor(
         position: Vector3 = new Vector3(),
@@ -14,6 +15,7 @@ export class Transform
         this._position = position;
         this._rotation = rotation;
         this._scale = scale;
+        this._matrix = new Matrix4x4();
     }
 
     public get position(): Vector3 { return this._position; }
@@ -25,7 +27,12 @@ export class Transform
     public get scale(): Vector3 { return this._scale; }
     public set scale(scale: Vector3) { this._scale = scale; }
 
-    public applyTransform(out: Matrix4x4 = new Matrix4x4()): Matrix4x4 {
+    public get matrix(): Matrix4x4 { 
+        this.applyTransform(this._matrix);
+        return this._matrix;
+    }
+
+    private applyTransform(out: Matrix4x4 = new Matrix4x4()): Matrix4x4 {
         Matrix4x4.translate(out, new Matrix4x4(), this._position);
         Matrix4x4.rotateWithRotator(out, out, this._rotation);
         Matrix4x4.scale(out, out, this._scale);

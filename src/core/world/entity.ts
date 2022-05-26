@@ -1,5 +1,4 @@
 import { Matrix4x4, Rotator, Transform, Vector3 } from "math";
-import { LOG } from "../utilities/logger";
 
 export abstract class Entity {
     private _name: string;
@@ -15,8 +14,8 @@ export abstract class Entity {
         scale: Vector3 = new Vector3(1, 1, 1))
         {
             this._name = name;
-            this._worldMatrix = new Matrix4x4();
             this._transform = new Transform(position, rotation, scale);
+            this._worldMatrix = this._transform.matrix;
             this._forwardVector = new Vector3(position.x + 1, this.position.y, this.position.z);
         }
 
@@ -78,7 +77,7 @@ export abstract class Entity {
      */
     public updateTransforms(): void
     {
-        this._transform.applyTransform(this._worldMatrix);
+        this._worldMatrix = this._transform.matrix;
     }
 
     public getWorldPosition(): Vector3
