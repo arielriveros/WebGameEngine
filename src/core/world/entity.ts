@@ -1,10 +1,9 @@
 import { Matrix4x4, Rotator, Transform, Vector3 } from "math";
+import { LOG } from "../utilities/logger";
 
 export abstract class Entity {
     private _name: string;
-    private _position: Vector3;
-    private _rotation: Rotator;
-    private _scale: Vector3;
+    private _forwardVector: Vector3;
     private _transform: Transform;
 
     protected _worldMatrix: Matrix4x4;
@@ -16,11 +15,9 @@ export abstract class Entity {
         scale: Vector3 = new Vector3(1, 1, 1))
         {
             this._name = name;
-            this._position = position;
-            this._rotation = rotation;
-            this._scale = scale;
             this._worldMatrix = new Matrix4x4();
             this._transform = new Transform(position, rotation, scale);
+            this._forwardVector = new Vector3(position.x + 1, this.position.y, this.position.z);
         }
 
     public get name(): string { return this._name; }
@@ -29,48 +26,52 @@ export abstract class Entity {
     /**
     * Gets the position of the object.
     */
-    public get position(): Vector3 { return this._position; }
+    public get position(): Vector3 { return this._transform.position; }
     /**
      * Sets the position of the object.
      */
-    public set position(pos: Vector3) { this._position = pos; }
+    public set position(pos: Vector3) { this._transform.position = pos; }
 
     /**
      * Gets the rotation of the object.
      */
-    public get rotation(): Rotator { return this._rotation; }
+    public get rotation(): Rotator { return this._transform.rotation; }
     /**
      * Sets the rotation of the object.
      */
-    public set rotation(rot: Rotator) { this._rotation = rot; }
+    public set rotation(rot: Rotator) { this._transform.rotation = rot; }
 
     /**
      * Gets the scale of the object.
      */
-    public get scale(): Vector3 { return this._scale; }
+    public get scale(): Vector3 { return this._transform.scale; }
     /**
      * Sets the scale of the object.
      */
-    public set scale(scale: Vector3) { this._scale = scale; }
+    public set scale(scale: Vector3) { this._transform.scale = scale; }
 
     public get worldMatrix(): Matrix4x4 { return this._worldMatrix; }
 
+    public get forwardVector(): Vector3 { return this._forwardVector; }
+
     public move(delta: Vector3): void
     {
-        this._position.add(delta);
+        this._transform.position.add(delta);
     }
 
     public rotate(delta: Rotator): void
     {
-        this._rotation.add(delta);
+        this._transform.rotation.add(delta);
     }
 
     public rescale(delta: Vector3): void
     {
-        this._scale.add(delta);
+        this._transform.scale.add(delta);
     }
 
     public delete(): void { }
+
+    public update(): void { }
 
     /**
      * Updates the world matrix of the object.
@@ -82,7 +83,7 @@ export abstract class Entity {
 
     public getWorldPosition(): Vector3
     {
-        this.updateTransforms();
+        console.log(this._worldMatrix);
         return Matrix4x4.getTranslation(this._worldMatrix);
     }
 }
