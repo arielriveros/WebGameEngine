@@ -26,7 +26,7 @@ export class Transform
     public set scale(scale: Vector3) { this._scale = scale; }
 
     public applyTransform(out: Matrix4x4 = new Matrix4x4()): Matrix4x4 {
-        Matrix4x4.translate(out, out, this._position);
+        Matrix4x4.translate(out, new Matrix4x4(), this._position);
         Matrix4x4.rotateWithRotator(out, out, this._rotation);
         Matrix4x4.scale(out, out, this._scale);
         return out;

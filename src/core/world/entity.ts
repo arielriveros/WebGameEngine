@@ -1,10 +1,11 @@
-import { Matrix4x4, Rotator, Vector3 } from "math";
+import { Matrix4x4, Rotator, Transform, Vector3 } from "math";
 
 export abstract class Entity {
     private _name: string;
     private _position: Vector3;
     private _rotation: Rotator;
     private _scale: Vector3;
+    private _transform: Transform;
 
     protected _worldMatrix: Matrix4x4;
 
@@ -19,6 +20,7 @@ export abstract class Entity {
             this._rotation = rotation;
             this._scale = scale;
             this._worldMatrix = new Matrix4x4();
+            this._transform = new Transform(position, rotation, scale);
         }
 
     public get name(): string { return this._name; }
@@ -75,9 +77,7 @@ export abstract class Entity {
      */
     public updateTransforms(): void
     {
-        Matrix4x4.translate(this._worldMatrix, new Matrix4x4(),this._position);
-        Matrix4x4.rotateWithRotator(this._worldMatrix, this._worldMatrix, this._rotation);
-        Matrix4x4.scale(this._worldMatrix, this._worldMatrix, this._scale);
+        this._transform.applyTransform(this._worldMatrix);
     }
 
     public getWorldPosition(): Vector3
