@@ -38,4 +38,8 @@ export class Transform
         Matrix4x4.scale(out, out, this._scale);
         return out;
     }
+
+    public applyToVector(vector: Vector3): Vector3 {
+        return Matrix4x4.multiplyVector(new Vector3(), this.matrix, vector);
+    }
 }

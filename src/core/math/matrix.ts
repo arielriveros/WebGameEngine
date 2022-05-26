@@ -506,4 +506,14 @@ export class Matrix4x4 {
     public static getTranslation(mat: Matrix4x4): Vector3 {
       return new Vector3(mat._data[12], mat._data[13], mat._data[14]);
     }
+
+    public static multiplyVector(out: Vector3, mat: Matrix4x4, vec: Vector3): Vector3 {
+      let x = vec.x,
+          y = vec.y,
+          z = vec.z;
+      out.x = mat._data[0] * x + mat._data[1] * y + mat._data[2] * z + mat._data[3];
+      out.y = mat._data[4] * x + mat._data[5] * y + mat._data[6] * z + mat._data[7];
+      out.z = mat._data[8] * x + mat._data[9] * y + mat._data[10] * z + mat._data[11];
+      return out;
+    }
 }
