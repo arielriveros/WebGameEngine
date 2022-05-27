@@ -1,7 +1,7 @@
 import { Game } from '../game/game';
 import { InputManager } from './input/manager';
 import { Render } from './rendering/render';
-import { LOG } from 'utils';
+import { LOG, Performance } from 'utils';
 import { Scene } from './world/scene';
 
 /**
@@ -12,7 +12,7 @@ export class Engine{
     private _input: InputManager;
     private _game: Game;
     private _scene: Scene;
-    private _performance;
+    private _performance: Performance;
 
     public constructor() {
         LOG("New Game Instance", 'info');
@@ -22,14 +22,14 @@ export class Engine{
         this._game.setUp();
         this._scene = this._game.scene;
         this._render.initialize(this._game.camera, this._scene);
-        this._performance = {showPerformance: true, frameTime: 0, fps: 0, previousTime: 0};
+        this._performance = new Performance();
     }
+
     /** 
      * Initializes the engine and starts the game loop.
      */
     public start(): void {
         this._input.initialize();
-
         let previousTime = performance.now()
         this._game.start();
         LOG(`Game set up in ${(performance.now() - previousTime).toFixed(2)} ms`, 'info');
@@ -42,24 +42,7 @@ export class Engine{
     public resize(): void {
         this._render.resize();
     }
-
-    private getPerformance(): void {
-        if(!this._performance.previousTime) {
-            this._performance.previousTime = performance.now();
-            this._performance.fps = 0;
-            this._performance.frameTime = 0;
-        }
-        let delta = (performance.now() - this._performance.previousTime);
-        this._performance.previousTime = performance.now();
-        this._performance.frameTime = delta;
-        this._performance.fps = 1000/delta;
-
-        let fpsMeter = document.getElementById('fps-meter') as HTMLDivElement;
-        fpsMeter.textContent = this._performance.fps.toFixed(2).toString();
-
-        let frameTimeMeter = document.getElementById('frametime-meter') as HTMLDivElement;
-        frameTimeMeter.textContent = this._performance.frameTime.toFixed(2).toString() + ' ms';
-    }
+    
     /**
      * Main game loop, called every frame.
      */
@@ -83,7 +66,8 @@ export class Engine{
         }
 
         if(this._performance.showPerformance) {
-            this.getPerformance();
+            this._performance.measure();
+            this._performance.sendToHUD();
         }
         // END DEBUG
 
