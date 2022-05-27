@@ -48,6 +48,14 @@ export class Game extends GameBase
                 new Shapes.Line({color: [1, 0, 1]}, new Vector3(0, 0.5, 0), new Vector3(1, 1, 1))
             )
         )
+
+        let c = this.scene.getEntity('controllable');
+        if(c){
+            this.camera.position.x = c.position.x;
+            //this.camera.position.y = c.position.y + 1;
+            //this.camera.position.z = c.position.z + 2;
+            this.camera.follow(c);
+        }
     }
 
     public override onUpdate(): void { }
@@ -144,7 +152,7 @@ export class Game extends GameBase
             if(c)
             {
                 this.camera.position = new Vector3(c.position.x, c.position.y + 1, c.position.z + 2);
-                this.camera.focalPoint = c.position;
+                this.camera.follow(c);
             }
         }
 

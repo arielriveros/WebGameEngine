@@ -31,6 +31,15 @@ export abstract class Camera extends Entity
     protected set projectionMatrix(newMatrix: Matrix4x4) { this._projectionMatrix = newMatrix; }
     
     public set focalPoint(focus: Vector3) { this._focalPosition = focus; }
+
+    /**
+     * Camera follows the given entity.
+     * @param entity Entity to follow
+     */
+    public follow(entity: Entity): void
+    {
+        this._focalPosition = entity.position;
+    }
     
     public refreshProjection(): void { }
 
