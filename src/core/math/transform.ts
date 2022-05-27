@@ -7,6 +7,12 @@ export class Transform
     private _scale: Vector3;
     private _matrix: Matrix4x4;
 
+    /**
+     * Transform Matrix for position-rotation-scaling object handling.
+     * @param position Vector3 position of the object.
+     * @param rotation Rotator rotation of the object.
+     * @param scale Vector3 scale of the object.
+     */
     public constructor(
         position: Vector3 = new Vector3(),
         rotation: Rotator = new Rotator(),
@@ -27,16 +33,17 @@ export class Transform
     public get scale(): Vector3 { return this._scale; }
     public set scale(scale: Vector3) { this._scale = scale; }
 
-    public get matrix(): Matrix4x4 { 
-        this.applyTransform(this._matrix);
-        return this._matrix;
-    }
+    public get matrix(): Matrix4x4 { return this._matrix; }
 
-    private applyTransform(out: Matrix4x4 = new Matrix4x4()): Matrix4x4 {
-        Matrix4x4.translate(out, new Matrix4x4(), this._position);
-        Matrix4x4.rotateWithRotator(out, out, this._rotation);
-        Matrix4x4.scale(out, out, this._scale);
-        return out;
+    /**
+     * Applies transform from the values contained in the transform object.
+     * @returns Result of the transform operation.
+     */
+    public applyTransform(): Matrix4x4 {
+        Matrix4x4.translate(this._matrix, new Matrix4x4(), this._position);
+        Matrix4x4.rotateWithRotator(this._matrix, this._matrix, this._rotation);
+        Matrix4x4.scale(this._matrix, this._matrix, this._scale);
+        return this._matrix;
     }
 
     public applyToVector(vector: Vector3): Vector3 {

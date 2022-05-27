@@ -2,6 +2,7 @@ import { Game } from '../game/game';
 import { InputManager } from './input/manager';
 import { Render } from './rendering/render';
 import { LOG } from 'utils';
+import { Scene } from './world/scene';
 
 /**
  *  Main Engine Class 
@@ -10,6 +11,7 @@ export class Engine{
     private _render: Render;
     private _input: InputManager;
     private _game: Game;
+    private _scene: Scene;
     private _performance;
 
     public constructor() {
@@ -18,7 +20,8 @@ export class Engine{
         this._input = new InputManager();
         this._game = new Game();
         this._game.setUp();
-        this._render.initialize(this._game.camera, this._game.scene);
+        this._scene = this._game.scene;
+        this._render.initialize(this._game.camera, this._scene);
         this._performance = {showPerformance: true, frameTime: 0, fps: 0, previousTime: 0};
     }
     /** 
@@ -86,6 +89,7 @@ export class Engine{
 
         this._game.inputListen(this._input);
         this._game.onUpdate();
+        this._scene.update();
         this._render.update();
         requestAnimationFrame(this.loop.bind( this ));
     }

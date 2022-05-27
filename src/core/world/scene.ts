@@ -1,10 +1,12 @@
-import { Camera } from "./camera";
 import { ObjectEntity } from "./objectEntity";
 
 export class Scene
 {
     private _objects: ObjectEntity[];
 
+    /**
+     * A Scene object is a collection of Entities that handles inner functionalities for each entity in a scene.
+     */
     public constructor()
     {
         this._objects = [];
@@ -15,12 +17,20 @@ export class Scene
         return this._objects;
     }
 
+    /**
+     * Adds an entity object to the scene.
+     * @param entity Entity to be added to the scene.
+     */
     public addEntity(entity: ObjectEntity): void
     {
         entity.renderable?.load();
         this._objects.push(entity);
     }
 
+    /**
+     * Removes an entity object from the scene.
+     * @param entity Name of the Entity to be removed from the scene.
+     */
     public removeEntity(entityName: string): void
     { 
         for (let i = 0; i < this._objects.length; i++)
@@ -34,6 +44,11 @@ export class Scene
         }
     }
 
+    /**
+     * Gets an entity object from the scene.
+     * @param entityName Name of the object to get from the scene.
+     * @returns Entity object from the scene if it exists, null otherwise.
+     */
     public getEntity(entityName: string): ObjectEntity | null
     {
         for (const e of this._objects)
@@ -46,10 +61,18 @@ export class Scene
         return null;
     }
 
-    public initialize(): void
-    {
+    /**
+     * Initialization function for the scene.
+     */
+    public initialize(): void { }
 
+    /**
+     * Runs every frame.
+     */
+    public update(): void {
+        for (const e of this._objects)
+        {
+            e.update(); // Each entity updates itself every frame.
+        }
     }
-
-    public update(): void { }
 }

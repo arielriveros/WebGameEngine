@@ -47,8 +47,7 @@ export class Render
         // clears buffers to preset values.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         for(const e of this._scene.entities)
-        { 
-            e.updateTransforms();
+        {
             e.renderable?.draw(this._camera); 
         };
     }

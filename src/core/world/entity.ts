@@ -5,8 +5,6 @@ export abstract class Entity {
     private _forwardVector: Vector3;
     private _transform: Transform;
 
-    protected _worldMatrix: Matrix4x4;
-
     public constructor(
         name: string,
         position: Vector3 = new Vector3(),
@@ -15,7 +13,6 @@ export abstract class Entity {
         {
             this._name = name;
             this._transform = new Transform(position, rotation, scale);
-            this._worldMatrix = this._transform.matrix;
             this._forwardVector = new Vector3(position.x + 1, this.position.y, this.position.z);
         }
 
@@ -49,7 +46,7 @@ export abstract class Entity {
      */
     public set scale(scale: Vector3) { this._transform.scale = scale; }
 
-    public get worldMatrix(): Matrix4x4 { return this._worldMatrix; }
+    public get worldMatrix(): Matrix4x4 { return this._transform.matrix; }
 
     public get forwardVector(): Vector3 { return this._forwardVector; }
 
@@ -70,19 +67,17 @@ export abstract class Entity {
 
     public delete(): void { }
 
-    public update(): void { }
-
     /**
-     * Updates the world matrix of the object.
+     * Runs every frame.
      */
-    public updateTransforms(): void
+    public update(): void
     {
-        this._worldMatrix = this._transform.matrix;
+        this._transform.applyTransform();
     }
+
 
     public getWorldPosition(): Vector3
     {
-        console.log(this._worldMatrix);
-        return Matrix4x4.getTranslation(this._worldMatrix);
+        return this._transform.position;
     }
 }

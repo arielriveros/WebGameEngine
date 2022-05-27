@@ -23,7 +23,7 @@ export class ObjectEntity extends Entity {
         if(newRenderable)
         {
             this._renderable = newRenderable;
-            this._renderable.worldMatrix = this._worldMatrix;
+            this._renderable.worldMatrix = this.worldMatrix;
         }
     }
 
