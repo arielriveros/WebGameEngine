@@ -38,6 +38,16 @@ export class Game extends GameBase
         LOG(`Random triangles ${(performance.now() - previousTime).toFixed(3)} ms`);
 
         addControllable(this._scene);
+
+        this._scene.addEntity(
+            new ObjectEntity(
+                'Line',
+                new Vector3(0, 0, 0),
+                new Rotator(),
+                new Vector3(1, 1, 1),
+                new Shapes.Line({color: [1, 0, 1]}, new Vector3(0, 0.5, 0), new Vector3(1, 1, 1))
+            )
+        )
     }
 
     public override onUpdate(): void { }
