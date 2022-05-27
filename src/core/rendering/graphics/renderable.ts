@@ -29,7 +29,6 @@ export abstract class Renderable
     protected _uViewProj!: WebGLUniformLocation;
     
     protected _worldMatrix: Matrix4x4;
-    protected _viewProjection: Matrix4x4;;
     
     /**
      * @param shader   Shader to use for rendering.
@@ -40,7 +39,6 @@ export abstract class Renderable
         this._indices = null;
         this._shader = shader;
         this._worldMatrix = new Matrix4x4();
-        this._viewProjection = new Matrix4x4();
     }
     
     /**
@@ -66,25 +64,6 @@ export abstract class Renderable
      */
     protected set indices(newIndices: number[]) { this._indices = newIndices; }
 
-
-    /**
-     * Updates the view projection matrix of the object.
-     * @param viewMatrix Camera View matrix.
-     * @param projectionMatrix Camera Projection Matrix
-     */
-    private updateViewProjection(viewMatrix: Matrix4x4 = new Matrix4x4(), projectionMatrix: Matrix4x4 = new Matrix4x4()): void
-    {
-        Matrix4x4.multiply(
-            this._viewProjection,
-            viewMatrix,
-            this._worldMatrix
-        );
-        Matrix4x4.multiply(
-            this._viewProjection,
-            projectionMatrix,
-            this._viewProjection
-        );
-    }
 
     /**
      * Loads current object's vertices into WebGL Buffer for rendering.
@@ -113,8 +92,7 @@ export abstract class Renderable
     {
         this._shader.use();
         
-        this.updateViewProjection(camera.viewMatrix, camera.projectionMatrix);
-        gl.uniformMatrix4fv(this._uViewProj, false, this._viewProjection.toFloat32Array());
+        gl.uniformMatrix4fv(this._uViewProj, false, camera.getViewProjection(this._worldMatrix).toFloat32Array());
 
         this._buffer.bind();
         if(this._indices)

@@ -33,6 +33,19 @@ export abstract class Camera extends Entity
     public set focalPoint(focus: Vector3) { this._focalPosition = focus; }
 
     /**
+     * Gets the View Projection Matrix given the current camera settings.
+     * @param worldMatrix The world matrix of an object.
+     * @returns 
+     */
+    public getViewProjection(worldMatrix: Matrix4x4): Matrix4x4
+    {
+        let out = new Matrix4x4();
+        Matrix4x4.multiply(out, this.viewMatrix, worldMatrix);
+        Matrix4x4.multiply(out, this.projectionMatrix, out);
+        return out;
+    }
+
+    /**
      * Camera follows the given entity.
      * @param entity Entity to follow
      */
