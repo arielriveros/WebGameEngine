@@ -11,7 +11,7 @@ export class Performance
         this._showPerformance = true;
     }
 
-    public get previousTime(): number { return this._previousTime; };
+    public get previousTime(): number { return this._previousTime; }
     public get time(): number { return this._time; }
     public get showPerformance(): boolean { return this._showPerformance; }
     public set showPerformance(showPerformance: boolean) { this._showPerformance = showPerformance; }
