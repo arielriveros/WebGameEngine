@@ -1,6 +1,5 @@
-import { GLArrayBuffer } from "../gl/arrayBuffer";
+import { GLArrayBuffer, AttributeInformation } from "../gl/arrayBuffer";
 import { GLElementArrayBuffer } from "../gl/elementArrayBuffer";
-import { AttributeInformation } from "../interfaces";
 import { Shader, SimpleShader, TextureShader } from "../shaders/shader";
 import { Vector3, Matrix4x4, Rotator } from "math";
 import { Texture } from "./texture";
