@@ -59,7 +59,7 @@ export abstract class Camera extends Entity
     /**
      * Initializes Camera shader and uniforms.
      */
-    public initialize(): void
+    public override initialize(): void
     {
         this.refreshProjection(); 
     }

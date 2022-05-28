@@ -32,4 +32,8 @@ export class ObjectEntity extends Entity {
         this._renderable?.unload();
         this._renderable = null;
     }
+
+    public override initialize(): void {
+        this._renderable?.load();
+    }
 }

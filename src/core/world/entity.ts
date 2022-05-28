@@ -1,9 +1,11 @@
 import { Matrix4x4, Rotator, Transform, Vector3 } from "math";
+import { Component } from "./components/component";
 
 export abstract class Entity {
     private _name: string;
-    private _forwardVector: Vector3;
     private _transform: Transform;
+
+    private _components: Component[];
 
     public constructor(
         name: string,
@@ -13,11 +15,39 @@ export abstract class Entity {
         {
             this._name = name;
             this._transform = new Transform(position, rotation, scale);
-            this._forwardVector = new Vector3(position.x + 1, this.position.y, this.position.z);
+            this._components = [];
         }
 
     public get name(): string { return this._name; }
     public set name(value: string) { this._name = value; }
+
+    public addComponent(component: Component): void
+    {
+        this._components.push(component);
+        component.entity = this;
+    }
+
+    public getComponent(name: string): Component | null
+    {
+        for(let component of this._components)
+        {
+            if(component.name === name)
+            {
+                return component;
+            }
+        }
+        return null;
+    }
+
+    public removeComponent(name: string): void
+    {
+        const component = this.getComponent(name);
+        if(component)
+        {
+            component.delete();
+            this._components = this._components.filter(c => c !== component);
+        }
+    }
 
     /**
     * Gets the position of the object.
@@ -48,8 +78,6 @@ export abstract class Entity {
 
     public get worldMatrix(): Matrix4x4 { return this._transform.matrix; }
 
-    public get forwardVector(): Vector3 { return this._forwardVector; }
-
     public move(delta: Vector3): void
     {
         this._transform.position.add(delta);
@@ -65,7 +93,14 @@ export abstract class Entity {
         this._transform.scale.add(delta);
     }
 
-    public delete(): void { }
+    public delete(): void {
+        for(let component of this._components)
+        {
+            component.delete();
+        }
+    }
+
+    public initialize(): void { }
 
     /**
      * Runs every frame.
@@ -73,6 +108,10 @@ export abstract class Entity {
     public update(): void
     {
         this._transform.applyTransform();
+        for(let component of this._components)
+        {
+            component.update();
+        }
     }
 
 
