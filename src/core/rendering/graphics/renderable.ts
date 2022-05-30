@@ -1,10 +1,9 @@
 import { GLArrayBuffer, AttributeInformation } from "../gl/arrayBuffer";
 import { GLElementArrayBuffer } from "../gl/elementArrayBuffer";
-import { Shader, SimpleShader, TextureShader } from "../shaders/shader";
-import { Vector3, Matrix4x4, Rotator } from "math";
+import { Shader } from "../shaders/shader";
+import { Matrix4x4 } from "math";
 import { Texture } from "./texture";
 import { gl } from "../render";
-import { Camera } from "../../world/camera";
 
 export interface Options
 {
@@ -23,24 +22,20 @@ export abstract class Renderable
 
     protected _buffer!: GLArrayBuffer;
     protected _indexBuffer!: GLElementArrayBuffer;
-    protected _uWorld!: WebGLUniformLocation;
-    protected _uViewProj!: WebGLUniformLocation;
     
     protected _worldMatrix: Matrix4x4;
+
+    protected _type: string;
     
-    /**
-     * @param shader   Shader to use for rendering.
-     */
-    public constructor() 
+    public constructor(type: string = "simple") 
     {
         this._vertices = [];
         this._indices = null;
         this._worldMatrix = new Matrix4x4();
+        this._type = type;
     }
-    
-    /**
-     * Sets the world matrix.
-     */
+
+    public get worldMatrix(): Matrix4x4 { return this._worldMatrix; }
     public set worldMatrix(matrix: Matrix4x4) { this._worldMatrix = matrix; }
 
     public get vertices(): number[] { return this._vertices; }
@@ -55,6 +50,7 @@ export abstract class Renderable
      */
     protected set indices(newIndices: number[] | null) { this._indices = newIndices; }
 
+    public get type(): string { return this._type; }
 
     /**
      * Loads current object's vertices into WebGL Buffer for rendering.
@@ -78,10 +74,8 @@ export abstract class Renderable
      * Draws data from the shape's buffers.
      * @param camera Camera to use for rendering.
      */
-    public draw(camera: Camera): void
+    public draw(): void
     {
-        gl.uniformMatrix4fv(this._uViewProj, false, camera.getViewProjection(this._worldMatrix).toFloat32Array());
-
         this._buffer.bind();
         if(this._indices)
         {
@@ -98,7 +92,7 @@ export class SimpleShape extends Renderable
 {
     public constructor()
     {
-        super();
+        super("simple");
     }
 
     public override load(shader: Shader): void
@@ -125,8 +119,6 @@ export class SimpleShape extends Renderable
             offset: 3 };
         this._buffer.addAttribLocation(colorAttribute);
 
-        this._uViewProj = shader.getUniformLocation('u_viewProj');
-        
         this._buffer.pushData(this._vertices);
         this._buffer.upload();
     }
@@ -138,7 +130,7 @@ export class TexturedShape extends Renderable
 
     public constructor(texture: HTMLImageElement)
     {
-        super();
+        super("textured");
         this._texture = new Texture(texture);
     }
 
@@ -167,8 +159,6 @@ export class TexturedShape extends Renderable
             offset: 3 };
         this._buffer.addAttribLocation(textureAttribute);
         
-        this._uViewProj = shader.getUniformLocation('u_viewProj');
-        
         this._buffer.pushData(this._vertices);
         this._buffer.upload();
     }
@@ -177,7 +167,7 @@ export class TexturedShape extends Renderable
 export class LineShape extends Renderable {
     public constructor()
     {
-        super();
+        super("simple");
     }
 
     public override load(shader: Shader): void
@@ -195,8 +185,6 @@ export class LineShape extends Renderable {
             size: 3, 
             offset: 3 };
         this._buffer.addAttribLocation(colorAttribute);
-
-        this._uViewProj = shader.getUniformLocation('u_viewProj');
         
         this._buffer.pushData(this._vertices);
         this._buffer.upload();

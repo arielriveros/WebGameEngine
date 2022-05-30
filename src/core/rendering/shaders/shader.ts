@@ -109,12 +109,6 @@ export class SimpleShader extends Shader {
         super('simple.vs.glsl', 'simple.fs.glsl')
     }
 }
- 
-export class SimpleShaderTest extends Shader {
-    public constructor() {
-        super('simpleTest.vs.glsl', 'simple.fs.glsl')
-    }
-}
 
 export class TextureShader extends Shader {
     public constructor() {
