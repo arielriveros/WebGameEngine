@@ -1,6 +1,7 @@
 import { Camera } from "../world/camera";
 import { Scene } from "../world/scene";
 import { LOG } from "utils";
+import { ObjectEntity } from "../world/objectEntity";
 
 /**
  * WebGL Global interface for rendering context
@@ -48,7 +49,7 @@ export class Render
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         for(const e of this._scene.entities)
         {
-            e.renderable?.draw(this._camera); 
+            (e as ObjectEntity).renderable?.draw(this._camera); 
         };
     }
 

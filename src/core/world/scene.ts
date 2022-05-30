@@ -1,8 +1,8 @@
-import { ObjectEntity } from "./objectEntity";
+import { Entity } from "./entity";
 
 export class Scene
 {
-    private _objects: ObjectEntity[];
+    private _objects: Entity[];
 
     /**
      * A Scene object is a collection of Entities that handles inner functionalities for each entity in a scene.
@@ -21,7 +21,7 @@ export class Scene
      * Adds an entity object to the scene.
      * @param entity Entity to be added to the scene.
      */
-    public addEntity(entity: ObjectEntity): void
+    public addEntity(entity: Entity): void
     {
         entity.initialize();
         this._objects.push(entity);
@@ -49,7 +49,7 @@ export class Scene
      * @param entityName Name of the object to get from the scene.
      * @returns Entity object from the scene if it exists, null otherwise.
      */
-    public getEntity(entityName: string): ObjectEntity | null
+    public getEntity(entityName: string): Entity | null
     {
         for (const e of this._objects)
         {
