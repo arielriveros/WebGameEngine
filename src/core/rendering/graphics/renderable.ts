@@ -21,7 +21,6 @@ export abstract class Renderable
     protected _vertices: number[];
     protected _indices: number[] | null;
 
-    private _shader: Shader;
     protected _buffer!: GLArrayBuffer;
     protected _indexBuffer!: GLElementArrayBuffer;
     protected _uWorld!: WebGLUniformLocation;
@@ -32,11 +31,10 @@ export abstract class Renderable
     /**
      * @param shader   Shader to use for rendering.
      */
-    public constructor(shader: Shader = new SimpleShader() ) 
+    public constructor() 
     {
         this._vertices = [];
         this._indices = null;
-        this._shader = shader;
         this._worldMatrix = new Matrix4x4();
     }
     
@@ -45,14 +43,8 @@ export abstract class Renderable
      */
     public set worldMatrix(matrix: Matrix4x4) { this._worldMatrix = matrix; }
 
-    /**
-     * Gets the shader used for rendering.
-     */
-    public get shader(): Shader { return this._shader; }
-    /**
-     * Sets the shader used for rendering.
-     */
-    public set shader(shader: Shader) { this._shader=shader; }
+    public get vertices(): number[] { return this._vertices; }
+    public get indices(): number[] | null { return this._indices; }
 
     /**
      * Sets the vertices of the object for the vertex array buffer.
@@ -61,13 +53,13 @@ export abstract class Renderable
     /**
      * Sets the indices of the object for the element array buffer.
      */
-    protected set indices(newIndices: number[]) { this._indices = newIndices; }
+    protected set indices(newIndices: number[] | null) { this._indices = newIndices; }
 
 
     /**
      * Loads current object's vertices into WebGL Buffer for rendering.
      */
-    public load(): void { }
+    public load(shader: Shader): void { }
     
     /**
      * Runs every frame.
@@ -79,7 +71,6 @@ export abstract class Renderable
      */
     public unload(): void
     {
-        this._shader.remove();
         this._buffer.unbind();
     }
 
@@ -89,8 +80,6 @@ export abstract class Renderable
      */
     public draw(camera: Camera): void
     {
-        this._shader.use();
-        
         gl.uniformMatrix4fv(this._uViewProj, false, camera.getViewProjection(this._worldMatrix).toFloat32Array());
 
         this._buffer.bind();
@@ -109,12 +98,11 @@ export class SimpleShape extends Renderable
 {
     public constructor()
     {
-        super(new SimpleShader() );
+        super();
     }
 
-    public override load(): void
+    public override load(shader: Shader): void
     {
-        this.shader.use();
         this._buffer = new GLArrayBuffer(6, gl.FLOAT, gl.TRIANGLES );
 
         if(this._indices)
@@ -126,18 +114,18 @@ export class SimpleShape extends Renderable
         }
 
         let positionAttribute:AttributeInformation = {
-            location: this.shader.getAttributeLocation("a_position"),
+            location: shader.getAttributeLocation("a_position"),
             size: 3,
             offset: 0 };
         this._buffer.addAttribLocation(positionAttribute);
 
         let colorAttribute:AttributeInformation = {
-            location: this.shader.getAttributeLocation("a_color"),
+            location: shader.getAttributeLocation("a_color"),
             size: 3, 
             offset: 3 };
         this._buffer.addAttribLocation(colorAttribute);
 
-        this._uViewProj = this.shader.getUniformLocation('u_viewProj');
+        this._uViewProj = shader.getUniformLocation('u_viewProj');
         
         this._buffer.pushData(this._vertices);
         this._buffer.upload();
@@ -150,13 +138,12 @@ export class TexturedShape extends Renderable
 
     public constructor(texture: HTMLImageElement)
     {
-        super(new TextureShader() );
+        super();
         this._texture = new Texture(texture);
     }
 
-    public override load(): void
+    public override load(shader: Shader): void
     {
-        this.shader.use();
         this._buffer = new GLArrayBuffer(5, gl.FLOAT, gl.TRIANGLES );
         
         if(this._indices)
@@ -168,19 +155,19 @@ export class TexturedShape extends Renderable
         }
         
         let positionAttribute:AttributeInformation = {
-            location: this.shader.getAttributeLocation("a_position"),
+            location: shader.getAttributeLocation("a_position"),
             size: 3,
             offset: 0 };
             this._buffer.addAttribLocation(positionAttribute);
             
         this._texture.load();
         let textureAttribute:AttributeInformation = {
-            location: this.shader.getAttributeLocation("a_texCoord"),
+            location: shader.getAttributeLocation("a_texCoord"),
             size: 2, 
             offset: 3 };
         this._buffer.addAttribLocation(textureAttribute);
         
-        this._uViewProj = this.shader.getUniformLocation('u_viewProj');
+        this._uViewProj = shader.getUniformLocation('u_viewProj');
         
         this._buffer.pushData(this._vertices);
         this._buffer.upload();
@@ -190,27 +177,26 @@ export class TexturedShape extends Renderable
 export class LineShape extends Renderable {
     public constructor()
     {
-        super(new SimpleShader() );
+        super();
     }
 
-    public override load(): void
+    public override load(shader: Shader): void
     {
-        this.shader.use();
         this._buffer = new GLArrayBuffer(6, gl.FLOAT, gl.LINES );
 
         let positionAttribute:AttributeInformation = {
-            location: this.shader.getAttributeLocation("a_position"),
+            location: shader.getAttributeLocation("a_position"),
             size: 3,
             offset: 0 };
         this._buffer.addAttribLocation(positionAttribute);
 
         let colorAttribute:AttributeInformation = {
-            location: this.shader.getAttributeLocation("a_color"),
+            location: shader.getAttributeLocation("a_color"),
             size: 3, 
             offset: 3 };
         this._buffer.addAttribLocation(colorAttribute);
 
-        this._uViewProj = this.shader.getUniformLocation('u_viewProj');
+        this._uViewProj = shader.getUniformLocation('u_viewProj');
         
         this._buffer.pushData(this._vertices);
         this._buffer.upload();

@@ -1,6 +1,7 @@
 import { Renderable } from "../rendering/graphics/shapes";
 import { Entity } from "./entity";
 import { Rotator, Vector3 } from "math";
+import { pipeline } from "../rendering/render";
 
 export class ObjectEntity extends Entity {
 
@@ -34,6 +35,9 @@ export class ObjectEntity extends Entity {
     }
 
     public override initialize(): void {
-        this._renderable?.load();
+        if(this._renderable)
+        {
+            pipeline.loadRenderable(this._renderable)
+        }
     }
 }
