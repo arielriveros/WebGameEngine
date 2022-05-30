@@ -1,8 +1,8 @@
 import { GameBase } from './gameInterface';
 import { PerspectiveCamera, Scene, InputManager, Shapes, OrthographicCamera, ObjectEntity } from 'core';
 import { LOG } from 'utils';
-import { Vector3, Rotator, randomNumber } from 'math';
-import { addGrid, addAxis, addRandomCubes, addRandomTexturedCubes, addRandomtriangles, addControllable } from './sceneSetup';
+import { Vector3, Rotator } from 'math';
+import { addGrid, addAxis, addRandomCubes, addRandomTexturedCubes, addRandomtriangles, addControllable, addRandomLines } from './sceneSetup';
 
 export class Game extends GameBase
 {
@@ -34,20 +34,14 @@ export class Game extends GameBase
         LOG(`Random textured cubes ${(performance.now() - previousTime).toFixed(3)} ms`);
         
         previousTime = performance.now()
-        addRandomtriangles(this._scene, 100);
+        addRandomtriangles(this._scene, 1000);
         LOG(`Random triangles ${(performance.now() - previousTime).toFixed(3)} ms`);
 
-        addControllable(this._scene);
+        previousTime = performance.now()
+        addRandomLines(this._scene, 500);
+        LOG(`Random Lines ${(performance.now() - previousTime).toFixed(3)} ms`);
 
-        this._scene.addEntity(
-            new ObjectEntity(
-                'Line',
-                new Vector3(0, 0, 0),
-                new Rotator(),
-                new Vector3(1, 1, 1),
-                new Shapes.Line({color: [1, 0, 1]}, new Vector3(0, 0.5, 0), new Vector3(1, 1, 1))
-            )
-        )
+        addControllable(this._scene);
 
         let c = this.scene.getEntity('controllable');
         if(c){
