@@ -1,6 +1,6 @@
 import { ObjectEntity, Scene, Shapes } from "core";
 import { randomNumber, Rotator, Vector3 } from "math";
-import { RenderableComponent } from "src/core/world/components/renderableComponent";
+import { RenderableComponent } from "../core/world/components/renderableComponent";
 
 
 function addGrid(scene: Scene, size: number = 10)
@@ -131,6 +131,7 @@ function addControllable(scene: Scene)
             {base: 0.5}
         )
     )
+    controllableEntity.addComponent(new RenderableComponent('renderable-component', new Shapes.Line({color: [0.5, 0, 0]})));
     scene.addEntity(controllableEntity);
 }
 
