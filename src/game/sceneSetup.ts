@@ -1,5 +1,6 @@
 import { ObjectEntity, Scene, Shapes } from "core";
 import { randomNumber, Rotator, Vector3 } from "math";
+import { RenderableComponent } from "../core/world/components/renderableComponent";
 
 
 function addGrid(scene: Scene, size: number = 10)
@@ -120,18 +121,48 @@ function addRandomTexturedCubes(scene: Scene, count: number)
 
 function addControllable(scene: Scene)
 {
-    scene.addEntity(
-        new ObjectEntity(
-            'controllable',
-            new Vector3(),
-            new Rotator(),
-            new Vector3(0.75, 2.5, 0.75),
-            new Shapes.TexturedCube(
-                document.getElementById('roma-texture') as HTMLImageElement, 
-                {base: 0.5}
-            )
+    let controllableEntity = new ObjectEntity(
+        'controllable',
+        new Vector3(),
+        new Rotator(),
+        new Vector3(0.75, 2.5, 0.75),
+        new Shapes.TexturedCube(
+            document.getElementById('roma-texture') as HTMLImageElement, 
+            {base: 0.5}
         )
-    );
+    )
+    controllableEntity.addComponent(new RenderableComponent('renderable-component', new Shapes.Line({color: [0.5, 0, 0]})));
+    scene.addEntity(controllableEntity);
 }
 
-export { addGrid, addAxis, addRandomCubes, addRandomtriangles, addRandomTexturedCubes, addControllable };
+function addRandomLines(scene: Scene, count: number)
+{
+    for(let i = 0; i < count; i++)
+    {
+        scene.addEntity(
+            new ObjectEntity(
+                'Line',
+                new Vector3(0, 0, 0),
+                new Rotator(),
+                new Vector3(1, 1, 1),
+                new Shapes.Line({color: [1, 0, 1]}, )
+            )
+        )
+        scene.addEntity(
+            new ObjectEntity(
+                `randLine-${i}`,
+                new Vector3(),
+                new Rotator(),
+                new Vector3(1, 1, 1),
+                new Shapes.Line
+                (
+                    { color: [randomNumber(), randomNumber(), randomNumber()] },
+                    new Vector3(randomNumber(10, -10), randomNumber(10, -10), randomNumber(10, -10)),
+                    new Vector3(randomNumber(10, -10), randomNumber(10, -10), randomNumber(10, -10))
+                )
+            )
+        )
+    }
+}
+
+export { addGrid, addAxis, addRandomCubes, addRandomtriangles, addRandomTexturedCubes, addControllable, addRandomLines };

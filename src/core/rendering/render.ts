@@ -1,12 +1,18 @@
 import { Camera } from "../world/camera";
 import { Scene } from "../world/scene";
 import { LOG } from "utils";
-import { ObjectEntity } from "../world/objectEntity";
+import { Shaders } from "core";
+import { PipelineManager } from "./pipeline/pipelineManager";
 
 /**
- * WebGL Global interface for rendering context
+ * WebGL Global interface for rendering context.
  */
 export let gl: WebGLRenderingContext; 
+
+/**
+ * Global rendering pipeline manager.
+ */
+export let pipelineManager = new PipelineManager();
 
 export class Render
 {
@@ -22,6 +28,8 @@ export class Render
     {
         LOG("New Render Instance", 'info');
         this.initializeContext(elementID);
+        pipelineManager.addPipeline("simple", new Shaders.SimpleShader());
+        pipelineManager.addPipeline("textured", new Shaders.TextureShader());
     }
 
     public get canvas(): HTMLCanvasElement { return this._canvas; }
@@ -33,8 +41,10 @@ export class Render
      */
     public initialize(camera: Camera, scene: Scene): void
     {
+        pipelineManager.initialize();
         this._camera = camera;
         this._camera.initialize();
+        pipelineManager.setCamera(this._camera);
         this._scene = scene;
         this._scene.initialize();
         this.resize();
@@ -47,10 +57,7 @@ export class Render
     {
         // clears buffers to preset values.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        for(const e of this._scene.entities)
-        {
-            (e as ObjectEntity).renderable?.draw(this._camera); 
-        };
+        pipelineManager.update();
     }
 
     /**

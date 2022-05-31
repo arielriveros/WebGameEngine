@@ -2,16 +2,27 @@ import { LOG } from "utils";
 import { gl } from "../render";
 
 export class Shader {
-    private _program: WebGLProgram;
+    private _program!: WebGLProgram;
     private _debug: boolean;
+
+    private vs: string;
+    private fs: string;
+
     public get program(): WebGLProgram {
         return this._program;
     }
 
     public constructor(vs: string, fs: string, debug: boolean = false) {
         this._debug = debug;
-        let vertexShader: WebGLShader = this.loadSource(vs, gl.VERTEX_SHADER);
-        let fragmentShader: WebGLShader = this.loadSource(fs, gl.FRAGMENT_SHADER);
+
+        this.vs = vs;
+        this.fs = fs;
+    }
+
+    public initialize(): void
+    {
+        let vertexShader: WebGLShader = this.loadSource(this.vs, gl.VERTEX_SHADER);
+        let fragmentShader: WebGLShader = this.loadSource(this.fs, gl.FRAGMENT_SHADER);
         this._program = this.createProgram(vertexShader, fragmentShader);
     }
 
@@ -96,12 +107,6 @@ export class Shader {
 export class SimpleShader extends Shader {
     public constructor() {
         super('simple.vs.glsl', 'simple.fs.glsl')
-    }
-}
- 
-export class SimpleShaderTest extends Shader {
-    public constructor() {
-        super('simpleTest.vs.glsl', 'simple.fs.glsl')
     }
 }
 

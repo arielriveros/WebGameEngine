@@ -1,11 +1,18 @@
 import { Renderable } from "../rendering/graphics/shapes";
 import { Entity } from "./entity";
 import { Rotator, Vector3 } from "math";
+import { RenderableComponent } from "./components/renderableComponent";
 
 export class ObjectEntity extends Entity {
 
-    private _renderable: Renderable | null = null;
-
+    /**
+     * An object entity is an entity that may contain a renderable component.
+     * @param name Name of the entity.
+     * @param position Position of the Entity
+     * @param rotation Rotation of the Entity
+     * @param scale Scale of the Entity
+     * @param newRenderable Renderable to add to the entity.
+     */
     public constructor(
         name: string,
         position: Vector3 = new Vector3(),
@@ -14,26 +21,7 @@ export class ObjectEntity extends Entity {
         newRenderable: Renderable | null = null)
         {
             super(name, position, rotation, scale);
-            this.renderable = newRenderable;
+            let component = new RenderableComponent("renderable", newRenderable);
+            this.addComponent(component);
         }
-
-    public get renderable(): Renderable | null { return this._renderable; }
-    public set renderable(newRenderable: Renderable | null)
-    { 
-        if(newRenderable)
-        {
-            this._renderable = newRenderable;
-            this._renderable.worldMatrix = this.worldMatrix;
-        }
-    }
-
-    public override delete(): void
-    {
-        this._renderable?.unload();
-        this._renderable = null;
-    }
-
-    public override initialize(): void {
-        this._renderable?.load();
-    }
 }
