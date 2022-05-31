@@ -2,14 +2,17 @@ import { Camera } from "../world/camera";
 import { Scene } from "../world/scene";
 import { LOG } from "utils";
 import { Shaders } from "core";
-import { PipeLineManager } from "./pipeline/pipelineManager";
+import { PipelineManager } from "./pipeline/pipelineManager";
 
 /**
- * WebGL Global interface for rendering context
+ * WebGL Global interface for rendering context.
  */
 export let gl: WebGLRenderingContext; 
 
-export let pipelineManager = new PipeLineManager();
+/**
+ * Global rendering pipeline manager.
+ */
+export let pipelineManager = new PipelineManager();
 
 export class Render
 {

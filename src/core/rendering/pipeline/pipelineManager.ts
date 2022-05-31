@@ -1,26 +1,39 @@
 import { Camera } from "src/core/world/camera";
 import { Renderable } from "../graphics/renderable";
 import { Shader } from "../shaders/shader";
-import { PipeLine } from "./pipeline";
+import { Pipeline } from "./pipeline";
 
-export class PipeLineManager
+export class PipelineManager
 {
-    private _pipelines: PipeLine[];
+    private _pipelines: Pipeline[];
 
+    /**
+     * A PipelineManager provides functionality for handling different pipelines.
+     */
     public constructor(){
         this._pipelines = [];
     }
 
-    public get pipelines(): PipeLine[] { return this._pipelines; }
-    public set pipelines(newPipelines: PipeLine[]) { this._pipelines = newPipelines; }
+    public get pipelines(): Pipeline[] { return this._pipelines; }
+    public set pipelines(newPipelines: Pipeline[]) { this._pipelines = newPipelines; }
 
+    /**
+     * Adds a pipeline to the manager.
+     * @param name Name of the pipeline.
+     * @param shader Shader the new pipeline will use.
+     */
     public addPipeline(name: string, shader: Shader): void
     {
-        let pipeline = new PipeLine(name, shader);
+        let pipeline = new Pipeline(name, shader);
         this._pipelines.push(pipeline);
     }
 
-    public getPipeline(name: string): PipeLine | null
+    /**
+     * Gets a pipeline from the manager.
+     * @param name Name of the pipeline to find.
+     * @returns The pipeline with the given name or null if it doesn't exist.
+     */
+    public getPipeline(name: string): Pipeline | null
     {
         for(let pipeline of this._pipelines)
         {
@@ -32,6 +45,10 @@ export class PipeLineManager
         return null;
     }
 
+    /**
+     * Removes a pipeline from the manager.
+     * @param name Name of the pipeline to be removed.
+     */
     public removePipeline(name: string): void
     {
         const pipeline = this.getPipeline(name);
@@ -42,7 +59,12 @@ export class PipeLineManager
         }
     }
 
-    public loadToPipeLine(name: string, renderable: Renderable): void
+    /**
+     * Loads a renderable to a given pipeline.
+     * @param name Name of the pipeline to load the renderable into.
+     * @param renderable The renderable to load.
+     */
+    public loadToPipeline(name: string, renderable: Renderable): void
     {
         const pipeline = this.getPipeline(name);
         if(pipeline)
@@ -51,7 +73,11 @@ export class PipeLineManager
         }
     }
 
-    public unloadFromPipeLine(name: string): void
+    /**
+     * Unloads a renderable from a the pipelines.
+     * @param name Name of the renderable to be unloaded.
+     */
+    public unloadFromPipeline(name: string): void
     {
         for(let pipeline of this._pipelines)
         {
@@ -59,6 +85,9 @@ export class PipeLineManager
         }
     }
 
+    /**
+     * Initializes all pipelines.
+     */
     public initialize(): void
     {
         for(let pipeline of this._pipelines)
@@ -67,6 +96,9 @@ export class PipeLineManager
         }
     }
 
+    /**
+     * Updates all pipelines.
+     */
     public update(): void
     {
         for(let pipeline of this._pipelines)
@@ -75,6 +107,10 @@ export class PipeLineManager
         }
     }
 
+    /**
+     * Sets a common camera for all pipelines that utilize it.
+     * @param camera Camera to be used by the pipelines.
+     */
     public setCamera( camera: Camera): void
     {
         for(let pipeline of this._pipelines)

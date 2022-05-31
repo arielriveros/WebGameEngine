@@ -7,7 +7,6 @@ export abstract class Component
 
     /**
      * Components handle owner entity's behavior and functionality.
-     * @param entity The entity that owns this component.
      * @param name The name of this component.
      */
     public constructor(name: string)
@@ -21,7 +20,16 @@ export abstract class Component
     public get entity(): Entity { return this._entity; }
     public set entity(value: Entity) { this._entity = value; }
 
+    /**
+     * Initializes the component.
+     */
     public initialize(): void { }
+    /**
+     * Runs every frame.
+     */
     public update(): void  { }
+    /**
+     * Deletes the component.
+     */
     public delete(): void { }
 }

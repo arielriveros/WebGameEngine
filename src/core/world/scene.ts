@@ -29,7 +29,7 @@ export class Scene
 
     /**
      * Removes an entity object from the scene.
-     * @param entity Name of the Entity to be removed from the scene.
+     * @param entityName Name of the Entity to be removed from the scene.
      */
     public removeEntity(entityName: string): void
     { 

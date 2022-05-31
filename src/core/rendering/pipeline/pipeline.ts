@@ -3,13 +3,18 @@ import { Renderable } from "../graphics/renderable";
 import { gl } from "../render";
 import { Shader } from "../shaders/shader";
 
-export class PipeLine
+export class Pipeline
 {
     private _name: string;
     private _shader: Shader;
     private _camera: Camera | null;
     private _renderables!: Renderable[];
 
+    /**
+     * A Pipeline handles the rendering of objects under the same shader program.
+     * @param name Name of the pipeline.
+     * @param shader Shader this pipeline will use.
+     */
     public constructor(name: string, shader: Shader)
     {
         this._name = name;
@@ -27,11 +32,18 @@ export class PipeLine
     public get shader(): Shader { return this._shader; }
     public set shader(value: Shader) { this._shader = value; }
 
+    /**
+     * Initializes the pipeline and its shader.
+     */
     public initialize(): void
     { 
         this._shader.initialize();
     }
 
+    /**
+     * Loads a renderable to the pipeline.
+     * @param renderable Renderable to be loaded into the pipeline.
+     */
     public loadRenderable(renderable: Renderable): void
     {
         this.shader.use();
@@ -39,6 +51,10 @@ export class PipeLine
         this._renderables.push(renderable);
     }
 
+    /**
+     * Unloads a renderable from the pipeline.
+     * @param renderableName Name of the renderable object to be unloaded from the pipeline.
+     */
     public unloadRenderable(renderableName: string): void
     {
         for( const r of this._renderables)
@@ -51,11 +67,21 @@ export class PipeLine
         }
     }
 
+    /**
+     * Deletes this pipeline unloading all renderables from it and deleting the shader program.
+    */
     public delete(): void
     {
+        for( const r of this._renderables)
+        {
+            r.unload();
+        }
         this._shader.remove();
     }
 
+    /**
+     * Renders all renderables in the pipeline.
+     */
     public update(): void {
         this.shader.use();
         let _uViewProj;

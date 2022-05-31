@@ -6,6 +6,11 @@ export class RenderableComponent extends Component
 {
     private _renderable: Renderable | null;
 
+    /**
+     * A renderable component is a component that can handle a renderable.
+     * @param name Name of the component.
+     * @param renderable Renderable that this component handles.
+     */
     public constructor(name: string, renderable: Renderable | null)
     {
         super(name);
@@ -26,7 +31,7 @@ export class RenderableComponent extends Component
     {
         if(this._renderable)
         {
-            pipelineManager.unloadFromPipeLine(this._renderable.name);
+            pipelineManager.unloadFromPipeline(this._renderable.name);
             this._renderable = null;
         }
     }
@@ -36,7 +41,7 @@ export class RenderableComponent extends Component
         if(this._renderable)
         {
             this._renderable.worldMatrix = this.entity.worldMatrix;
-            pipelineManager.loadToPipeLine(this._renderable.type, this._renderable);
+            pipelineManager.loadToPipeline(this._renderable.type, this._renderable);
         }
     }
 }
