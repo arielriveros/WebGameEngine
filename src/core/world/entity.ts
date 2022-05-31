@@ -23,8 +23,8 @@ export abstract class Entity {
 
     public addComponent(component: Component): void
     {
-        component.initialize();
         component.entity = this;
+        component.initialize();
         this._components.push(component);
     }
 

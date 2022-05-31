@@ -3,16 +3,15 @@ import { Entity } from "../entity";
 export abstract class Component
 {
     private _name: string;
-    private _entity: Entity;
+    private _entity!: Entity;
 
     /**
      * Components handle owner entity's behavior and functionality.
      * @param entity The entity that owns this component.
      * @param name The name of this component.
      */
-    public constructor(entity: Entity, name: string)
+    public constructor(name: string)
     {
-        this._entity = entity;
         this._name = name;
     }
 

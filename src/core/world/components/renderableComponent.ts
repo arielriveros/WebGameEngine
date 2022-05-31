@@ -1,20 +1,15 @@
 import { Renderable } from "src/core/rendering/graphics/renderable";
 import { pipelineManager } from "../../rendering/render";
-import { Entity } from "../entity";
 import { Component } from "./component";
 
 export class RenderableComponent extends Component
 {
     private _renderable: Renderable | null;
 
-    public constructor(entity: Entity, name: string, renderable: Renderable | null)
+    public constructor(name: string, renderable: Renderable | null)
     {
-        super(entity, name);
+        super(name);
         this._renderable = renderable;
-        if(this._renderable)
-        {
-            this._renderable.worldMatrix = this.entity.worldMatrix;
-        }
     }
 
     public get renderable(): Renderable | null { return this._renderable; }
@@ -40,6 +35,7 @@ export class RenderableComponent extends Component
     {
         if(this._renderable)
         {
+            this._renderable.worldMatrix = this.entity.worldMatrix;
             pipelineManager.loadToPipeLine(this._renderable.type, this._renderable);
         }
     }

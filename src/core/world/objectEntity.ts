@@ -13,7 +13,7 @@ export class ObjectEntity extends Entity {
         newRenderable: Renderable | null = null)
         {
             super(name, position, rotation, scale);
-            let component = new RenderableComponent(this, "renderable", newRenderable);
+            let component = new RenderableComponent("renderable", newRenderable);
             this.addComponent(component);
         }
 }
