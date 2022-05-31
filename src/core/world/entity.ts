@@ -23,8 +23,9 @@ export abstract class Entity {
 
     public addComponent(component: Component): void
     {
-        this._components.push(component);
+        component.initialize();
         component.entity = this;
+        this._components.push(component);
     }
 
     public getComponent(name: string): Component | null

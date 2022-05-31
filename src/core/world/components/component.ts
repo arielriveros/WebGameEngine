@@ -22,6 +22,7 @@ export abstract class Component
     public get entity(): Entity { return this._entity; }
     public set entity(value: Entity) { this._entity = value; }
 
+    public initialize(): void { }
     public update(): void  { }
     public delete(): void { }
 }
