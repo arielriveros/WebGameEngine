@@ -34,11 +34,11 @@ export class Game extends GameBase
         LOG(`Random textured cubes ${(performance.now() - previousTime).toFixed(3)} ms`);
         
         previousTime = performance.now()
-        addRandomtriangles(this._scene, 1000);
+        addRandomtriangles(this._scene, 10);
         LOG(`Random triangles ${(performance.now() - previousTime).toFixed(3)} ms`);
 
         previousTime = performance.now()
-        addRandomLines(this._scene, 500);
+        addRandomLines(this._scene, 10);
         LOG(`Random Lines ${(performance.now() - previousTime).toFixed(3)} ms`);
 
         addControllable(this._scene);

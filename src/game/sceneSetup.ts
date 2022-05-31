@@ -1,5 +1,6 @@
 import { ObjectEntity, Scene, Shapes } from "core";
 import { randomNumber, Rotator, Vector3 } from "math";
+import { RenderableComponent } from "src/core/world/components/renderableComponent";
 
 
 function addGrid(scene: Scene, size: number = 10)
@@ -120,18 +121,17 @@ function addRandomTexturedCubes(scene: Scene, count: number)
 
 function addControllable(scene: Scene)
 {
-    scene.addEntity(
-        new ObjectEntity(
-            'controllable',
-            new Vector3(),
-            new Rotator(),
-            new Vector3(0.75, 2.5, 0.75),
-            new Shapes.TexturedCube(
-                document.getElementById('roma-texture') as HTMLImageElement, 
-                {base: 0.5}
-            )
+    let controllableEntity = new ObjectEntity(
+        'controllable',
+        new Vector3(),
+        new Rotator(),
+        new Vector3(0.75, 2.5, 0.75),
+        new Shapes.TexturedCube(
+            document.getElementById('roma-texture') as HTMLImageElement, 
+            {base: 0.5}
         )
-    );
+    )
+    scene.addEntity(controllableEntity);
 }
 
 function addRandomLines(scene: Scene, count: number)
