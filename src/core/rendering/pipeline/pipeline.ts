@@ -39,6 +39,18 @@ export class PipeLine
         this._renderables.push(renderable);
     }
 
+    public unloadRenderable(renderableName: string): void
+    {
+        for( const r of this._renderables)
+        {
+            if(r.name === renderableName)
+            {
+                r.unload();
+                this._renderables.splice(this._renderables.indexOf(r), 1);
+            }
+        }
+    }
+
     public delete(): void
     {
         this._shader.remove();

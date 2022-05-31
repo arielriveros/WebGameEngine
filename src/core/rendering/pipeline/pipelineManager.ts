@@ -51,6 +51,14 @@ export class PipeLineManager
         }
     }
 
+    public unloadFromPipeLine(name: string): void
+    {
+        for(let pipeline of this._pipelines)
+        {
+            pipeline.unloadRenderable(name);
+        }
+    }
+
     public initialize(): void
     {
         for(let pipeline of this._pipelines)

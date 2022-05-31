@@ -4,6 +4,7 @@ import { Shader } from "../shaders/shader";
 import { Matrix4x4 } from "math";
 import { Texture } from "./texture";
 import { gl } from "../render";
+import { randomNumber } from "math";
 
 export interface Options
 {
@@ -17,6 +18,8 @@ export interface Options
  */
 export abstract class Renderable
 {
+    private _name: string;
+
     protected _vertices: number[];
     protected _indices: number[] | null;
 
@@ -27,13 +30,16 @@ export abstract class Renderable
 
     protected _type: string;
     
-    public constructor(type: string = "simple") 
+    public constructor(type: string = "simple", name: string = `renderable-id-${randomNumber(9999)}`) 
     {
+        this._name = name;
         this._vertices = [];
         this._indices = null;
         this._worldMatrix = new Matrix4x4();
         this._type = type;
     }
+
+    public get name(): string { return this._name; }
 
     public get worldMatrix(): Matrix4x4 { return this._worldMatrix; }
     public set worldMatrix(matrix: Matrix4x4) { this._worldMatrix = matrix; }

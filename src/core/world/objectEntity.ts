@@ -30,8 +30,11 @@ export class ObjectEntity extends Entity {
 
     public override delete(): void
     {
-        this._renderable?.unload();
-        this._renderable = null;
+        if(this._renderable)
+        {
+            pipelineManager.unloadFromPipeLine(this._renderable.name);
+            this._renderable = null;
+        }
     }
 
     public override initialize(): void {
