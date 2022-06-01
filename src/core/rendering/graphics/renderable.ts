@@ -11,6 +11,7 @@ export interface Options
     height?: number,
     base?: number,
     color?: number[],
+    texturePath?: string
 }
 
 /**
@@ -84,119 +85,5 @@ export abstract class Renderable
         this._buffer.bind();
         if(this._indices) { this._indexBuffer.draw(); }
         else { this._buffer.draw(); }
-    }
-}
-
-export class SimpleShape extends Renderable
-{
-    public constructor()
-    {
-        super("simple");
-    }
-
-    public override load(shader: Shader): void
-    {
-        this._buffer = new GLArrayBuffer(6, gl.FLOAT, gl.TRIANGLES );
-
-        if(this._indices)
-        {
-            this._indexBuffer = new GLElementArrayBuffer(gl.UNSIGNED_SHORT, gl.TRIANGLES);
-            this._indexBuffer.bind();
-            this._indexBuffer.pushData(this._indices);
-            this._indexBuffer.upload();
-        }
-
-        let positionAttribute:AttributeInformation = {
-            location: shader.getAttributeLocation("a_position"),
-            size: 3,
-            offset: 0 };
-        this._buffer.addAttribLocation(positionAttribute);
-
-        let colorAttribute:AttributeInformation = {
-            location: shader.getAttributeLocation("a_color"),
-            size: 3, 
-            offset: 3 };
-        this._buffer.addAttribLocation(colorAttribute);
-
-        this._buffer.pushData(this._vertices);
-        this._buffer.upload();
-    }
-}
-
-export class TexturedShape extends Renderable
-{
-    private _texture: Texture;
-
-    public constructor(texturePath: string)
-    {
-        super("textured");
-        this._texture = new Texture(texturePath);
-    }
-
-    public override load(shader: Shader): void
-    {
-        this._buffer = new GLArrayBuffer(5, gl.FLOAT, gl.TRIANGLES );
-        
-        if(this._indices)
-        {
-            this._indexBuffer = new GLElementArrayBuffer(gl.UNSIGNED_SHORT, gl.TRIANGLES);
-            this._indexBuffer.bind();
-            this._indexBuffer.pushData(this._indices);
-            this._indexBuffer.upload();
-        }
-        
-        let positionAttribute:AttributeInformation = {
-            location: shader.getAttributeLocation("a_position"),
-            size: 3,
-            offset: 0 };
-            this._buffer.addAttribLocation(positionAttribute);
-            
-        this._texture.load();
-        let textureAttribute:AttributeInformation = {
-            location: shader.getAttributeLocation("a_texCoord"),
-            size: 2, 
-            offset: 3 };
-        this._buffer.addAttribLocation(textureAttribute);
-        
-        this._buffer.pushData(this._vertices);
-        this._buffer.upload();
-    }
-
-    /**
-     * Draws data from the shape's buffers.
-     */
-     public override draw(): void
-     {
-         this._buffer.bind();
-         this._texture.draw();
-         if(this._indices) { this._indexBuffer.draw(); }
-         else { this._buffer.draw(); }
-     }
-}
-
-export class LineShape extends Renderable {
-    public constructor()
-    {
-        super("simple");
-    }
-
-    public override load(shader: Shader): void
-    {
-        this._buffer = new GLArrayBuffer(6, gl.FLOAT, gl.LINES );
-
-        let positionAttribute:AttributeInformation = {
-            location: shader.getAttributeLocation("a_position"),
-            size: 3,
-            offset: 0 };
-        this._buffer.addAttribLocation(positionAttribute);
-
-        let colorAttribute:AttributeInformation = {
-            location: shader.getAttributeLocation("a_color"),
-            size: 3, 
-            offset: 3 };
-        this._buffer.addAttribLocation(colorAttribute);
-        
-        this._buffer.pushData(this._vertices);
-        this._buffer.upload();
     }
 }

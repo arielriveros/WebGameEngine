@@ -1,9 +1,3 @@
-import { Renderable } from "./renderable";
-import { Line } from "./fiberShape";
-import { Triangle, ColorTriangle, Quad } from "./planarShapes";
-import { Cube, ColorCube, TexturedCube } from "./volumeShapes";
-
-export { 
-    Renderable, 
-    Triangle, ColorTriangle, Quad, Line,
-    Cube, ColorCube, TexturedCube};
+export { Renderable } from "./renderable";
+export { Line } from "./simpleShape";
+export { Cube, ColorCube, Cube as TexturedCube, Triangle, ColorTriangle, Quad } from "./compoundShapes";
