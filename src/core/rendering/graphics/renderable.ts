@@ -134,10 +134,10 @@ export class TexturedShape extends Renderable
 {
     private _texture: Texture;
 
-    public constructor(texture: HTMLImageElement)
+    public constructor(texturePath: string)
     {
         super("textured");
-        this._texture = new Texture(texture);
+        this._texture = new Texture(texturePath);
     }
 
     public override load(shader: Shader): void

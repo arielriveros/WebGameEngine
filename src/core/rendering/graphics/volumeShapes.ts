@@ -117,8 +117,8 @@ export class ColorCube extends Cube
 
 export class TexturedCube extends TexturedShape
 {
-    public constructor(texture: HTMLImageElement, options: Options) {
-        super(texture);
+    public constructor(texturePath: string, options: Options) {
+        super(texturePath);
         const l2 = options.base ? options.base/2 : 0.5;
         this.indices = [
             // Top

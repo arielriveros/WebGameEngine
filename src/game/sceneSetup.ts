@@ -104,7 +104,7 @@ function addRandomTexturedCubes(scene: Scene, count: number)
     for(let i = 0; i < count; i++)
     {
         let newCube = new Shapes.TexturedCube(
-                document.getElementById('roma-texture') as HTMLImageElement, 
+                'assets/textures/roma.png', 
                 { base: randomNumber(0.2, 1.5) }
             )
         scene.addEntity(
@@ -127,7 +127,7 @@ function addControllable(scene: Scene)
         new Rotator(),
         new Vector3(0.75, 2.5, 0.75),
         new Shapes.TexturedCube(
-            document.getElementById('roma-texture') as HTMLImageElement, 
+            'assets/textures/wall.png',
             {base: 0.5}
         )
     )
