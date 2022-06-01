@@ -60,25 +60,6 @@ function addAxis(scene: Scene)
     );
 }
 
-function addRandomCubes(scene: Scene, count: number)
-{
-    for(let i = 0; i < count; i++)
-    {
-        let newCube = new Shapes.Cube({ 
-            base: randomNumber(0.2, 1.5), 
-            color: [randomNumber(), randomNumber(), randomNumber()]})
-        scene.addEntity(
-            new ObjectEntity(
-                `randCube-${i}`,
-                new Vector3(randomNumber(10, -10), randomNumber(10, -10), randomNumber(10, -10)),
-                new Rotator(randomNumber(360), randomNumber(360), randomNumber(360)),
-                new Vector3(randomNumber(0.5, 1.5), randomNumber(0.5, 1.5), randomNumber(0.5, 1.5)),
-                newCube
-            )
-        )
-    }
-}
-
 function addRandomtriangles(scene: Scene, count: number)
 {
     for(let i = 0; i < count; i++)
@@ -99,13 +80,15 @@ function addRandomtriangles(scene: Scene, count: number)
     }
 }
 
-function addRandomTexturedCubes(scene: Scene, count: number)
+function addRandomCubes(scene: Scene, count: number)
 {
     for(let i = 0; i < count; i++)
     {
+        let texFlag = randomNumber(0, 1);
         let newCube = new Shapes.TexturedCube(
-            randomNumber(0, 1) > 0.5 ? 'assets/textures/wall.png' : 'assets/textures/dirt.jpg',
-                { base: randomNumber(0.2, 1.5) }
+                { base: randomNumber(0.2, 1.5), 
+                  color: [randomNumber(), randomNumber(), randomNumber()],
+                  texturePath: texFlag > 0.6667 ? 'assets/textures/wall.png' : (texFlag  < 0.3333 ? 'assets/textures/dirt.jpg' : undefined)}
             )
         scene.addEntity(
             new ObjectEntity(
@@ -126,10 +109,7 @@ function addControllable(scene: Scene)
         new Vector3(),
         new Rotator(),
         new Vector3(0.75, 2.5, 0.75),
-        new Shapes.TexturedCube(
-            'assets/textures/roma.png',
-            {base: 0.5}
-        )
+        new Shapes.Cube( {base: 0.5, texturePath: 'assets/textures/roma.png',} )
     )
     controllableEntity.addComponent(new RenderableComponent('renderable-component', new Shapes.Line({color: [0.5, 0, 0]})));
     scene.addEntity(controllableEntity);
@@ -165,4 +145,4 @@ function addRandomLines(scene: Scene, count: number)
     }
 }
 
-export { addGrid, addAxis, addRandomCubes, addRandomtriangles, addRandomTexturedCubes, addControllable, addRandomLines };
+export { addGrid, addAxis, addRandomCubes, addRandomtriangles, addControllable, addRandomLines };

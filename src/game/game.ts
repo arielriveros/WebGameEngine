@@ -2,7 +2,7 @@ import { GameBase } from './gameInterface';
 import { PerspectiveCamera, Scene, InputManager, Shapes, OrthographicCamera, ObjectEntity } from 'core';
 import { LOG } from 'utils';
 import { Vector3, Rotator } from 'math';
-import { addGrid, addAxis, addRandomCubes, addRandomTexturedCubes, addRandomtriangles, addControllable, addRandomLines } from './sceneSetup';
+import { addGrid, addAxis, addRandomCubes, addRandomtriangles, addControllable, addRandomLines } from './sceneSetup';
 
 export class Game extends GameBase
 {
@@ -26,12 +26,8 @@ export class Game extends GameBase
         LOG(`Grid - Axis ${(performance.now() - previousTime).toFixed(3)} ms`);
 
         previousTime = performance.now()
-        addRandomCubes(this._scene, 10);
+        addRandomCubes(this._scene, 1000);
         LOG(`Random cubes ${(performance.now() - previousTime).toFixed(3)} ms`);
-
-        previousTime = performance.now()
-        addRandomTexturedCubes(this._scene, 500);
-        LOG(`Random textured cubes ${(performance.now() - previousTime).toFixed(3)} ms`);
         
         previousTime = performance.now()
         addRandomtriangles(this._scene, 10);
