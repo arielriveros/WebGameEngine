@@ -104,7 +104,7 @@ function addRandomTexturedCubes(scene: Scene, count: number)
     for(let i = 0; i < count; i++)
     {
         let newCube = new Shapes.TexturedCube(
-                'assets/textures/roma.png', 
+            randomNumber(0, 1) > 0.5 ? 'assets/textures/wall.png' : 'assets/textures/dirt.jpg',
                 { base: randomNumber(0.2, 1.5) }
             )
         scene.addEntity(
@@ -127,7 +127,7 @@ function addControllable(scene: Scene)
         new Rotator(),
         new Vector3(0.75, 2.5, 0.75),
         new Shapes.TexturedCube(
-            'assets/textures/wall.png',
+            'assets/textures/roma.png',
             {base: 0.5}
         )
     )

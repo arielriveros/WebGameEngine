@@ -26,11 +26,11 @@ export class Game extends GameBase
         LOG(`Grid - Axis ${(performance.now() - previousTime).toFixed(3)} ms`);
 
         previousTime = performance.now()
-        addRandomCubes(this._scene, 50);
+        addRandomCubes(this._scene, 10);
         LOG(`Random cubes ${(performance.now() - previousTime).toFixed(3)} ms`);
 
         previousTime = performance.now()
-        addRandomTexturedCubes(this._scene, 50);
+        addRandomTexturedCubes(this._scene, 500);
         LOG(`Random textured cubes ${(performance.now() - previousTime).toFixed(3)} ms`);
         
         previousTime = performance.now()
