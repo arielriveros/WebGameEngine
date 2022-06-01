@@ -1,4 +1,4 @@
-import { LOG } from "utils";
+import { Loader } from "../../loaders/loader";
 import { gl } from "../render";
 
 export class Texture{
@@ -14,29 +14,8 @@ export class Texture{
     /**
      * Load the source image into the texture.
      */
-    public load(): void
-    {
-        let xhr = new XMLHttpRequest();
-        xhr.open("GET", this._imagePath, false);
-        xhr.send(null);
-
-        if (xhr.status == 200) {
-            let image: HTMLImageElement = new Image();
-            image.onload = () => {
-                this._image = image;
-                this.loadTexture();
-            }
-            image.src = this._imagePath;
-        }
-        else {
-            LOG("Error loading source shader file", "error", true);
-        }
-    }; 
-
-    public get image(): HTMLImageElement { return this._image; }
-    public get texture(): WebGLTexture { return this._texture; }
-
-    private loadTexture(): void {
+    public async load(): Promise<any>{
+        this._image = await Loader.loadImage(this._imagePath);
         // Before creating a texutres flips (u,v) coords to match (x,y) coords
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
         // Creates a texture webgl object
@@ -54,7 +33,10 @@ export class Texture{
         // Uploads the image data to the texture object
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this._image);
         gl.bindTexture(gl.TEXTURE_2D, null);
-    } 
+    }
+
+    public get image(): HTMLImageElement { return this._image; }
+    public get texture(): WebGLTexture { return this._texture; }
 
     /**
      * Binds the texture to the shader program.
