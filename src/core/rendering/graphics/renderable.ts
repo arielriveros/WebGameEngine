@@ -78,19 +78,12 @@ export abstract class Renderable
 
     /**
      * Draws data from the shape's buffers.
-     * @param camera Camera to use for rendering.
      */
     public draw(): void
     {
         this._buffer.bind();
-        if(this._indices)
-        {
-            this._indexBuffer.draw();
-        }
-        else
-        {
-            this._buffer.draw();
-        }
+        if(this._indices) { this._indexBuffer.draw(); }
+        else { this._buffer.draw(); }
     }
 }
 
@@ -168,6 +161,17 @@ export class TexturedShape extends Renderable
         this._buffer.pushData(this._vertices);
         this._buffer.upload();
     }
+
+    /**
+     * Draws data from the shape's buffers.
+     */
+     public override draw(): void
+     {
+         this._buffer.bind();
+         this._texture.draw();
+         if(this._indices) { this._indexBuffer.draw(); }
+         else { this._buffer.draw(); }
+     }
 }
 
 export class LineShape extends Renderable {

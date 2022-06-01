@@ -10,6 +10,10 @@ export class Texture{
         this._imagePath = imagePath;
     }
 
+
+    /**
+     * Load the source image into the texture.
+     */
     public load(): void
     {
         let xhr = new XMLHttpRequest();
@@ -49,10 +53,23 @@ export class Texture{
 
         // Uploads the image data to the texture object
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this._image);
-        // Active Texture
-        gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, null);
     } 
-    
+
+    /**
+     * Binds the texture to the shader program.
+     */
+    public draw(): void
+    {
+        // Active Texture
+        //gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, this._texture);
+
+    }
+
+    /**
+     * Unbind and delete the texture from the shader program.
+     */
     public unload(): void {
         gl.bindTexture(gl.TEXTURE_2D, null);
         gl.deleteTexture(this._texture);
