@@ -83,9 +83,9 @@ export class Triangle extends CompoundShape
         this.vertices = [
         // VERTEX POSITION          COLOR                           TEXTURE     NORMALS
         // X       Y          Z     R         G         B           u    v       x   y    z
-          -base/2, -height/2, 0.0,  color[0], color[1], color[2],   0.0, 0.0,   0.0, 0.0, 1.0,
-           base/2, -height/2, 0.0,  color[0], color[1], color[2],   1.0, 0.0,   0.0, 0.0, 1.0,
-           0.0,     height/2, 0.0,  color[0], color[1], color[2],   0.5, 1.0,   0.0, 0.0, 1.0];
+          -base/2, -height/2, 0.0,  color[0], color[1], color[2],   0.0, 1.0,   0.0, 0.0, 1.0,
+           base/2, -height/2, 0.0,  color[0], color[1], color[2],   1.0, 1.0,   0.0, 0.0, 1.0,
+           0.0,     height/2, 0.0,  color[0], color[1], color[2],   0.5, 0.0,   0.0, 0.0, 1.0];
         }
 }
 
@@ -102,7 +102,7 @@ export class Quad extends CompoundShape {
         super(options.texturePath);
         this.vertices = [
         // VERTEX POSITION          COLOR                           TEXTURE     NORMALS
-        // X       Y          Z     R         G         B          U     V      x    y    z
+        // X        Y         Z     R         G         B           U    V      x    y    z
           -base/2, -height/2, 0.0,  color[0], color[1], color[2],   0.0, 0.0,   0.0, 0.0, 1.0,
            base/2, -height/2, 0.0,  color[0], color[1], color[2],   1.0, 0.0,   0.0, 0.0, 1.0,
           -base/2,  height/2, 0.0,  color[0], color[1], color[2],   0.0, 1.0,   0.0, 0.0, 1.0,
@@ -146,37 +146,37 @@ export class Cube extends CompoundShape
         ];
         this.vertices = [
         // VERTEX POSITION  COLOR                           TEXTURE    NORMALS
-        // X    Y    Z      R         G         B           U    V     x    y    z
+        // X    Y    Z      R         G         B           U    V     x     y     z
         // TOP
-          -l2,  l2, -l2,    color[0], color[1], color[2],   0.0, 0.0,  0.0,  1.0,  0.0,
-          -l2,  l2,  l2,    color[0], color[1], color[2],   0.0, 1.0,  0.0,  1.0,  0.0,
-           l2,  l2,  l2,    color[0], color[1], color[2],   1.0, 1.0,  0.0,  1.0,  0.0,
-           l2,  l2, -l2,    color[0], color[1], color[2],   1.0, 0.0,  0.0,  1.0,  0.0,
+          -l2,  l2, -l2,    color[0], color[1], color[2],   1/4, 0.0,  0.0,  1.0,  0.0,
+          -l2,  l2,  l2,    color[0], color[1], color[2],   1/4, 1/4,  0.0,  1.0,  0.0,
+           l2,  l2,  l2,    color[0], color[1], color[2],   1/2, 1/4,  0.0,  1.0,  0.0,
+           l2,  l2, -l2,    color[0], color[1], color[2],   1/2, 0.0,  0.0,  1.0,  0.0,
         // LEFT
-          -l2,  l2,  l2,    color[0], color[1], color[2],   0.0, 1.0, -1.0,  0.0,  0.0,
-          -l2, -l2,  l2,    color[0], color[1], color[2],   1.0, 1.0, -1.0,  0.0,  0.0,
-          -l2, -l2, -l2,    color[0], color[1], color[2],   1.0, 0.0, -1.0,  0.0,  0.0,
-          -l2,  l2, -l2,    color[0], color[1], color[2],   0.0, 0.0, -1.0,  0.0,  0.0,
+          -l2,  l2,  l2,    color[0], color[1], color[2],   1/4, 1/3, -1.0,  0.0,  0.0,
+          -l2, -l2,  l2,    color[0], color[1], color[2],   1/4, 2/3, -1.0,  0.0,  0.0,
+          -l2, -l2, -l2,    color[0], color[1], color[2],   0.0, 2/3, -1.0,  0.0,  0.0,
+          -l2,  l2, -l2,    color[0], color[1], color[2],   0.0, 1/3, -1.0,  0.0,  0.0,
         // Right
-           l2,  l2,  l2,    color[0], color[1], color[2],   0.0, 1.0,  1.0,  0.0,  0.0,
-           l2, -l2,  l2,    color[0], color[1], color[2],   1.0, 1.0,  1.0,  0.0,  0.0,
-           l2, -l2, -l2,    color[0], color[1], color[2],   1.0, 0.0,  1.0,  0.0,  0.0,
-           l2,  l2, -l2,    color[0], color[1], color[2],   0.0, 0.0,  1.0,  0.0,  0.0,
+           l2,  l2,  l2,    color[0], color[1], color[2],   1/2, 1/3,  1.0,  0.0,  0.0,
+           l2, -l2,  l2,    color[0], color[1], color[2],   1/2, 2/3,  1.0,  0.0,  0.0,
+           l2, -l2, -l2,    color[0], color[1], color[2],   3/4, 2/3,  1.0,  0.0,  0.0,
+           l2,  l2, -l2,    color[0], color[1], color[2],   3/4, 1/3,  1.0,  0.0,  0.0,
         // Front
-           l2,  l2,  l2,    color[0], color[1], color[2],   0.0, 1.0,  0.0,  0.0,  1.0,
-           l2, -l2,  l2,    color[0], color[1], color[2],   1.0, 1.0,  0.0,  0.0,  1.0,
-          -l2, -l2,  l2,    color[0], color[1], color[2],   1.0, 0.0,  0.0,  0.0,  1.0,
-          -l2,  l2,  l2,    color[0], color[1], color[2],   0.0, 0.0,  0.0,  0.0,  1.0,
+           l2,  l2,  l2,    color[0], color[1], color[2],   1/2, 1/3,  0.0,  0.0,  1.0,
+           l2, -l2,  l2,    color[0], color[1], color[2],   1/2, 2/3,  0.0,  0.0,  1.0,
+          -l2, -l2,  l2,    color[0], color[1], color[2],   1/4, 2/3,  0.0,  0.0,  1.0,
+          -l2,  l2,  l2,    color[0], color[1], color[2],   1/4, 1/3,  0.0,  0.0,  1.0,
         // Back
-           l2,  l2, -l2,    color[0], color[1], color[2],   0.0, 1.0,  0.0,  0.0, -1.0,
-           l2, -l2, -l2,    color[0], color[1], color[2],   1.0, 1.0,  0.0,  0.0, -1.0,
-          -l2, -l2, -l2,    color[0], color[1], color[2],   1.0, 0.0,  0.0,  0.0, -1.0,
-          -l2,  l2, -l2,    color[0], color[1], color[2],   0.0, 0.0,  0.0,  0.0, -1.0,
+           l2,  l2, -l2,    color[0], color[1], color[2],   3/4, 1/3,  0.0,  0.0, -1.0,
+           l2, -l2, -l2,    color[0], color[1], color[2],   3/4, 2/3,  0.0,  0.0, -1.0,
+          -l2, -l2, -l2,    color[0], color[1], color[2],   1.0, 2/3,  0.0,  0.0, -1.0,
+          -l2,  l2, -l2,    color[0], color[1], color[2],   1.0, 1/3,  0.0,  0.0, -1.0,
         // Bottom
-          -l2, -l2, -l2,    color[0], color[1], color[2],   0.0, 1.0,  0.0, -1.0,  0.0,
-          -l2, -l2,  l2,    color[0], color[1], color[2],   0.0, 0.0,  0.0, -1.0,  0.0,
-           l2, -l2,  l2,    color[0], color[1], color[2],   1.0, 0.0,  0.0, -1.0,  0.0,
-           l2, -l2, -l2,    color[0], color[1], color[2],   1.0, 1.0,  0.0, -1.0,  0.0
+          -l2, -l2, -l2,    color[0], color[1], color[2],   1/4, 1.0,  0.0, -1.0,  0.0,
+          -l2, -l2,  l2,    color[0], color[1], color[2],   1/4, 2/3,  0.0, -1.0,  0.0,
+           l2, -l2,  l2,    color[0], color[1], color[2],   1/2, 2/3,  0.0, -1.0,  0.0,
+           l2, -l2, -l2,    color[0], color[1], color[2],   1/2, 1.0,  0.0, -1.0,  0.0
         ];
     }
 }

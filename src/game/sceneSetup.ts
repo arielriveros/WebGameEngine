@@ -68,7 +68,7 @@ function addRandomtriangles(scene: Scene, count: number)
         let newTriangle = new Shapes.Triangle({
             base: randomNumber(0.2, 1.5),
             height: randomNumber(0.2, 1.5),
-            texturePath: texFlag > 0.6667 ? 'assets/textures/wall.png' : (texFlag  < 0.3333 ? 'assets/textures/dirt.jpg' : undefined),
+            texturePath: texFlag > 0.6667 ? 'assets/textures/wall.png' : (texFlag  < 0.3333 ? 'assets/textures/roma.png' : undefined),
             color: [randomNumber(), randomNumber(), randomNumber()]})
         scene.addEntity(
             new ObjectEntity(
@@ -90,7 +90,7 @@ function addRandomCubes(scene: Scene, count: number)
         let newCube = new Shapes.Cube(
                 { base: randomNumber(0.2, 1.5), 
                   color: [randomNumber(), randomNumber(), randomNumber()],
-                  texturePath: texFlag > 0.6667 ? 'assets/textures/wall.png' : (texFlag  < 0.3333 ? 'assets/textures/dirt.jpg' : undefined)
+                  texturePath: texFlag > 0.6667 ? 'assets/textures/sky_cube_map.jpg' : (texFlag  < 0.3333 ? 'assets/textures/dirt_cube.png' : undefined)
                 }
             )
         scene.addEntity(
@@ -111,8 +111,8 @@ function addControllable(scene: Scene)
         'controllable',
         new Vector3(),
         new Rotator(),
-        new Vector3(0.75, 2.5, 0.75),
-        new Shapes.Cube( {base: 0.5, texturePath: 'assets/textures/roma.png',} )
+        new Vector3(1, 1, 1),
+        new Shapes.Cube( {base: 1.5, texturePath: 'assets/textures/sky_cube.jpg',} )
     )
     controllableEntity.addComponent(new RenderableComponent('renderable-component', new Shapes.Line({color: [0.5, 0, 0]})));
     scene.addEntity(controllableEntity);
