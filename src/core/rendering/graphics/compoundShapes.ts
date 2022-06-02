@@ -17,7 +17,7 @@ export class CompoundShape extends Renderable
 
     public override load(shader: Shader): void
     {
-        this._buffer = new GLArrayBuffer(8, gl.FLOAT, gl.TRIANGLES );
+        this._buffer = new GLArrayBuffer(11, gl.FLOAT, gl.TRIANGLES );
         
         if(this._indices)
         {
@@ -45,6 +45,12 @@ export class CompoundShape extends Renderable
             size: 2, 
             offset: 6 };
         this._buffer.addAttribLocation(textureAttribute);
+
+        let normalAttribute:AttributeInformation = {
+            location: shader.getAttributeLocation("a_normal"),
+            size: 3, 
+            offset: 8 };
+        this._buffer.addAttribLocation(normalAttribute);
         
         this._buffer.pushData(this._vertices);
         this._buffer.upload();
@@ -65,7 +71,6 @@ export class CompoundShape extends Renderable
 
 export class Triangle extends CompoundShape
 {
-
     /**
      * Triangle Basic 2D Shape. Rendered at origin.
      */
@@ -76,35 +81,18 @@ export class Triangle extends CompoundShape
         let color: number[] = options.color || [1, 1, 1];
         super(options.texturePath);
         this.vertices = [
-        //  X       Y          Z    R         G         B         u    v
-           -base/2, -height/2, 0.0, color[0], color[1], color[2], 0.0, 0.0,
-            base/2, -height/2, 0.0, color[0], color[1], color[2], 1.0, 0.0,
-            0.0,     height/2, 0.0, color[0], color[1], color[2], 0.5, 1.0];
-        }
-}
-
-export class ColorTriangle extends CompoundShape
-{
-    /**
-     * Triangle Basic 2D Shape. Rendered at origin.
-     */
-    public constructor(options: Options = {})
-    {
-        let base: number = options.base || 1;
-        let height: number = options.height || 1;
-        super();
-        this.vertices = [
-        //  X       Y          Z    R    G    B     U   V
-           -base/2, -height/2, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0,
-            base/2, -height/2, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0,
-            0.0,     height/2, 0.0, 0.0, 0.0, 1.0, 0.5, 1.0];
+        // VERTEX POSITION          COLOR                           TEXTURE     NORMALS
+        // X       Y          Z     R         G         B           u    v       x   y    z
+          -base/2, -height/2, 0.0,  color[0], color[1], color[2],   0.0, 0.0,   0.0, 0.0, 1.0,
+           base/2, -height/2, 0.0,  color[0], color[1], color[2],   1.0, 0.0,   0.0, 0.0, 1.0,
+           0.0,     height/2, 0.0,  color[0], color[1], color[2],   0.5, 1.0,   0.0, 0.0, 1.0];
         }
 }
 
 export class Quad extends CompoundShape {
 
     /**
-     * Quad Basic 2D Shape. Rendered in origin. Consists of 2 adyacent Triangles.
+     * Quad Basic 2D Shape. Rendered at origin. Consists of 2 adyacent Triangles.
      */
     public constructor(options: Options = {})
     {
@@ -113,19 +101,23 @@ export class Quad extends CompoundShape {
         let color: number[] = options.color || [1, 1, 1];
         super(options.texturePath);
         this.vertices = [
-        //  X       Y          Z    R         G         B          U     V
-           -base/2, -height/2, 0.0, color[0], color[1], color[2], 0.0, 0.0,
-            base/2, -height/2, 0.0, color[0], color[1], color[2], 1.0, 0.0,
-           -base/2,  height/2, 0.0, color[0], color[1], color[2], 0.0, 1.0,
-        
-           -base/2,  height/2, 0.0, color[0], color[1], color[2], 0.0, 1.0,
-            base/2, -height/2, 0.0, color[0], color[1], color[2], 1.0, 0.0,
-            base/2,  height/2, 0.0, color[0], color[1], color[2], 1.0, 1.0];
+        // VERTEX POSITION          COLOR                           TEXTURE     NORMALS
+        // X       Y          Z     R         G         B          U     V      x    y    z
+          -base/2, -height/2, 0.0,  color[0], color[1], color[2],   0.0, 0.0,   0.0, 0.0, 1.0,
+           base/2, -height/2, 0.0,  color[0], color[1], color[2],   1.0, 0.0,   0.0, 0.0, 1.0,
+          -base/2,  height/2, 0.0,  color[0], color[1], color[2],   0.0, 1.0,   0.0, 0.0, 1.0,
+
+          -base/2,  height/2, 0.0,  color[0], color[1], color[2],   0.0, 1.0,   0.0, 0.0, 1.0,
+           base/2, -height/2, 0.0,  color[0], color[1], color[2],   1.0, 0.0,   0.0, 0.0, 1.0,
+           base/2,  height/2, 0.0,  color[0], color[1], color[2],   1.0, 1.0,   0.0, 0.0, 1.0];
         }
 }
 
 export class Cube extends CompoundShape
 {
+    /**
+     * Cube Basic 3D Shape. Rendered at origin. Consists of 6 Quads for each face.
+     */
     public constructor(options: Options = {})
     {
         let base: number = options.base || 1;
@@ -153,88 +145,38 @@ export class Cube extends CompoundShape
             22, 20, 23
         ];
         this.vertices = [
-        //   X   Y    Z   R         G         B          U     V
-            // TOP
-            -l2,  l2, -l2, color[0], color[1], color[2], 0.0, 0.0,
-            -l2,  l2,  l2, color[0], color[1], color[2], 0.0, 1.0,
-             l2,  l2,  l2, color[0], color[1], color[2], 1.0, 1.0,
-             l2,  l2, -l2, color[0], color[1], color[2], 1.0, 0.0,
- 
-            // LEFT
-            -l2,  l2,  l2, color[0], color[1], color[2], 0.0, 1.0,
-            -l2, -l2,  l2, color[0], color[1], color[2], 1.0, 1.0,
-            -l2, -l2, -l2, color[0], color[1], color[2], 1.0, 0.0,
-            -l2,  l2, -l2, color[0], color[1], color[2], 0.0, 0.0,
-
-            // Right
-             l2,  l2,  l2, color[0], color[1], color[2], 0.0, 1.0,
-             l2, -l2,  l2, color[0], color[1], color[2], 1.0, 1.0,
-             l2, -l2, -l2, color[0], color[1], color[2], 1.0, 0.0,
-             l2,  l2, -l2, color[0], color[1], color[2], 0.0, 0.0,
-
-            // Front
-            l2,  l2,  l2, color[0], color[1], color[2], 0.0, 1.0,
-            l2, -l2,  l2, color[0], color[1], color[2], 1.0, 1.0,
-           -l2, -l2,  l2, color[0], color[1], color[2], 1.0, 0.0,
-           -l2,  l2,  l2, color[0], color[1], color[2], 0.0, 0.0,
-
-            // Back
-            l2,  l2, -l2, color[0], color[1], color[2], 0.0, 1.0,
-            l2, -l2, -l2, color[0], color[1], color[2], 1.0, 1.0,
-           -l2, -l2, -l2, color[0], color[1], color[2], 1.0, 0.0,
-           -l2,  l2, -l2, color[0], color[1], color[2], 0.0, 0.0,
-
-            // Bottom
-           -l2, -l2, -l2, color[0], color[1], color[2], 0.0, 1.0,
-           -l2, -l2,  l2, color[0], color[1], color[2], 0.0, 0.0,
-            l2, -l2,  l2, color[0], color[1], color[2], 1.0, 0.0,
-            l2, -l2, -l2, color[0], color[1], color[2], 1.0, 1.0
-        ];
-    }
-}
-
-export class ColorCube extends Cube
-{
-    public constructor(options: Options) {
-        super(options);
-        const l2 = options.base ? options.base/2 : 0.5;
-        this.vertices = [
-        //   X   Y    Z    R    G    B    U    V
-            // TOP
-            -l2,  l2, -l2, 1.0, 0.0, 0.0, 0.0, 0.0,
-            -l2,  l2,  l2, 1.0, 0.0, 0.0, 0.0, 1.0,
-             l2,  l2,  l2, 1.0, 0.0, 0.0, 1.0, 1.0, 
-             l2,  l2, -l2, 1.0, 0.0, 0.0, 1.0, 0.0,
-    
-            // LEFT
-            -l2,  l2,  l2, 0.0, 1.0, 0.0, 0.0, 1.0,
-            -l2, -l2,  l2, 0.0, 1.0, 0.0, 1.0, 1.0,
-            -l2, -l2, -l2, 0.0, 1.0, 0.0, 1.0, 0.0,
-            -l2,  l2, -l2, 0.0, 1.0, 0.0, 0.0, 0.0,
-
-            // Right
-             l2,  l2,  l2, 0.0, 0.0, 1.0, 0.0, 1.0,
-             l2, -l2,  l2, 0.0, 0.0, 1.0, 1.0, 1.0,
-             l2, -l2, -l2, 0.0, 0.0, 1.0, 1.0, 0.0,
-             l2,  l2, -l2, 0.0, 0.0, 1.0, 0.0, 0.0,
-
-            // Front
-            l2,  l2,  l2, 1.0, 1.0, 0.0, 0.0, 1.0,
-            l2, -l2,  l2, 1.0, 1.0, 0.0, 1.0, 1.0,
-           -l2, -l2,  l2, 1.0, 1.0, 0.0, 1.0, 0.0,
-           -l2,  l2,  l2, 1.0, 1.0, 0.0, 0.0, 0.0,
-
-            // Back
-            l2,  l2, -l2, 1.0, 0.0, 1.0, 0.0, 1.0,
-            l2, -l2, -l2, 1.0, 0.0, 1.0, 1.0, 1.0,
-           -l2, -l2, -l2, 1.0, 0.0, 1.0, 1.0, 0.0,
-           -l2,  l2, -l2, 1.0, 0.0, 1.0, 0.0, 0.0,
-
-            // Bottom
-           -l2, -l2, -l2, 0.0, 1.0, 1.0, 0.0, 1.0,
-           -l2, -l2,  l2, 0.0, 1.0, 1.0, 0.0, 0.0,
-            l2, -l2,  l2, 0.0, 1.0, 1.0, 1.0, 0.0,
-            l2, -l2, -l2, 0.0, 1.0, 1.0, 1.0, 1.0
+        // VERTEX POSITION  COLOR                           TEXTURE    NORMALS
+        // X    Y    Z      R         G         B           U    V     x    y    z
+        // TOP
+          -l2,  l2, -l2,    color[0], color[1], color[2],   0.0, 0.0,  0.0,  1.0,  0.0,
+          -l2,  l2,  l2,    color[0], color[1], color[2],   0.0, 1.0,  0.0,  1.0,  0.0,
+           l2,  l2,  l2,    color[0], color[1], color[2],   1.0, 1.0,  0.0,  1.0,  0.0,
+           l2,  l2, -l2,    color[0], color[1], color[2],   1.0, 0.0,  0.0,  1.0,  0.0,
+        // LEFT
+          -l2,  l2,  l2,    color[0], color[1], color[2],   0.0, 1.0, -1.0,  0.0,  0.0,
+          -l2, -l2,  l2,    color[0], color[1], color[2],   1.0, 1.0, -1.0,  0.0,  0.0,
+          -l2, -l2, -l2,    color[0], color[1], color[2],   1.0, 0.0, -1.0,  0.0,  0.0,
+          -l2,  l2, -l2,    color[0], color[1], color[2],   0.0, 0.0, -1.0,  0.0,  0.0,
+        // Right
+           l2,  l2,  l2,    color[0], color[1], color[2],   0.0, 1.0,  1.0,  0.0,  0.0,
+           l2, -l2,  l2,    color[0], color[1], color[2],   1.0, 1.0,  1.0,  0.0,  0.0,
+           l2, -l2, -l2,    color[0], color[1], color[2],   1.0, 0.0,  1.0,  0.0,  0.0,
+           l2,  l2, -l2,    color[0], color[1], color[2],   0.0, 0.0,  1.0,  0.0,  0.0,
+        // Front
+           l2,  l2,  l2,    color[0], color[1], color[2],   0.0, 1.0,  0.0,  0.0,  1.0,
+           l2, -l2,  l2,    color[0], color[1], color[2],   1.0, 1.0,  0.0,  0.0,  1.0,
+          -l2, -l2,  l2,    color[0], color[1], color[2],   1.0, 0.0,  0.0,  0.0,  1.0,
+          -l2,  l2,  l2,    color[0], color[1], color[2],   0.0, 0.0,  0.0,  0.0,  1.0,
+        // Back
+           l2,  l2, -l2,    color[0], color[1], color[2],   0.0, 1.0,  0.0,  0.0, -1.0,
+           l2, -l2, -l2,    color[0], color[1], color[2],   1.0, 1.0,  0.0,  0.0, -1.0,
+          -l2, -l2, -l2,    color[0], color[1], color[2],   1.0, 0.0,  0.0,  0.0, -1.0,
+          -l2,  l2, -l2,    color[0], color[1], color[2],   0.0, 0.0,  0.0,  0.0, -1.0,
+        // Bottom
+          -l2, -l2, -l2,    color[0], color[1], color[2],   0.0, 1.0,  0.0, -1.0,  0.0,
+          -l2, -l2,  l2,    color[0], color[1], color[2],   0.0, 0.0,  0.0, -1.0,  0.0,
+           l2, -l2,  l2,    color[0], color[1], color[2],   1.0, 0.0,  0.0, -1.0,  0.0,
+           l2, -l2, -l2,    color[0], color[1], color[2],   1.0, 1.0,  0.0, -1.0,  0.0
         ];
     }
 }

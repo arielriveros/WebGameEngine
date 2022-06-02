@@ -87,7 +87,7 @@ function addRandomCubes(scene: Scene, count: number)
     for(let i = 0; i < count; i++)
     {
         let texFlag = randomNumber(0, 1);
-        let newCube = new Shapes.TexturedCube(
+        let newCube = new Shapes.Cube(
                 { base: randomNumber(0.2, 1.5), 
                   color: [randomNumber(), randomNumber(), randomNumber()],
                   texturePath: texFlag > 0.6667 ? 'assets/textures/wall.png' : (texFlag  < 0.3333 ? 'assets/textures/dirt.jpg' : undefined)
