@@ -18,7 +18,7 @@ export class Texture{
         // Load the image given a path, if no path is given, use the default image.
         this._image = this._imagePath ? await Loader.loadImage(this._imagePath) : null;
         // Before creating a texutres flips (u,v) coords to match (x,y) coords
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+        //gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
         // Creates a texture webgl object
         this._texture = gl.createTexture() as WebGLTexture;
         // Binds the texture data to the webgl texture object
