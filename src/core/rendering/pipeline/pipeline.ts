@@ -1,3 +1,4 @@
+import { Matrix4x4 } from "math";
 import { Camera } from "src/core/world/camera";
 import { Renderable } from "../graphics/renderable";
 import { gl } from "../render";
@@ -85,6 +86,9 @@ export class Pipeline
     public update(): void {
         this.shader.use();
         let _uViewProj;
+        let _uNormalMatrix;
+
+        _uNormalMatrix = this._shader.getUniformLocation("u_normalMatrix");
 
         if(this._camera)
         {
@@ -96,6 +100,13 @@ export class Pipeline
             if(this._camera && _uViewProj)
             {
                 gl.uniformMatrix4fv(_uViewProj, false, this._camera.getViewProjection(renderable.worldMatrix).toFloat32Array());
+            }
+            if(_uNormalMatrix)
+            {
+                let normalMatrix = new Matrix4x4();
+                Matrix4x4.invert(normalMatrix, renderable.worldMatrix);
+                Matrix4x4.transpose(normalMatrix, normalMatrix);
+                gl.uniformMatrix4fv(_uNormalMatrix, false, normalMatrix.toFloat32Array());
             }
             renderable.draw();
         }

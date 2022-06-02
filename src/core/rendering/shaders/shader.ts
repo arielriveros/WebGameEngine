@@ -84,15 +84,16 @@ export abstract class Shader {
         return gl.getAttribLocation(this._program, attrib);
     }
 
-    public getUniformLocation(uniform:string): WebGLUniformLocation {
-        let outLocation:any = gl.getUniformLocation(this._program, uniform)
+    public getUniformLocation(uniform:string): WebGLUniformLocation | null {
+        return gl.getUniformLocation(this._program, uniform);
+        /* let outLocation:WebGLUniformLocation | null = gl.getUniformLocation(this._program, uniform)
         if (outLocation) {
             return outLocation as WebGLUniformLocation;
         }
         else {
             LOG(`No uniform of name ${uniform} found.`, 'error', true)
-            throw new Error()
-        }
+            return null;
+        } */
     }
 
     public use(): void {
