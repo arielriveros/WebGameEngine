@@ -1,7 +1,7 @@
 import { LOG } from "utils";
 import { gl } from "../render";
 
-export class Shader {
+export abstract class Shader {
     private _program!: WebGLProgram;
     private _debug: boolean;
 
