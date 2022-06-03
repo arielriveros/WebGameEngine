@@ -34,6 +34,11 @@ export class Transform
     public set scale(scale: Vector3) { this._scale = scale; }
 
     public get matrix(): Matrix4x4 { return this._matrix; }
+    public get inverseMatrix(): Matrix4x4 {
+        let out = this._matrix.clone();
+        Matrix4x4.invert(out, out);
+        return out; 
+    }
 
     /**
      * Applies transform from the values contained in the transform object.
@@ -47,6 +52,6 @@ export class Transform
     }
 
     public applyToVector(vector: Vector3): Vector3 {
-        return Matrix4x4.multiplyVector(new Vector3(), this.matrix, vector);
+        return Matrix4x4.multiplyVector(new Vector3(), this.inverseMatrix, vector);
     }
 }
