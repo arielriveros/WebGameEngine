@@ -2,7 +2,7 @@ import { GameBase } from './gameInterface';
 import { PerspectiveCamera, Scene, InputManager, Shapes, OrthographicCamera, ObjectEntity } from 'core';
 import { LOG } from 'utils';
 import { Vector3, Rotator } from 'math';
-import { addGrid, addAxis, addRandomCubes, addRandomtriangles, addControllable, addRandomLines } from './sceneSetup';
+import { setScene } from './sceneSetup';
 
 export class Game extends GameBase
 {
@@ -20,28 +20,9 @@ export class Game extends GameBase
         this.scene.directionalLight = this.directionalLight;
     }
 
-    
-
     public override start(): void
     {
-        let previousTime = performance.now()
-        addGrid(this._scene);
-        addAxis(this._scene);
-        LOG(`Grid - Axis ${(performance.now() - previousTime).toFixed(3)} ms`);
-
-        previousTime = performance.now()
-        addRandomCubes(this._scene, 250);
-        LOG(`Random cubes ${(performance.now() - previousTime).toFixed(3)} ms`);
-        
-        previousTime = performance.now()
-        addRandomtriangles(this._scene, 250);
-        LOG(`Random triangles ${(performance.now() - previousTime).toFixed(3)} ms`);
-
-        previousTime = performance.now()
-        addRandomLines(this._scene, 10);
-        LOG(`Random Lines ${(performance.now() - previousTime).toFixed(3)} ms`);
-
-        addControllable(this._scene);
+        setScene(this.scene);
 
         let c = this.scene.getEntity('controllable');
         if(c){

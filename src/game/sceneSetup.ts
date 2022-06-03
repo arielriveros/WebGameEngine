@@ -1,5 +1,6 @@
 import { ObjectEntity, Scene, Shapes } from "core";
 import { randomNumber, Rotator, Vector3 } from "math";
+import { LOG } from "utils";
 import { RenderableComponent } from "../core/world/components/renderableComponent";
 
 
@@ -148,4 +149,24 @@ function addRandomLines(scene: Scene, count: number)
     }
 }
 
-export { addGrid, addAxis, addRandomCubes, addRandomtriangles, addControllable, addRandomLines };
+export function setScene(scene: Scene)
+{
+    let previousTime = performance.now()
+        addGrid(scene);
+        addAxis(scene);
+        LOG(`Grid - Axis ${(performance.now() - previousTime).toFixed(3)} ms`);
+
+        previousTime = performance.now()
+        addRandomCubes(scene, 250);
+        LOG(`Random cubes ${(performance.now() - previousTime).toFixed(3)} ms`);
+        
+        previousTime = performance.now()
+        addRandomtriangles(scene, 250);
+        LOG(`Random triangles ${(performance.now() - previousTime).toFixed(3)} ms`);
+
+        previousTime = performance.now()
+        addRandomLines(scene, 10);
+        LOG(`Random Lines ${(performance.now() - previousTime).toFixed(3)} ms`);
+
+        addControllable(scene);
+}
