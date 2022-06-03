@@ -3,6 +3,7 @@ import { Vector2, Vector3, Vector4 } from './vector'
 
 export class Matrix4x4 {
     
+    
     private _data: number[] = [];
     public constructor() {
         this._data = [
@@ -507,6 +508,12 @@ export class Matrix4x4 {
       out._data[13] = (a00 * b09 - a01 * b07 + a02 * b06) * det;
       out._data[14] = (a31 * b01 - a30 * b03 - a32 * b00) * det;
       out._data[15] = (a20 * b03 - a21 * b01 + a22 * b00) * det;
+      return out;
+    }
+
+    public clone(): Matrix4x4 {
+      let out: Matrix4x4 = new Matrix4x4();
+      out._data = this._data;
       return out;
     }
 
