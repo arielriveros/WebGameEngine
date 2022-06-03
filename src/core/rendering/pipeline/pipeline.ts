@@ -1,4 +1,4 @@
-import { Matrix4x4 } from "math";
+import { Matrix4x4, Vector2, Vector3 } from "math";
 import { Camera } from "src/core/world/camera";
 import { Renderable } from "../graphics/renderable";
 import { gl } from "../render";
@@ -9,6 +9,7 @@ export class Pipeline
     private _name: string;
     private _shader: Shader;
     private _camera: Camera | null;
+    private _directionalLight: Vector3 | null;
     private _renderables!: Renderable[];
 
     /**
@@ -20,8 +21,9 @@ export class Pipeline
     {
         this._name = name;
         this._shader = shader;
-        this._renderables = [];
         this._camera = null;
+        this._directionalLight = null;
+        this._renderables = [];
     }
 
     public get name(): string { return this._name; }
@@ -29,6 +31,9 @@ export class Pipeline
 
     public get camera(): Camera | null { return this._camera; }
     public set camera(value: Camera | null) { this._camera = value; }
+
+    public get directionalLight(): Vector3 | null { return this._directionalLight; }
+    public set directionalLight(value: Vector3 | null) { this._directionalLight = value; }
 
     public get shader(): Shader { return this._shader; }
     public set shader(value: Shader) { this._shader = value; }
@@ -86,9 +91,8 @@ export class Pipeline
     public update(): void {
         this.shader.use();
         let _uViewProj;
-        let _uNormalMatrix;
-
-        _uNormalMatrix = this._shader.getUniformLocation("u_normalMatrix");
+        let _uNormalMatrix = this._shader.getUniformLocation("u_normalMatrix");
+        let _uLightDirection = this._shader.getUniformLocation("u_lightDirection");
 
         if(this._camera)
         {
@@ -97,16 +101,25 @@ export class Pipeline
         
         for(const renderable of this._renderables)
         {
+            // ViewProjection Matrix uniform transformation using Camera values
             if(this._camera && _uViewProj)
             {
                 gl.uniformMatrix4fv(_uViewProj, false, this._camera.getViewProjection(renderable.worldMatrix).toFloat32Array());
             }
+
+            // Normal matrix uniform transformation using world matrix
             if(_uNormalMatrix)
             {
                 let normalMatrix = new Matrix4x4();
                 Matrix4x4.invert(normalMatrix, renderable.worldMatrix);
                 Matrix4x4.transpose(normalMatrix, normalMatrix);
                 gl.uniformMatrix4fv(_uNormalMatrix, false, normalMatrix.toFloat32Array());
+            }
+
+            // Directional light uniform setting using directional light vector
+            if(this._directionalLight && _uLightDirection)
+            {
+                gl.uniform3fv(_uLightDirection, this._directionalLight.toFloat32Array());
             }
             renderable.draw();
         }

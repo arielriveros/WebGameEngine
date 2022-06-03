@@ -7,13 +7,17 @@ import { addGrid, addAxis, addRandomCubes, addRandomtriangles, addControllable, 
 export class Game extends GameBase
 {
     private _cameraOptions = {cameraSpeed: 0.1, cameraRotationScale: 1.5};
+    private directionalLight!: Vector3;
+    private time: number = 0;
 
     public override setUp(): void
     {
-        let perspectiveCamera = new PerspectiveCamera({position: new Vector3(-1, 1, 2), fovy: 1.6});
+        let perspectiveCamera = new PerspectiveCamera({position: new Vector3(-10, 10, 10), fovy: 1.2});
         let orthographicCamera = new OrthographicCamera({position: new Vector3(-1, 1, 2), left: -3, right: 3, bottom: -3, top: 3, near: 0.01, far: 100});
         this.camera = perspectiveCamera;
         this.scene = new Scene();
+        this.directionalLight = new Vector3();
+        this.scene.directionalLight = this.directionalLight;
     }
 
     
@@ -41,14 +45,15 @@ export class Game extends GameBase
 
         let c = this.scene.getEntity('controllable');
         if(c){
-            this.camera.position.x = c.position.x;
-            //this.camera.position.y = c.position.y + 1;
-            //this.camera.position.z = c.position.z + 2;
             this.camera.follow(c);
         }
     }
 
-    public override onUpdate(): void { }
+    public override onUpdate(): void {
+        this.time += 0.1;
+        this.directionalLight.x = Math.sin(this.time * 0.1) * 0.5 + 0.5;
+        this.directionalLight.y = Math.cos(this.time * 0.1) * 0.5 + 0.5;
+    }
 
     public override inputListen(input: InputManager): void
     {

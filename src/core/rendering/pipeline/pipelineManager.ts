@@ -1,3 +1,4 @@
+import { Vector3 } from "math";
 import { Camera } from "src/core/world/camera";
 import { Renderable } from "../graphics/renderable";
 import { Shader } from "../shaders/shader";
@@ -116,6 +117,14 @@ export class PipelineManager
         for(let pipeline of this._pipelines)
         {
             pipeline.camera = camera;
+        }
+    }
+
+    public setDirectionalLight( direction: Vector3 | null): void
+    {
+        for(let pipeline of this._pipelines)
+        {
+            pipeline.directionalLight = direction;
         }
     }
 }

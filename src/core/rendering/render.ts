@@ -47,6 +47,7 @@ export class Render
         pipelineManager.setCamera(this._camera);
         this._scene = scene;
         this._scene.initialize();
+        pipelineManager.setDirectionalLight(this._scene.directionalLight);
         this.resize();
     }
 
@@ -113,11 +114,11 @@ export class Render
         // gets webGL context object from the canvas and stores it in _context
         gl = this._canvas.getContext("webgl") as WebGLRenderingContext; 
         // Dark gray initial color
-        gl.clearColor(0.2, 0.2, 0.2, 1.0);
+        gl.clearColor(0.05, 0.05, 0.05, 1.0);
         gl.enable(gl.DEPTH_TEST);
-        //gl.enable(gl.CULL_FACE);
-        //gl.frontFace(gl.CCW);
-        //gl.cullFace(gl.BACK);
+        gl.enable(gl.CULL_FACE);
+        gl.frontFace(gl.CCW);
+        gl.cullFace(gl.BACK);
         // gl.cullFace(gl.FRONT);
     }
 }
