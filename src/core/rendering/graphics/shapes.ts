@@ -37,12 +37,20 @@ class Triangle extends CompoundShape
         let color: number[] = options.color || [1, 1, 1];
         super(options.texturePath);
         this.vertices = [
-        // VERTEX POSITION          COLOR                           TEXTURE     NORMALS
-        // X       Y          Z     R         G         B           u    v       x   y    z
-          -base/2, -height/2, 0.0,  color[0], color[1], color[2],   0.0, 1.0,   0.0, 0.0, 1.0,
-           base/2, -height/2, 0.0,  color[0], color[1], color[2],   1.0, 1.0,   0.0, 0.0, 1.0,
-           0.0,     height/2, 0.0,  color[0], color[1], color[2],   0.5, 0.0,   0.0, 0.0, 1.0];
-        }
+        // VERTEX POSITION          COLOR                           TEXTURE  
+        // X       Y          Z     R         G         B           u    v   
+          -base/2, -height/2, 0.0,  color[0], color[1], color[2],   0.0, 1.0,
+           base/2, -height/2, 0.0,  color[0], color[1], color[2],   1.0, 1.0,
+           0.0,     height/2, 0.0,  color[0], color[1], color[2],   0.5, 0.0
+        ];
+        this.normals = [
+          // NORMALS
+          // x   y    z
+          0.0, 0.0, 1.0,
+          0.0, 0.0, 1.0,
+          0.0, 0.0, 1.0
+        ];
+      }
 }
 
 class Quad extends CompoundShape {
@@ -52,21 +60,32 @@ class Quad extends CompoundShape {
      */
     public constructor(options: Options = {})
     {
-        let base: number = options.base || 1;
-        let height: number = options.height || 1;
-        let color: number[] = options.color || [1, 1, 1];
-        super(options.texturePath);
-        this.vertices = [
-        // VERTEX POSITION          COLOR                           TEXTURE     NORMALS
-        // X        Y         Z     R         G         B           U    V      x    y    z
-          -base/2, -height/2, 0.0,  color[0], color[1], color[2],   0.0, 0.0,   0.0, 0.0, 1.0,
-           base/2, -height/2, 0.0,  color[0], color[1], color[2],   1.0, 0.0,   0.0, 0.0, 1.0,
-          -base/2,  height/2, 0.0,  color[0], color[1], color[2],   0.0, 1.0,   0.0, 0.0, 1.0,
+      let base: number = options.base || 1;
+      let height: number = options.height || 1;
+      let color: number[] = options.color || [1, 1, 1];
+      super(options.texturePath);
+      this.vertices = [
+      // VERTEX POSITION          COLOR                           TEXTURE  
+      // X        Y         Z     R         G         B           U    V   
+        -base/2, -height/2, 0.0,  color[0], color[1], color[2],   0.0, 0.0,
+         base/2, -height/2, 0.0,  color[0], color[1], color[2],   1.0, 0.0,
+        -base/2,  height/2, 0.0,  color[0], color[1], color[2],   0.0, 1.0,
 
-          -base/2,  height/2, 0.0,  color[0], color[1], color[2],   0.0, 1.0,   0.0, 0.0, 1.0,
-           base/2, -height/2, 0.0,  color[0], color[1], color[2],   1.0, 0.0,   0.0, 0.0, 1.0,
-           base/2,  height/2, 0.0,  color[0], color[1], color[2],   1.0, 1.0,   0.0, 0.0, 1.0];
-        }
+        -base/2,  height/2, 0.0,  color[0], color[1], color[2],   0.0, 1.0,
+         base/2, -height/2, 0.0,  color[0], color[1], color[2],   1.0, 0.0,
+         base/2,  height/2, 0.0,  color[0], color[1], color[2],   1.0, 1.0,
+      ];
+      this.normals = [
+        // NORMALS
+        // x   y    z
+        0.0, 0.0, 1.0,
+        0.0, 0.0, 1.0,
+        0.0, 0.0, 1.0,
+        0.0, 0.0, 1.0,
+        0.0, 0.0, 1.0,
+        0.0, 0.0, 1.0
+      ];
+  }
 }
 
 class Cube extends CompoundShape
@@ -101,39 +120,68 @@ class Cube extends CompoundShape
             22, 20, 23
         ];
         this.vertices = [
-        // VERTEX POSITION  COLOR                           TEXTURE    NORMALS
-        // X    Y    Z      R         G         B           U    V     x     y     z
+        // VERTEX POSITION  COLOR                           TEXTURE
+        // X    Y    Z      R         G         B           U    V 
         // TOP
-          -l2,  l2, -l2,    color[0], color[1], color[2],   1/4, 0.0,  0.0,  1.0,  0.0,
-          -l2,  l2,  l2,    color[0], color[1], color[2],   1/4, 1/4,  0.0,  1.0,  0.0,
-           l2,  l2,  l2,    color[0], color[1], color[2],   1/2, 1/4,  0.0,  1.0,  0.0,
-           l2,  l2, -l2,    color[0], color[1], color[2],   1/2, 0.0,  0.0,  1.0,  0.0,
+          -l2,  l2, -l2,    color[0], color[1], color[2],   1/4, 0.0,
+          -l2,  l2,  l2,    color[0], color[1], color[2],   1/4, 1/4,
+           l2,  l2,  l2,    color[0], color[1], color[2],   1/2, 1/4,
+           l2,  l2, -l2,    color[0], color[1], color[2],   1/2, 0.0,
         // LEFT
-          -l2,  l2,  l2,    color[0], color[1], color[2],   1/4, 1/3, -1.0,  0.0,  0.0,
-          -l2, -l2,  l2,    color[0], color[1], color[2],   1/4, 2/3, -1.0,  0.0,  0.0,
-          -l2, -l2, -l2,    color[0], color[1], color[2],   0.0, 2/3, -1.0,  0.0,  0.0,
-          -l2,  l2, -l2,    color[0], color[1], color[2],   0.0, 1/3, -1.0,  0.0,  0.0,
+          -l2,  l2,  l2,    color[0], color[1], color[2],   1/4, 1/3,
+          -l2, -l2,  l2,    color[0], color[1], color[2],   1/4, 2/3,
+          -l2, -l2, -l2,    color[0], color[1], color[2],   0.0, 2/3,
+          -l2,  l2, -l2,    color[0], color[1], color[2],   0.0, 1/3,
         // Right
-           l2,  l2,  l2,    color[0], color[1], color[2],   1/2, 1/3,  1.0,  0.0,  0.0,
-           l2, -l2,  l2,    color[0], color[1], color[2],   1/2, 2/3,  1.0,  0.0,  0.0,
-           l2, -l2, -l2,    color[0], color[1], color[2],   3/4, 2/3,  1.0,  0.0,  0.0,
-           l2,  l2, -l2,    color[0], color[1], color[2],   3/4, 1/3,  1.0,  0.0,  0.0,
+           l2,  l2,  l2,    color[0], color[1], color[2],   1/2, 1/3,
+           l2, -l2,  l2,    color[0], color[1], color[2],   1/2, 2/3,
+           l2, -l2, -l2,    color[0], color[1], color[2],   3/4, 2/3,
+           l2,  l2, -l2,    color[0], color[1], color[2],   3/4, 1/3,
         // Front
-           l2,  l2,  l2,    color[0], color[1], color[2],   1/2, 1/3,  0.0,  0.0,  1.0,
-           l2, -l2,  l2,    color[0], color[1], color[2],   1/2, 2/3,  0.0,  0.0,  1.0,
-          -l2, -l2,  l2,    color[0], color[1], color[2],   1/4, 2/3,  0.0,  0.0,  1.0,
-          -l2,  l2,  l2,    color[0], color[1], color[2],   1/4, 1/3,  0.0,  0.0,  1.0,
+           l2,  l2,  l2,    color[0], color[1], color[2],   1/2, 1/3,
+           l2, -l2,  l2,    color[0], color[1], color[2],   1/2, 2/3,
+          -l2, -l2,  l2,    color[0], color[1], color[2],   1/4, 2/3,
+          -l2,  l2,  l2,    color[0], color[1], color[2],   1/4, 1/3,
         // Back
-           l2,  l2, -l2,    color[0], color[1], color[2],   3/4, 1/3,  0.0,  0.0, -1.0,
-           l2, -l2, -l2,    color[0], color[1], color[2],   3/4, 2/3,  0.0,  0.0, -1.0,
-          -l2, -l2, -l2,    color[0], color[1], color[2],   1.0, 2/3,  0.0,  0.0, -1.0,
-          -l2,  l2, -l2,    color[0], color[1], color[2],   1.0, 1/3,  0.0,  0.0, -1.0,
+           l2,  l2, -l2,    color[0], color[1], color[2],   3/4, 1/3,
+           l2, -l2, -l2,    color[0], color[1], color[2],   3/4, 2/3,
+          -l2, -l2, -l2,    color[0], color[1], color[2],   1.0, 2/3,
+          -l2,  l2, -l2,    color[0], color[1], color[2],   1.0, 1/3,
         // Bottom
-          -l2, -l2, -l2,    color[0], color[1], color[2],   1/4, 1.0,  0.0, -1.0,  0.0,
-          -l2, -l2,  l2,    color[0], color[1], color[2],   1/4, 2/3,  0.0, -1.0,  0.0,
-           l2, -l2,  l2,    color[0], color[1], color[2],   1/2, 2/3,  0.0, -1.0,  0.0,
-           l2, -l2, -l2,    color[0], color[1], color[2],   1/2, 1.0,  0.0, -1.0,  0.0
+          -l2, -l2, -l2,    color[0], color[1], color[2],   1/4, 1.0,
+          -l2, -l2,  l2,    color[0], color[1], color[2],   1/4, 2/3,
+           l2, -l2,  l2,    color[0], color[1], color[2],   1/2, 2/3,
+           l2, -l2, -l2,    color[0], color[1], color[2],   1/2, 1.0,
         ];
+
+        this.normals = [
+        // NORMALS
+        // x     y     z
+          0.0,  1.0,  0.0,
+          0.0,  1.0,  0.0,
+          0.0,  1.0,  0.0,
+          0.0,  1.0,  0.0,
+         -1.0,  0.0,  0.0,
+         -1.0,  0.0,  0.0,
+         -1.0,  0.0,  0.0,
+         -1.0,  0.0,  0.0,
+          1.0,  0.0,  0.0,
+          1.0,  0.0,  0.0,
+          1.0,  0.0,  0.0,
+          1.0,  0.0,  0.0,
+          0.0,  0.0,  1.0,
+          0.0,  0.0,  1.0,
+          0.0,  0.0,  1.0,
+          0.0,  0.0,  1.0,
+          0.0,  0.0, -1.0,
+          0.0,  0.0, -1.0,
+          0.0,  0.0, -1.0,
+          0.0,  0.0, -1.0,
+          0.0, -1.0,  0.0,
+          0.0, -1.0,  0.0,
+          0.0, -1.0,  0.0,
+          0.0, -1.0,  0.0
+        ]
     }
 }
 

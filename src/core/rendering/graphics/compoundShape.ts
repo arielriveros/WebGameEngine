@@ -17,12 +17,11 @@ export class CompoundShape extends Renderable
 
     public override load(shader: Shader): void
     {
-        this._buffer = new GLArrayBuffer(11, gl.FLOAT, gl.TRIANGLES );
+        this._vertexBuffer = new GLArrayBuffer(8, gl.FLOAT, gl.TRIANGLES );
         
         if(this._indices)
         {
             this._indexBuffer = new GLElementArrayBuffer(gl.UNSIGNED_SHORT, gl.TRIANGLES);
-            this._indexBuffer.bind();
             this._indexBuffer.pushData(this._indices);
             this._indexBuffer.upload();
         }
@@ -31,39 +30,49 @@ export class CompoundShape extends Renderable
             location: shader.getAttributeLocation("a_position"),
             size: 3,
             offset: 0 };
-            this._buffer.addAttribLocation(positionAttribute);
+            this._vertexBuffer.addAttribLocation(positionAttribute);
 
         let colorAttribute:AttributeInformation = {
             location: shader.getAttributeLocation("a_color"),
             size: 3, 
             offset: 3 };
-        this._buffer.addAttribLocation(colorAttribute);
+        this._vertexBuffer.addAttribLocation(colorAttribute);
             
         this._texture.load();
         let textureAttribute:AttributeInformation = {
             location: shader.getAttributeLocation("a_texCoord"),
             size: 2, 
             offset: 6 };
-        this._buffer.addAttribLocation(textureAttribute);
+        this._vertexBuffer.addAttribLocation(textureAttribute);
 
-        let normalAttribute:AttributeInformation = {
-            location: shader.getAttributeLocation("a_normal"),
-            size: 3, 
-            offset: 8 };
-        this._buffer.addAttribLocation(normalAttribute);
+        if(this._normals)
+        {
+            this._normalBuffer = new GLArrayBuffer(3, gl.FLOAT, gl.TRIANGLES);
+            let normalAttribute:AttributeInformation = {
+                location: shader.getAttributeLocation("a_normal"),
+                size: 3, 
+                offset: 0 };
+            this._normalBuffer.addAttribLocation(normalAttribute);
+
+            this._normalBuffer.bind();
+            this._normalBuffer.pushData(this._normals);
+            this._normalBuffer.upload();
+        }
+
+        this._vertexBuffer.pushData(this._vertices);
+        this._vertexBuffer.upload();
+        }
         
-        this._buffer.pushData(this._vertices);
-        this._buffer.upload();
-    }
-
     /**
      * Draws data from the shape's buffers.
      */
      public override draw(): void
      {
-         this._buffer.bind();
-         this._texture.draw();
-         if(this._indices) { this._indexBuffer.draw(); }
-         else { this._buffer.draw(); }
+         this._vertexBuffer.bind();
+         this._texture.bind();
+         if(this.normals) { this._normalBuffer.bind(); }
+
+         if(this._indices) { this._indexBuffer.bind(); this._indexBuffer.draw(); }
+         else { this._vertexBuffer.draw(); }
      }
 }

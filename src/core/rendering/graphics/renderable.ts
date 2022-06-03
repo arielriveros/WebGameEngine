@@ -23,9 +23,11 @@ export abstract class Renderable
 
     protected _vertices: number[];
     protected _indices: number[] | null;
+    protected _normals: number[] | null;
 
-    protected _buffer!: GLArrayBuffer;
+    protected _vertexBuffer!: GLArrayBuffer;
     protected _indexBuffer!: GLElementArrayBuffer;
+    protected _normalBuffer!: GLArrayBuffer;
     
     protected _worldMatrix: Matrix4x4;
 
@@ -36,6 +38,7 @@ export abstract class Renderable
         this._name = name;
         this._vertices = [];
         this._indices = null;
+        this._normals = null;
         this._worldMatrix = new Matrix4x4();
         this._type = type;
     }
@@ -47,7 +50,7 @@ export abstract class Renderable
 
     public get vertices(): number[] { return this._vertices; }
     public get indices(): number[] | null { return this._indices; }
-
+    public get normals(): number[] | null { return this._normals; }
     /**
      * Sets the vertices of the object for the vertex array buffer.
      */
@@ -56,6 +59,10 @@ export abstract class Renderable
      * Sets the indices of the object for the element array buffer.
      */
     protected set indices(newIndices: number[] | null) { this._indices = newIndices; }
+    /**
+     * Sets the normals of the object for the normal array buffer.
+     */
+    protected set normals(newNormals: number[] | null) { this._normals = newNormals; }
 
     public get type(): string { return this._type; }
 
@@ -74,7 +81,11 @@ export abstract class Renderable
      */
     public unload(): void
     {
-        this._buffer.unbind();
+        this._vertexBuffer.unbind();
+        if(this.normals)
+        {
+            this._normalBuffer.unbind();
+        }
     }
 
     /**
@@ -82,8 +93,9 @@ export abstract class Renderable
      */
     public draw(): void
     {
-        this._buffer.bind();
+        this._vertexBuffer.bind();
+        if(this.normals) { this._normalBuffer.bind(); }
         if(this._indices) { this._indexBuffer.draw(); }
-        else { this._buffer.draw(); }
+        else { this._vertexBuffer.draw(); }
     }
 }

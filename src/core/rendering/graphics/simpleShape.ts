@@ -11,21 +11,21 @@ export class SimpleShape extends Renderable {
 
     public override load(shader: Shader): void
     {
-        this._buffer = new GLArrayBuffer(6, gl.FLOAT, gl.LINES );
+        this._vertexBuffer = new GLArrayBuffer(6, gl.FLOAT, gl.LINES );
 
         let positionAttribute:AttributeInformation = {
             location: shader.getAttributeLocation("a_position"),
             size: 3,
             offset: 0 };
-        this._buffer.addAttribLocation(positionAttribute);
+        this._vertexBuffer.addAttribLocation(positionAttribute);
 
         let colorAttribute:AttributeInformation = {
             location: shader.getAttributeLocation("a_color"),
             size: 3, 
             offset: 3 };
-        this._buffer.addAttribLocation(colorAttribute);
+        this._vertexBuffer.addAttribLocation(colorAttribute);
         
-        this._buffer.pushData(this._vertices);
-        this._buffer.upload();
+        this._vertexBuffer.pushData(this._vertices);
+        this._vertexBuffer.upload();
     }
 }

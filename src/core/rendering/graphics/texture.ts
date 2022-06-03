@@ -51,7 +51,7 @@ export class Texture{
     /**
      * Binds the texture to the shader program.
      */
-    public draw(): void
+    public bind(): void
     {
         // Active Texture
         //gl.activeTexture(gl.TEXTURE0);
