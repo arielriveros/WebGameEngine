@@ -513,7 +513,9 @@ export class Matrix4x4 {
 
     public clone(): Matrix4x4 {
       let out: Matrix4x4 = new Matrix4x4();
-      out._data = this._data;
+      for(let i = 0; i < 16; i++) {
+        out._data[i] = this._data[i];
+      }
       return out;
     }
 
@@ -612,7 +614,8 @@ export class Matrix4x4 {
       return new Vector3(mat._data[12], mat._data[13], mat._data[14]);
     }
 
-    public static multiplyVector(out: Vector3, mat: Matrix4x4, vec: Vector3): Vector3 {
+    public static multiplyVector(out: Vector3, a: Matrix4x4, vec: Vector3): Vector3 {
+      let mat: Matrix4x4 = a.clone();
       let x = vec.x,
           y = vec.y,
           z = vec.z;
