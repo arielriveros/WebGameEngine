@@ -54,7 +54,6 @@ export class CompoundShape extends Renderable
                 offset: 0 };
             this._normalBuffer.addAttribLocation(normalAttribute);
 
-            this._normalBuffer.bind();
             this._normalBuffer.pushData(this._normals);
             this._normalBuffer.upload();
         }
