@@ -1,7 +1,6 @@
 import { Matrix4x4, Vector2, Vector3 } from "math";
 import { Camera } from "src/core/world/camera";
 import { Renderable } from "../graphics/renderable";
-import { gl } from "../render";
 import { Shader } from "../shaders/shader";
 
 export class Pipeline
@@ -90,36 +89,37 @@ export class Pipeline
      */
     public update(): void {
         this.shader.use();
-        let _uViewProj;
-        let _uNormalMatrix = this._shader.getUniformLocation("u_normalMatrix");
-        let _uLightDirection = this._shader.getUniformLocation("u_lightDirection");
-
-        if(this._camera)
-        {
-            _uViewProj = this._shader.getUniformLocation('u_viewProj');
-        }
         
         for(const renderable of this._renderables)
         {
             // ViewProjection Matrix uniform transformation using Camera values
-            if(this._camera && _uViewProj)
+            if(this._camera)
             {
-                gl.uniformMatrix4fv(_uViewProj, false, this._camera.getViewProjection(renderable.worldMatrix).toFloat32Array());
+                this.shader.setUniform(
+                    'u_viewProj',
+                    'Matrix4fv',
+                    this._camera.getViewProjection(renderable.worldMatrix).toFloat32Array())
             }
 
             // Normal matrix uniform transformation using world matrix
-            if(_uNormalMatrix)
+            if(this._shader.getUniformLocation("u_normalMatrix"))
             {
                 let normalMatrix = new Matrix4x4();
                 Matrix4x4.invert(normalMatrix, renderable.worldMatrix);
                 Matrix4x4.transpose(normalMatrix, normalMatrix);
-                gl.uniformMatrix4fv(_uNormalMatrix, false, normalMatrix.toFloat32Array());
+                this.shader.setUniform(
+                    'u_normalMatrix',
+                    'Matrix4fv',
+                    normalMatrix.toFloat32Array())
             }
 
             // Directional light uniform setting using directional light vector
-            if(this._directionalLight && _uLightDirection)
+            if(this._directionalLight)
             {
-                gl.uniform3fv(_uLightDirection, this._directionalLight.toFloat32Array());
+                this.shader.setUniform(
+                    'u_lightDirection',
+                    '3fv',
+                    this._directionalLight.toFloat32Array())
             }
             renderable.draw();
         }
