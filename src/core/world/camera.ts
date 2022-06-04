@@ -24,6 +24,8 @@ export abstract class Camera extends Entity
     {
         Matrix4x4.lookAt(this._viewMatrix, this.position, this._focalPosition, new Vector3(0, 1, 0));
         Matrix4x4.rotateAroundPivot(this._viewMatrix, this._viewMatrix, this.rotation, this._focalPosition);
+        //Matrix4x4.multiply(this._viewMatrix, this.worldMatrix, this._viewMatrix);
+        //Matrix4x4.lookAt(this._viewMatrix, this.position, this.forward, new Vector3(0, 1, 0));
         return this._viewMatrix;
      }
 

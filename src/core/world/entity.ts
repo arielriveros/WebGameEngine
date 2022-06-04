@@ -4,6 +4,7 @@ import { Component } from "./components/component";
 export abstract class Entity {
     private _name: string;
     private _transform: Transform;
+    private _forward: Vector3;
 
     private _components: Component[];
 
@@ -16,6 +17,8 @@ export abstract class Entity {
             this._name = name;
             this._transform = new Transform(position, rotation, scale);
             this._components = [];
+            this._forward = new Vector3(0, 0, 1);
+            this.transform();
         }
 
     public get name(): string { return this._name; }
@@ -78,27 +81,38 @@ export abstract class Entity {
     public set scale(scale: Vector3) { this._transform.scale = scale; }
 
     public get worldMatrix(): Matrix4x4 { return this._transform.matrix; }
+    public get forward(): Vector3 { return this._forward; }
 
     public move(delta: Vector3): void
     {
         this._transform.position.add(delta);
+        this.transform();
     }
 
     public rotate(delta: Rotator): void
     {
         this._transform.rotation.add(delta);
+        this.transform();
     }
 
     public rescale(delta: Vector3): void
     {
         this._transform.scale.add(delta);
+        this.transform();
     }
 
-    public delete(): void {
+    public delete(): void
+    {
         for(let component of this._components)
         {
             component.delete();
         }
+    }
+
+    public transform(): void
+    {
+        this._transform.applyTransform();
+        this._transform.applyToVector(this._forward);
     }
 
     public initialize(): void { }
@@ -108,7 +122,7 @@ export abstract class Entity {
      */
     public update(): void
     {
-        this._transform.applyTransform();
+        this.transform();
         for(let component of this._components)
         {
             component.update();

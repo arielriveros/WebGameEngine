@@ -34,9 +34,10 @@ export class Transform
     public set scale(scale: Vector3) { this._scale = scale; }
 
     public get matrix(): Matrix4x4 { return this._matrix; }
-    public get inverseMatrix(): Matrix4x4 {
+    public get inverseTransposedMatrix(): Matrix4x4 {
         let out = this._matrix.clone();
         Matrix4x4.invert(out, out);
+        Matrix4x4.transpose(out, out);
         return out; 
     }
 
@@ -51,7 +52,12 @@ export class Transform
         return this._matrix;
     }
 
-    public applyToVector(vector: Vector3): Vector3 {
-        return Matrix4x4.multiplyVector(new Vector3(), this.inverseMatrix, vector);
+    public applyToVector(out: Vector3): Vector3 {
+        let pos = this._position.clone();
+        out.x = pos.x;
+        out.y = pos.y;
+        out.z = pos.z + 1; 
+        Matrix4x4.multiplyVector(out, this.matrix, out);
+        return out;
     }
 }
