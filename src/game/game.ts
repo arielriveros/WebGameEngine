@@ -1,5 +1,5 @@
 import { GameBase } from './gameInterface';
-import { PerspectiveCamera, Scene, InputManager, Shapes, OrthographicCamera, ObjectEntity } from 'core';
+import { PerspectiveCamera, Scene, InputManager, OrthographicCamera, DirectionalLight } from 'core';
 import { LOG } from 'utils';
 import { Vector3, Rotator } from 'math';
 import { setScene } from './sceneSetup';
@@ -7,8 +7,7 @@ import { setScene } from './sceneSetup';
 export class Game extends GameBase
 {
     private _cameraOptions = {cameraSpeed: 0.1, cameraRotationScale: 1.5};
-    private directionalLight!: Vector3;
-    private time: number = 0;
+    private directionalLight!: DirectionalLight;
 
     public override setUp(): void
     {
@@ -16,7 +15,8 @@ export class Game extends GameBase
         let orthographicCamera = new OrthographicCamera({position: new Vector3(-1, 1, 2), left: -3, right: 3, bottom: -3, top: 3, near: 0.01, far: 100});
         this.camera = perspectiveCamera;
         this.scene = new Scene();
-        this.directionalLight = new Vector3();
+
+        this.directionalLight = new DirectionalLight('directional-light');
         this.scene.directionalLight = this.directionalLight;
     }
 
@@ -31,9 +31,7 @@ export class Game extends GameBase
     }
 
     public override onUpdate(): void {
-        this.time += 0.1;
-        this.directionalLight.x = Math.sin(this.time * 0.1) * 0.5 + 0.5;
-        this.directionalLight.y = Math.cos(this.time * 0.1) * 0.5 + 0.5;
+        this.directionalLight.rotate(new Rotator(1, 1, 1));
     }
 
     public override inputListen(input: InputManager): void

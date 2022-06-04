@@ -7,14 +7,14 @@ import { PipelineManager } from "./pipeline/pipelineManager";
 /**
  * WebGL Global interface for rendering context.
  */
-export let gl: WebGLRenderingContext; 
+let gl: WebGLRenderingContext; 
 
 /**
  * Global rendering pipeline manager.
  */
-export let pipelineManager = new PipelineManager();
+let pipelineManager = new PipelineManager();
 
-export class Render
+class Render
 {
     private _canvas!: HTMLCanvasElement ;
     private _camera!: Camera;
@@ -47,7 +47,7 @@ export class Render
         pipelineManager.setCamera(this._camera);
         this._scene = scene;
         this._scene.initialize();
-        pipelineManager.setDirectionalLight(this._scene.directionalLight);
+        pipelineManager.setDirectionalLight(this._scene.directionalLight.forward);
         this.resize();
     }
 
@@ -122,3 +122,5 @@ export class Render
         // gl.cullFace(gl.FRONT);
     }
 }
+
+export { Render, gl, pipelineManager };

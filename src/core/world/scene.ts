@@ -1,10 +1,12 @@
 import { Vector3 } from "math";
 import { Entity } from "./entity";
+import { DirectionalLight, Light } from "./light";
+import { ObjectEntity } from "./objectEntity";
 
 export class Scene
 {
     private _objects: Entity[];
-    private _directionalLight: Vector3 | null;
+    private _directionalLight!: DirectionalLight ;
 
     /**
      * A Scene object is a collection of Entities that handles inner functionalities for each entity in a scene.
@@ -12,13 +14,12 @@ export class Scene
     public constructor()
     {
         this._objects = [];
-        this._directionalLight = null;
     }
 
     public get entities() { return this._objects; }
 
     public get directionalLight() { return this._directionalLight; }
-    public set directionalLight(value: Vector3 | null) { this._directionalLight = value; }
+    public set directionalLight(value: DirectionalLight ) { this._directionalLight = value; }
 
     /**
      * Adds an entity object to the scene.
@@ -27,7 +28,15 @@ export class Scene
     public addEntity(entity: Entity): void
     {
         entity.initialize();
-        this._objects.push(entity);
+        if(entity instanceof ObjectEntity)
+        {
+            this._objects.push(entity);
+        }
+
+        else if (entity instanceof DirectionalLight)
+        {
+            this._directionalLight = entity;
+        }
     }
 
     /**
