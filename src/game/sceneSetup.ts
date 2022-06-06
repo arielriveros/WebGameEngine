@@ -113,7 +113,7 @@ function addControllable(scene: Scene)
         new Vector3(),
         new Rotator(),
         new Vector3(1, 1, 1),
-        new Shapes.Cube( {base: 1.5, texturePath: 'assets/textures/sky_cube.jpg',} )
+        new Shapes.Cube( {base: 1.5, texturePath: 'assets/textures/dirt_cube.png',} )
     )
     controllableEntity.addComponent(new RenderableComponent('renderable-component', new Shapes.Line({color: [0.5, 0, 0]})));
     scene.addEntity(controllableEntity);
@@ -149,24 +149,26 @@ function addRandomLines(scene: Scene, count: number)
     }
 }
 
-export function setScene(scene: Scene)
+function randomScene(scene: Scene)
 {
     let previousTime = performance.now()
-        addGrid(scene);
-        addAxis(scene);
-        LOG(`Grid - Axis ${(performance.now() - previousTime).toFixed(3)} ms`);
+    addRandomCubes(scene, 250);
+    LOG(`Random cubes ${(performance.now() - previousTime).toFixed(3)} ms`);
+    
+    previousTime = performance.now()
+    addRandomtriangles(scene, 250);
+    LOG(`Random triangles ${(performance.now() - previousTime).toFixed(3)} ms`);
+    previousTime = performance.now()
+    addRandomLines(scene, 10);
+    LOG(`Random Lines ${(performance.now() - previousTime).toFixed(3)} ms`);
+}
 
-        previousTime = performance.now()
-        addRandomCubes(scene, 250);
-        LOG(`Random cubes ${(performance.now() - previousTime).toFixed(3)} ms`);
-        
-        previousTime = performance.now()
-        addRandomtriangles(scene, 250);
-        LOG(`Random triangles ${(performance.now() - previousTime).toFixed(3)} ms`);
+export function setScene(scene: Scene)
+{
+    addGrid(scene);
+    addAxis(scene);
 
-        previousTime = performance.now()
-        addRandomLines(scene, 10);
-        LOG(`Random Lines ${(performance.now() - previousTime).toFixed(3)} ms`);
+    //randomScene(scene);
 
-        addControllable(scene);
+    addControllable(scene);
 }
