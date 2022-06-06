@@ -185,5 +185,26 @@ class Cube extends CompoundShape
     }
 }
 
+class Sphere extends CompoundShape
+{
+  public constructor(options: Options = {})
+  {
+    let radius: number = options.base || 1;
+    let color: number[] = options.color || [1, 1, 1];
+    super(options.texturePath);
+
+    for (let i = 0; i < 128; i++)
+    {
+      this.vertices.push(
+        radius * Math.cos(i * Math.PI / 12),
+        radius * Math.sin(i * Math.PI / 12),
+        0,
+        color[0], color[1], color[2],
+        1 / 24 * i,
+        0.0);
+    }
+  }
+}
+
 export { Renderable } from "./renderable";
-export { Line, Triangle, Quad, Cube };
+export { Line, Triangle, Quad, Cube, Sphere };

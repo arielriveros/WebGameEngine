@@ -11,6 +11,7 @@ export interface Options
     height?: number,
     base?: number,
     color?: number[],
+    radius?: number,
     texturePath?: string
 }
 
