@@ -1,6 +1,8 @@
+import { DirectionalLight } from "core";
 import { Matrix4x4, Vector2, Vector3 } from "math";
 import { Camera } from "src/core/world/camera";
 import { Renderable } from "../graphics/renderable";
+import { gl } from "../render";
 import { Shader } from "../shaders/shader";
 
 export class Pipeline
@@ -8,7 +10,7 @@ export class Pipeline
     private _name: string;
     private _shader: Shader;
     private _camera: Camera | null;
-    private _directionalLight: Vector3 | null;
+    private _directionalLight: DirectionalLight | null;
     private _renderables!: Renderable[];
 
     /**
@@ -31,8 +33,8 @@ export class Pipeline
     public get camera(): Camera | null { return this._camera; }
     public set camera(value: Camera | null) { this._camera = value; }
 
-    public get directionalLight(): Vector3 | null { return this._directionalLight; }
-    public set directionalLight(value: Vector3 | null) { this._directionalLight = value; }
+    public get directionalLight(): DirectionalLight | null { return this._directionalLight; }
+    public set directionalLight(value: DirectionalLight | null) { this._directionalLight = value; }
 
     public get shader(): Shader { return this._shader; }
     public set shader(value: Shader) { this._shader = value; }
@@ -117,9 +119,15 @@ export class Pipeline
             if(this._directionalLight)
             {
                 this.shader.setUniform(
+                    'u_lightIntensity',
+                    'float',
+                    this._directionalLight.intensity
+                    )
+                this.shader.setUniform(
                     'u_lightDirection',
                     '3fv',
-                    this._directionalLight.toFloat32Array())
+                    this._directionalLight.forward.toFloat32Array())
+                
             }
             renderable.draw();
         }

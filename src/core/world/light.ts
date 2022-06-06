@@ -11,12 +11,15 @@ abstract class Light extends Entity {
         this._color = color;
         this._intensity = intensity;
     }   
+
+    public get intensity(): number { return this._intensity; }
+    public set intensity(intensity: number) { this._intensity = intensity; }
 }
 
 class DirectionalLight extends Light {
 
-    public constructor(name: string) {
-        super(name);
+    public constructor(name: string, color: number[] = [1, 1, 1], intensity: number = 1) {
+        super(name, color, intensity);
     }
 
     public get direction(): Vector3 { return this.forward; }

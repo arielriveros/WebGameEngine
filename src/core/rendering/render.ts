@@ -47,7 +47,7 @@ class Render
         pipelineManager.setCamera(this._camera);
         this._scene = scene;
         this._scene.initialize();
-        pipelineManager.setDirectionalLight(this._scene.directionalLight.forward);
+        pipelineManager.setDirectionalLight(this._scene.directionalLight);
         this.resize();
     }
 

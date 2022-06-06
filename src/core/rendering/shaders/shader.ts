@@ -98,40 +98,43 @@ export abstract class Shader {
         return gl.getUniformLocation(this._program, uniform);
     }
 
-    public setUniform(uniform: string, type: string, value: Int32Array | Float32Array): void
+    public setUniform(uniform: string, type: string, value: Int32Array | Float32Array | number): void
     {
         let location: WebGLUniformLocation | null = this.getUniformLocation(uniform);
         switch(type)
         {
+            case "float":
+                gl.uniform1f(location, value as number);
+                break;
             case "1fv":
-                gl.uniform1fv(location, value);
+                gl.uniform1fv(location, value as Float32Array);
                 break;
             case "2fv":
-                gl.uniform2fv(location, value);
+                gl.uniform2fv(location, value as Float32Array);
                 break;
             case "3fv":
-                gl.uniform3fv(location, value);
+                gl.uniform3fv(location, value as Float32Array);
                 break;
             case "4fv":
-                gl.uniform4fv(location, value);
+                gl.uniform4fv(location, value as Float32Array);
                 break;
             case "1iv":
-                gl.uniform1iv(location, value);
+                gl.uniform1iv(location, value as Int32Array);
                 break;
             case "2iv":
-                gl.uniform2iv(location, value);
+                gl.uniform2iv(location, value as Int32Array);
                 break;
             case "3iv":
-                gl.uniform3iv(location, value);
+                gl.uniform3iv(location, value as Int32Array);
                 break;
             case "4iv":
-                gl.uniform4iv(location, value);
+                gl.uniform4iv(location, value as Int32Array);
                 break;
             case "Matrix3fv":
-                gl.uniformMatrix3fv(location, false, value);
+                gl.uniformMatrix3fv(location, false, value as Float32Array);
                 break;
             case "Matrix4fv":
-                gl.uniformMatrix4fv(location, false, value);
+                gl.uniformMatrix4fv(location, false, value as Float32Array);
                 break;
             default:
                 LOG(`Uniform type ${type} not supported.`, 'error', true);

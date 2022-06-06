@@ -16,7 +16,7 @@ export class Game extends GameBase
         this.camera = perspectiveCamera;
         this.scene = new Scene();
 
-        this.directionalLight = new DirectionalLight('directional-light');
+        this.directionalLight = new DirectionalLight('directional-light', [1, 1, 1], 1);
         this.scene.directionalLight = this.directionalLight;
     }
 
