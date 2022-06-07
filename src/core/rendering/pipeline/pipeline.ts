@@ -2,7 +2,6 @@ import { DirectionalLight } from "core";
 import { Matrix4x4, Vector2, Vector3 } from "math";
 import { Camera } from "src/core/world/camera";
 import { Renderable } from "../graphics/renderable";
-import { gl } from "../render";
 import { Shader } from "../shaders/shader";
 
 export class Pipeline

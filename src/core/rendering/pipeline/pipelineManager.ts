@@ -1,5 +1,4 @@
 import { DirectionalLight } from "core";
-import { Vector3 } from "math";
 import { Camera } from "src/core/world/camera";
 import { Renderable } from "../graphics/renderable";
 import { Shader } from "../shaders/shader";

@@ -2,8 +2,6 @@ import { GLArrayBuffer, AttributeInformation } from "../gl/arrayBuffer";
 import { GLElementArrayBuffer } from "../gl/elementArrayBuffer";
 import { Shader } from "../shaders/shader";
 import { Matrix4x4 } from "math";
-import { Texture } from "./texture";
-import { gl } from "../render";
 import { randomNumber } from "math";
 
 export interface Options

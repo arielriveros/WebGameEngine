@@ -1,4 +1,3 @@
-import { Vector3 } from "math";
 import { Entity } from "./entity";
 import { DirectionalLight, Light } from "./light";
 import { ObjectEntity } from "./objectEntity";
