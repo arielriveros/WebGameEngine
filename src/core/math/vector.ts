@@ -64,6 +64,14 @@ export class Vector2
         }
     }
 
+    public multiply(v: number): void
+    {
+        for (const i in this._data)
+        {
+            this._data[i] * v;
+        }
+    }
+
     public opposite(): void
     {
         for (const i in this._data)
@@ -75,6 +83,7 @@ export class Vector2
 
 export class Vector3 extends Vector2
 {
+    
     public constructor(x: number = 0, y: number = 0, z: number = 0)
     {
         super(x, y);
