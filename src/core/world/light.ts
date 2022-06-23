@@ -22,7 +22,7 @@ class DirectionalLight extends Light {
         super(name, color, intensity);
     }
 
-    public get direction(): Vector3 { return this.forward; }
+    public get direction(): Vector3 { return this.getForward(); }
 }
 
 export { Light, DirectionalLight };

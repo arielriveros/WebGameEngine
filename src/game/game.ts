@@ -132,7 +132,7 @@ export class Game extends GameBase
                 //LOG(`(${c.getWorldPosition().x.toFixed(2)}, ${c.getWorldPosition().y.toFixed(2)}, ${c.getWorldPosition().z.toFixed(2)})
                 //LOG(`(${c.position.x.toFixed(2)}, ${c.position.y.toFixed(2)}, ${c.position.z.toFixed(2)})
                 //     (${c.rotation.pitch.toFixed(2)}, ${c.rotation.yaw.toFixed(2)}, ${c.rotation.roll.toFixed(2)})`);
-                LOG(`(${c.forward.x.toFixed(2)}, ${c.forward.y.toFixed(2)}, ${c.forward.z.toFixed(2)})`);
+                LOG(`(${c.getForward().x.toFixed(2)}, ${c.getForward().y.toFixed(2)}, ${c.getForward().z.toFixed(2)})`);
             }
         }
         if(input.isKeyDown('KeyR'))

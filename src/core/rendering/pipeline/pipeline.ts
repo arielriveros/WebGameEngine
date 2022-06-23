@@ -125,7 +125,7 @@ export class Pipeline
                 this.shader.setUniform(
                     'u_lightDirection',
                     '3fv',
-                    this._directionalLight.forward.toFloat32Array())
+                    this._directionalLight.direction.toFloat32Array())
                 
             }
             renderable.draw();

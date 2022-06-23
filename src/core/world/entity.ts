@@ -4,7 +4,6 @@ import { Component } from "./components/component";
 export abstract class Entity {
     private _name: string;
     private _transform: Transform;
-    private _forward: Vector3;
 
     private _components: Component[];
 
@@ -17,7 +16,6 @@ export abstract class Entity {
             this._name = name;
             this._transform = new Transform(position, rotation, scale);
             this._components = [];
-            this._forward = new Vector3(0, 0, 1);
             this.transform();
         }
 
@@ -81,19 +79,35 @@ export abstract class Entity {
     public set scale(scale: Vector3) { this._transform.scale = scale; }
 
     public get worldMatrix(): Matrix4x4 { return this._transform.matrix; }
-    public get forward(): Vector3 { 
+
+    public getForward(): Vector3
+    { 
         let x: number =  Math.cos(this._transform.rotation.getRadiansPitch()) * Math.sin(this._transform.rotation.getRadiansYaw());
         let y: number = -Math.sin(this._transform.rotation.getRadiansPitch());
         let z: number =  Math.cos(this._transform.rotation.getRadiansPitch()) * Math.cos(this._transform.rotation.getRadiansYaw());
-        //return this._forward; 
+        return new Vector3(x, y, z);
+    }
+
+    public getRight(): Vector3
+    {
+        let x: number = Math.cos(this._transform.rotation.getRadiansYaw());
+        let y: number = 0;
+        let z: number = -Math.sin(this._transform.rotation.getRadiansYaw());
         return new Vector3(x, y, z);
     }
 
     public moveForward(distance: number): void
     {
-        this._transform.position.x += this.forward.x * distance;
-        this._transform.position.y += this.forward.y * distance;
-        this._transform.position.z += this.forward.z * distance;
+        this._transform.position.x += this.getForward().x * distance;
+        this._transform.position.y += this.getForward().y * distance;
+        this._transform.position.z += this.getForward().z * distance;
+    }
+
+    public moveRight(distance: number): void
+    {
+        this._transform.position.x += this.getRight().y * distance;
+        this._transform.position.y += this.getRight().z * distance;
+        this._transform.position.z += this.getRight().x * distance;
     }
 
     public move(delta: Vector3): void
