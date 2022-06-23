@@ -89,6 +89,13 @@ export abstract class Entity {
         return new Vector3(x, y, z);
     }
 
+    public moveForward(distance: number): void
+    {
+        this._transform.position.x += this.forward.x * distance;
+        this._transform.position.y += this.forward.y * distance;
+        this._transform.position.z += this.forward.z * distance;
+    }
+
     public move(delta: Vector3): void
     {
         this._transform.position.add(delta);
