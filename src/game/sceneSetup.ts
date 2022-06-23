@@ -115,7 +115,9 @@ function addControllable(scene: Scene)
         new Vector3(1, 1, 1),
         new Shapes.Cube( {base: 1.5, texturePath: 'assets/textures/dirt_cube.png',} )
     )
-    controllableEntity.addComponent(new RenderableComponent('renderable-component', new Shapes.Line({color: [0.5, 0, 0]})));
+    let forwardLine = new RenderableComponent('renderable-component', 
+        new Shapes.Line({color: [0.5, 0, 0]}, new Vector3(), new Vector3(0, 0, 1) ));
+    controllableEntity.addComponent(forwardLine);
     scene.addEntity(controllableEntity);
 }
 
