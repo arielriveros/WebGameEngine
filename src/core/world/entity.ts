@@ -81,7 +81,13 @@ export abstract class Entity {
     public set scale(scale: Vector3) { this._transform.scale = scale; }
 
     public get worldMatrix(): Matrix4x4 { return this._transform.matrix; }
-    public get forward(): Vector3 { return this._forward; }
+    public get forward(): Vector3 { 
+        let x: number =  Math.cos(this._transform.rotation.getRadiansPitch()) * Math.sin(this._transform.rotation.getRadiansYaw());
+        let y: number = -Math.sin(this._transform.rotation.getRadiansPitch());
+        let z: number =  Math.cos(this._transform.rotation.getRadiansPitch()) * Math.cos(this._transform.rotation.getRadiansYaw());
+        //return this._forward; 
+        return new Vector3(x, y, z);
+    }
 
     public move(delta: Vector3): void
     {
@@ -112,7 +118,8 @@ export abstract class Entity {
     public transform(): void
     {
         this._transform.applyTransform();
-        this._transform.applyToVector(this._forward);
+        //this._transform.rotation.rotateVector3(this._forward);
+        //this._transform.applyToVector(this._forward);
     }
 
     public initialize(): void { }

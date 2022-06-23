@@ -31,4 +31,19 @@ export class Rotator {
     public toVector3(): Vector3 {
         return new Vector3(this._pitch * PI_180, this._yaw * PI_180, this._roll * PI_180);
     }
+
+    public rotateVector3(out: Vector3): Vector3 {
+        const pitch = this._pitch * PI_180;
+        const yaw = this._yaw * PI_180;
+        const roll = this._roll * PI_180;
+        
+    //   (  cos(y) cos(z) | -sin(z) | sin(y) cos(z)
+    //      cos(x) cos(y) sin(z) + sin(x) sin(y) | cos(x) cos(z) | cos(x) sin(y) sin(z) - sin(x) cos(y)
+    //      sin(x) cos(y) sin(z) - cos(x) sin(y) | sin(x) cos(z) | sin(x) sin(y) sin(z) + cos(x) cos(y))
+        out.x = Math.cos(yaw) * Math.cos(roll) * out.x + Math.cos(pitch) * Math.sin(roll) * out.y + Math.sin(pitch) * Math.sin(yaw) * out.z;
+        out.y = Math.cos(pitch) * Math.cos(yaw) * out.y + Math.cos(roll) * Math.sin(yaw) * out.z + Math.sin(roll) * Math.sin(pitch) * out.x;
+        out.z = Math.cos(roll) * Math.sin(pitch) * out.y - Math.sin(roll) * Math.cos(pitch) * out.x + Math.cos(roll) * Math.cos(pitch) * out.z;
+        return out;
+    }
+
 }
