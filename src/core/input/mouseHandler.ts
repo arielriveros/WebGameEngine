@@ -1,10 +1,10 @@
 import { MouseMapping } from "./inputMaps";
-import { Vector2 } from "math";
+import { Vector } from "math";
 
 export class MouseHandler
 {
-    private static _mousePosition: Vector2 = new Vector2();
-    private static _mouseSpeed: Vector2 = new Vector2();
+    private static _mousePosition: Vector = new Vector();
+    private static _mouseSpeed: Vector = new Vector();
 
     private static _pressedButtons: boolean[];
 
@@ -16,8 +16,8 @@ export class MouseHandler
         MouseHandler._pressedButtons = Array(5).fill(false);
     }
     
-    public static get mousePosition(): Vector2 { return MouseHandler._mousePosition; }
-    public static get mouseSpeed(): Vector2 { return MouseHandler._mouseSpeed; }
+    public static get mousePosition(): Vector { return MouseHandler._mousePosition; }
+    public static get mouseSpeed(): Vector { return MouseHandler._mouseSpeed; }
         
     public static onButtonDown(button: number): void
     {

@@ -1,4 +1,4 @@
-import { Vector2 } from "math";
+import { Vector } from "math";
 import { LOG } from "utils";
 import { KeyHandler } from "./keyHandler";
 import { MouseHandler } from "./mouseHandler";
@@ -70,11 +70,11 @@ export class InputManager {
         return KeyHandler.isKeyDown(code);
     }
 
-    public getMousePosition(): Vector2 {
+    public getMousePosition(): Vector {
         return MouseHandler.mousePosition;
     }   
 
-    public getMouseSpeed(): Vector2 {
+    public getMouseSpeed(): Vector {
         return MouseHandler.mouseSpeed;
     }
 

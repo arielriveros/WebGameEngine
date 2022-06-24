@@ -1,5 +1,5 @@
 import { Rotator } from './rotator';
-import { Vector2, Vector3, Vector4 } from './vector'
+import { Vector3, Vector4 } from './vector'
 
 export class Matrix4x4 {
     
