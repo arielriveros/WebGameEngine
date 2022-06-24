@@ -72,11 +72,13 @@ export class Game extends GameBase
         
         if(input.isKeyDown('KeyA'))
         {
-            this.scene.getEntity('controllable')?.rotate(  new Rotator(0, 2, 0));
+            this.scene.getEntity('controllable')?.moveRight(-0.02);
+            
         }
         if(input.isKeyDown('KeyD'))
         {
-            this.scene.getEntity('controllable')?.rotate( new Rotator(0, -2, 0));
+            this.scene.getEntity('controllable')?.moveRight(0.02);
+            
         }
         if(input.isKeyDown('KeyW'))
         {
@@ -88,19 +90,21 @@ export class Game extends GameBase
         }
         if(input.isKeyDown('KeyE'))
         {
-            this.scene.getEntity('controllable')?.rotate( new Rotator(-2, 0, 0));
+            this.scene.getEntity('controllable')?.rotate( new Rotator(0, -2, 0));
+            
         }
         if(input.isKeyDown('KeyQ'))
         {
-            this.scene.getEntity('controllable')?.rotate(  new Rotator(2, 0, 0));
+            this.scene.getEntity('controllable')?.rotate(  new Rotator(0, 2, 0));
         }
         if(input.isKeyDown('Digit5'))
         {
-            this.scene.getEntity('controllable')?.rotate(  new Rotator(0, 0, 2));
+            this.scene.getEntity('controllable')?.rotate( new Rotator(-2, 0, 0));
         }
+
         if(input.isKeyDown('Digit6'))
         {
-            this.scene.getEntity('controllable')?.rotate( new Rotator(0, 0, -2));
+            this.scene.getEntity('controllable')?.rotate(  new Rotator(2, 0, 0));
         }
 
         if(input.isKeyDown('Space'))

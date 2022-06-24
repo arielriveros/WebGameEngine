@@ -90,9 +90,9 @@ export abstract class Entity {
 
     public getRight(): Vector3
     {
-        let x: number = Math.cos(this._transform.rotation.getRadiansYaw());
+        let x: number = -Math.cos(this._transform.rotation.getRadiansYaw());
         let y: number = 0;
-        let z: number = -Math.sin(this._transform.rotation.getRadiansYaw());
+        let z: number = Math.sin(this._transform.rotation.getRadiansYaw());
         return new Vector3(x, y, z);
     }
 
@@ -105,9 +105,9 @@ export abstract class Entity {
 
     public moveRight(distance: number): void
     {
-        this._transform.position.x += this.getRight().y * distance;
-        this._transform.position.y += this.getRight().z * distance;
-        this._transform.position.z += this.getRight().x * distance;
+        this._transform.position.x += this.getRight().x * distance;
+        this._transform.position.y += this.getRight().y * distance;
+        this._transform.position.z += this.getRight().z * distance;
     }
 
     public move(delta: Vector3): void
