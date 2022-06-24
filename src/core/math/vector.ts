@@ -1,4 +1,4 @@
-export class Vector2
+export class Vector
 {
     protected _data: number[];
 
@@ -56,32 +56,38 @@ export class Vector2
         return out;
     }
 
-    public add(v: Vector3): void
+    public add(v: Vector): Vector
     {
         for (const i in this._data)
         {
             this._data[i] += v._data[i];
         }
+
+        return this;
     }
 
-    public multiply(v: number): void
+    public multiply(v: number): Vector
     {
         for (const i in this._data)
         {
             this._data[i] * v;
         }
+
+        return this;
     }
 
-    public opposite(): void
+    public opposite(): Vector
     {
         for (const i in this._data)
         {
             this._data[i] = -this._data[i];
         }
+
+        return this;
     }
 }
 
-export class Vector3 extends Vector2
+export class Vector3 extends Vector
 {
     
     public constructor(x: number = 0, y: number = 0, z: number = 0)
