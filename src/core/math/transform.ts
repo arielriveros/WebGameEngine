@@ -60,4 +60,19 @@ export class Transform
         Matrix4x4.multiplyVector(out, this.matrix, out);
         return out;
     }
+
+    public getForward(): Vector3
+    { 
+        let x: number =  Math.cos(this.rotation.getRadiansPitch()) * Math.sin(this.rotation.getRadiansYaw());
+        let y: number = -Math.sin(this.rotation.getRadiansPitch());
+        let z: number =  Math.cos(this.rotation.getRadiansPitch()) * Math.cos(this.rotation.getRadiansYaw());
+        return new Vector3(x, y, z);
+    }
+
+    public getRight(): Vector3
+    {
+        let x: number = -Math.cos(this.rotation.getRadiansYaw());
+        let z: number = Math.sin(this.rotation.getRadiansYaw());
+        return new Vector3(x, 0, z);
+    }
 }

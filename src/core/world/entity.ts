@@ -78,22 +78,25 @@ export abstract class Entity {
      */
     public set scale(scale: Vector3) { this._transform.scale = scale; }
 
+    /**
+     * Gets the transform matrix of the object.
+     */
     public get worldMatrix(): Matrix4x4 { return this._transform.matrix; }
 
+    /**
+     * Gets the forward vector of the object calculated in its transform.
+    */
     public getForward(): Vector3
     { 
-        let x: number =  Math.cos(this._transform.rotation.getRadiansPitch()) * Math.sin(this._transform.rotation.getRadiansYaw());
-        let y: number = -Math.sin(this._transform.rotation.getRadiansPitch());
-        let z: number =  Math.cos(this._transform.rotation.getRadiansPitch()) * Math.cos(this._transform.rotation.getRadiansYaw());
-        return new Vector3(x, y, z);
+        return this._transform.getForward();
     }
 
+    /**
+     * Gets the right vector of the object calculated in its transform.
+    */
     public getRight(): Vector3
     {
-        let x: number = -Math.cos(this._transform.rotation.getRadiansYaw());
-        let y: number = 0;
-        let z: number = Math.sin(this._transform.rotation.getRadiansYaw());
-        return new Vector3(x, y, z);
+        return this._transform.getRight();
     }
 
     public moveForward(distance: number): void
