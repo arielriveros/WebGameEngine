@@ -101,16 +101,12 @@ export abstract class Entity {
 
     public moveForward(distance: number): void
     {
-        this._transform.position.x += this.getForward().x * distance;
-        this._transform.position.y += this.getForward().y * distance;
-        this._transform.position.z += this.getForward().z * distance;
+        this._transform.position.add(new Vector3(this.getForward().x * distance, this.getForward().y * distance, this.getForward().z * distance));
     }
 
     public moveRight(distance: number): void
     {
-        this._transform.position.x += this.getRight().x * distance;
-        this._transform.position.y += this.getRight().y * distance;
-        this._transform.position.z += this.getRight().z * distance;
+        this._transform.position.add(new Vector3(this.getRight().x * distance, this.getRight().y * distance, this.getRight().z * distance));
     }
 
     public move(delta: Vector3): void
