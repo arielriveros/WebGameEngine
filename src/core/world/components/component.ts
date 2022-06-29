@@ -27,7 +27,7 @@ export abstract class Component
     /**
      * Runs every frame.
      */
-    public update(): void  { }
+    public update(delta: number = 0): void  { }
     /**
      * Deletes the component.
      */

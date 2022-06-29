@@ -147,12 +147,12 @@ export abstract class Entity {
     /**
      * Runs every frame.
      */
-    public update(): void
+    public update(delta: number = 0): void
     {
         this.transform();
         for(let component of this._components)
         {
-            component.update();
+            component.update(delta);
         }
     }
 

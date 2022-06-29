@@ -35,8 +35,9 @@ export class RigidBody extends Component
     public get isKinematic(): boolean { return this._isKinematic; }
     public set isKinematic(value: boolean) { this._isKinematic = value; }
 
-    public override update(): void {
+    public override update(delta: number): void {
         if (this._isKinematic) {
+            console.log(delta);
             console.log("Kinematic");
         }
     }

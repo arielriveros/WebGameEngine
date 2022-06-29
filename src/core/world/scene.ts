@@ -80,10 +80,10 @@ export class Scene
     /**
      * Runs every frame.
      */
-    public update(): void {
+    public update(delta: number = 0): void {
         for (const e of this._objects)
         {
-            e.update(); // Each entity updates itself every frame.
+            e.update(delta); // Each entity updates itself every frame.
         }
     }
 }

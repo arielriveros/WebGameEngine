@@ -73,7 +73,7 @@ export class Engine{
 
         this._game.inputListen(this._input);
         this._game.onUpdate();
-        this._scene.update();
+        this._scene.update(this._performance.time);
         this._render.update();
         requestAnimationFrame(this.loop.bind( this ));
     }
