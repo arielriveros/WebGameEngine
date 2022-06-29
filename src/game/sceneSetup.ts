@@ -1,5 +1,6 @@
 import { ObjectEntity, Scene, Shapes } from "core";
 import { randomNumber, Rotator, Vector3 } from "math";
+import { RigidBody } from "../core/world/components/rigidBody";
 import { LOG } from "utils";
 import { RenderableComponent } from "../core/world/components/renderableComponent";
 
@@ -114,6 +115,7 @@ function addControllable(scene: Scene)
         new Rotator(),
         new Vector3(1, 1, 1),
         new Shapes.Cube( {base: 1.5, texturePath: 'assets/textures/dirt_cube.png',} )
+        //new Shapes.Sphere( {radius: 1.5, color:[1,1,1],texturePath: 'assets/textures/dirt_cube.png',} )
     )
     let forwardLine = new RenderableComponent('renderable-component', 
         new Shapes.Line({color: [0.5, 0, 0]}, new Vector3(), new Vector3(0, 0, 1) ));
@@ -165,12 +167,27 @@ function randomScene(scene: Scene)
     LOG(`Random Lines ${(performance.now() - previousTime).toFixed(3)} ms`);
 }
 
+function simpleScene( scene: Scene )
+{
+    let cube = new Shapes.Cube({color: [1, 0, 1]} );
+    let cubeEntity = new ObjectEntity(
+        'Rigid-Entity',
+        new Vector3(0, 1, 0),
+        new Rotator(),
+        new Vector3(1, 1, 1),
+        cube
+    );
+    cubeEntity.addComponent(new RigidBody());
+    scene.addEntity(cubeEntity);
+}
+
 export function setScene(scene: Scene)
 {
     addGrid(scene);
     addAxis(scene);
 
     //randomScene(scene);
+    simpleScene(scene);
 
     addControllable(scene);
 }

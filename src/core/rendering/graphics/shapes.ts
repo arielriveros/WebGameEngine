@@ -1,4 +1,4 @@
-import { Vector3 } from "math";
+import { PI, Vector3 } from "math";
 import { CompoundShape } from "./compoundShape";
 import { Options } from "./renderable";
 import { SimpleShape } from "./simpleShape";
@@ -185,7 +185,7 @@ class Cube extends CompoundShape
     }
 }
 
-class Sphere extends CompoundShape
+/* class Sphere extends CompoundShape
 {
   public constructor(options: Options = {})
   {
@@ -203,6 +203,63 @@ class Sphere extends CompoundShape
         1 / 24 * i,
         0.0);
     }
+  }
+} */
+
+class Sphere extends CompoundShape
+{
+  public constructor(options: Options = {})
+  {
+    let radius: number = options.base || 1;
+    let color: number[] = options.color || [1, 1, 1];
+    super(options.texturePath);
+
+    let i: number, j: number;
+    let lats = 40;
+    let longs = 40;
+    let indicator = 0;
+    for(i = 0; i <= lats; i++)
+    {
+       let lat0 = PI * (-0.5 + (i - 1) / lats);
+       let z0  = Math.sin(lat0);
+       let zr0 =  Math.cos(lat0);
+
+       let lat1 = PI * (-0.5 + i / lats);
+       let z1 = Math.sin(lat1);
+       let zr1 = Math.cos(lat1);
+
+      for(j = 0; j <= longs; j++) {
+        let lng = 2 * PI * (j - 1) / longs;
+        let x = Math.cos(lng);
+        let y = Math.sin(lng);
+        this.vertices.push(x * zr0);
+        this.vertices.push(y * zr0);
+        this.vertices.push(z0);
+        this.vertices.push(color[0]);
+        this.vertices.push(color[1]);
+        this.vertices.push(color[2]);
+        this.vertices.push(0);
+        this.vertices.push(1);
+        this.indices?.push(indicator);
+        indicator++;
+        this.vertices.push(x * zr1);
+        this.vertices.push(y * zr1);
+        this.vertices.push(z1);
+        this.vertices.push(color[0]);
+        this.vertices.push(color[1]);
+        this.vertices.push(color[2]);
+        this.vertices.push(1);
+        this.vertices.push(1);
+        this.indices?.push(indicator);
+        indicator++;
+
+        this.normals?.push(x * zr0);
+        this.normals?.push(y * zr0);
+        this.normals?.push(z0);
+       }
+       this.indices?.push(0);
+   }
+
   }
 }
 
