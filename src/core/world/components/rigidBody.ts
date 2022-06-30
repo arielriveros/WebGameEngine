@@ -42,7 +42,7 @@ export class RigidBody extends Component
         this._enableGravity = value;
         if(this._enableGravity)
         {
-            this._acceleration.y += -0.098;
+            this._acceleration.y += -0.005;
         }
     }
 
@@ -50,11 +50,12 @@ export class RigidBody extends Component
 
         if (this._isKinematic) {
             let time: number = delta / 1000; // seconds
-            // pos_f = pos_i + vel_i * time + 0.5 * a * time * time
-            let dA = this._acceleration.multiply(time * time * 0.5) as Vector3;
-            let dV = new Vector3(this._velocity.x * time, this._velocity.y * time, this._velocity.z * time);
+            // let dA = this._acceleration.multiply(time * time * 0.5) as Vector3;
+            this.velocity.add(this._acceleration.clone().multiply(time));
+            this.entity.position.add(this.velocity.clone().multiply(time));
+            /* let dV = new Vector3(this._velocity.x * time, this._velocity.y * time, this._velocity.z * time);
             let dP = new Vector3(dV.x + dA.x, dV.y + dA.y, dV.z + dA.z);
-            this.entity.position.add(dP);
+            this.entity.position.add(dP); */
         }
     }
 

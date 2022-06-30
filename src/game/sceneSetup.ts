@@ -167,11 +167,12 @@ function randomScene(scene: Scene)
     LOG(`Random Lines ${(performance.now() - previousTime).toFixed(3)} ms`);
 }
 
-function simpleScene( scene: Scene )
+function physicsScene( scene: Scene )
 {
     for(let i = 0; i < 1000; i++)
     {
-        let cube = new Shapes.Cube({texturePath: "assets/textures/roma.png"} );
+        //let cube = new Shapes.Cube({texturePath: "assets/textures/roma.png"} );
+        let cube = new Shapes.Cube({color: [randomNumber(1), randomNumber(1), randomNumber(1)]} );
         let cubeEntity = new ObjectEntity(
         'Rigid-Entity',
         new Vector3(randomNumber(10, -10), randomNumber(1000), randomNumber(10, -10)),
@@ -192,7 +193,7 @@ export function setScene(scene: Scene)
     addAxis(scene);
 
     //randomScene(scene);
-    simpleScene(scene);
+    physicsScene(scene);
 
     addControllable(scene);
 }
