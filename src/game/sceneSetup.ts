@@ -169,16 +169,21 @@ function randomScene(scene: Scene)
 
 function simpleScene( scene: Scene )
 {
-    let cube = new Shapes.Cube({color: [1, 0, 1]} );
-    let cubeEntity = new ObjectEntity(
+    for(let i = 0; i < 1000; i++)
+    {
+        let cube = new Shapes.Cube({texturePath: "assets/textures/roma.png"} );
+        let cubeEntity = new ObjectEntity(
         'Rigid-Entity',
-        new Vector3(0, 1, 0),
-        new Rotator(),
+        new Vector3(randomNumber(10, -10), randomNumber(1000), randomNumber(10, -10)),
+        new Rotator(randomNumber(360), randomNumber(360), randomNumber(360)),
         new Vector3(1, 1, 1),
         cube
-    );
-    cubeEntity.addComponent(new RigidBody());
-    scene.addEntity(cubeEntity);
+        );
+        let rigidBody = new RigidBody();
+        rigidBody.enableGravity = true;
+        cubeEntity.addComponent(rigidBody);
+        scene.addEntity(cubeEntity);
+    }
 }
 
 export function setScene(scene: Scene)
