@@ -2,17 +2,24 @@ import { Entity } from "./entity";
 import { DirectionalLight, Light } from "./light";
 import { ObjectEntity } from "./objectEntity";
 
+interface SceneSettings
+{
+    kill_y: number
+}
+
 export class Scene
 {
     private _objects: Entity[];
     private _directionalLight!: DirectionalLight ;
-
+    
+    private _settings: SceneSettings;
     /**
      * A Scene object is a collection of Entities that handles inner functionalities for each entity in a scene.
      */
-    public constructor()
+    public constructor(settings = {'kill_y': -10})
     {
         this._objects = [];
+        this._settings = settings;
     }
 
     public get entities() { return this._objects; }
@@ -84,6 +91,11 @@ export class Scene
         for (const e of this._objects)
         {
             e.update(delta); // Each entity updates itself every frame.
+            if(e.position.y < this._settings.kill_y)
+            {
+                e.delete();
+                this._objects.splice(this._objects.indexOf(e), 1);
+            }
         }
     }
 }
