@@ -42,7 +42,7 @@ export class RigidBody extends Component
         this._enableGravity = value;
         if(this._enableGravity)
         {
-            this._acceleration.y += -0.0098;
+            this._acceleration.y += -9.8;
         }
     }
 
@@ -51,18 +51,14 @@ export class RigidBody extends Component
         if (this._isKinematic) {
             let time: number = delta / 1000; // seconds
 
-            // pf = pi + vf * dt
-            this.entity.position.add(this.velocity.clone().multiply(time));
-
-            let friction: number = -0.05;
-            let frictionVector: Vector3 = new Vector3(this._velocity.x * friction, this._velocity.y * friction, this._velocity.z * friction);
-            //let frictionVector: Vector3 = this._velocity.clone().multiply(friction) as Vector3;
+            let friction: number = -0.01;
+            let frictionVector: Vector3 = (this._velocity.clone()).scale(friction);
 
             // vf = vi + a * dt - friction * vi
-            this.velocity.add(this._acceleration.clone().multiply(time));
-            this.velocity.add(frictionVector);
+            this.velocity.add(this._acceleration.clone().scale(time).clone().add(frictionVector));
 
-            
+            // pf = pi + vf * dt
+            this.entity.position.add(this.velocity.clone().scale(time));
         }
     }
 
