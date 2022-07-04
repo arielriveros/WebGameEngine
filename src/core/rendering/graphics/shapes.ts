@@ -264,4 +264,5 @@ class Sphere extends CompoundShape
 }
 
 export { Renderable } from "./renderable";
+export { Skybox } from "./skybox";
 export { Line, Triangle, Quad, Cube, Sphere };

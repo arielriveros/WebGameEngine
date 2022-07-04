@@ -172,6 +172,6 @@ export class SkyboxShader extends Shader
 {
     public constructor()
     {
-        super('textured.vs.glsl', 'textured.fs.glsl')
+        super('skybox.vs.glsl', 'skybox.fs.glsl')
     }
 }

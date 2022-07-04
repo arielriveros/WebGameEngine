@@ -187,10 +187,27 @@ function physicsScene( scene: Scene )
     }
 }
 
+function addSkybox(scene: Scene)
+{
+    scene.addEntity(
+        new ObjectEntity(
+            'Skybox',
+            new Vector3(),
+            new Rotator(),
+            new Vector3(1, 1, 1),
+            new Shapes.Skybox( 
+                ['assets/textures/sky_right.png', 'assets/textures/sky_left.png', 'assets/textures/sky_top.png',
+                 'assets/textures/sky_bottom.png','assets/textures/sky_back.png', 'assets/textures/sky_front.png'
+            ])
+        )
+    )
+}
+
 export function setScene(scene: Scene)
 {
     addGrid(scene);
     addAxis(scene);
+    addSkybox(scene);
 
     //randomScene(scene);
     physicsScene(scene);

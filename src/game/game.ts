@@ -31,7 +31,7 @@ export class Game extends GameBase
     }
 
     public override onUpdate(): void {
-        this.directionalLight.rotate(new Rotator(1, 1, 1));
+        //this.directionalLight.rotate(new Rotator(1, 1, 1));
     }
 
     public override inputListen(input: InputManager): void
