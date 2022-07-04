@@ -30,6 +30,7 @@ class Render
         this.initializeContext(elementID);
         pipelineManager.addPipeline("simple", new Shaders.SimpleShader());
         pipelineManager.addPipeline("textured", new Shaders.TextureShader());
+        pipelineManager.addPipeline("skybox", new Shaders.SkyboxShader());
     }
 
     public get canvas(): HTMLCanvasElement { return this._canvas; }
