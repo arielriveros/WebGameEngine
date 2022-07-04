@@ -107,19 +107,19 @@ class Render
         
         this._canvas = canvas;
 
-        if (!this._canvas.getContext("webgl"))
+        if (!this._canvas.getContext("webgl2"))
         {
             LOG("Cannot initialize WebGL by the browser", 'error', true);
         }
 
         // gets webGL context object from the canvas and stores it in _context
-        gl = this._canvas.getContext("webgl") as WebGLRenderingContext; 
+        gl = this._canvas.getContext("webgl2") as WebGLRenderingContext; 
         // Dark gray initial color
         gl.clearColor(0.05, 0.05, 0.05, 1.0);
         gl.enable(gl.DEPTH_TEST);
-        gl.enable(gl.CULL_FACE);
-        gl.frontFace(gl.CCW);
-        gl.cullFace(gl.BACK);
+        //gl.enable(gl.CULL_FACE);
+        //gl.frontFace(gl.CCW);
+        //gl.cullFace(gl.BACK);
         // gl.cullFace(gl.FRONT);
     }
 }
