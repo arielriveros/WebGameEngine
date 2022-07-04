@@ -14,7 +14,7 @@ export class Skybox extends Renderable
       super("skybox");
       this._cubemap = new Cubemap(texturePaths);
 
-      let base: number = 1000;
+      let base: number = 10000;
       const l2 = base/2;
       this.indices = [
           // Top

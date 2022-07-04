@@ -6,12 +6,12 @@ import { setScene } from './sceneSetup';
 
 export class Game extends GameBase
 {
-    private _cameraOptions = {cameraSpeed: 0.1, cameraRotationScale: 1.5};
+    private _cameraOptions = {cameraSpeed: 0.8, cameraRotationScale: 1.5};
     private directionalLight!: DirectionalLight;
 
     public override setUp(): void
     {
-        let perspectiveCamera = new PerspectiveCamera({position: new Vector3(-10, 10, 10), fovy: 1.2});
+        let perspectiveCamera = new PerspectiveCamera({position: new Vector3(-10, 10, 10), fovy: 1.2, far: 10000});
         let orthographicCamera = new OrthographicCamera({position: new Vector3(-1, 1, 2), left: -3, right: 3, bottom: -3, top: 3, near: 0.01, far: 100});
         this.camera = perspectiveCamera;
         this.scene = new Scene();
