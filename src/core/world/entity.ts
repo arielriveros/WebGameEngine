@@ -91,6 +91,11 @@ export abstract class Entity {
         return this._transform.getForward();
     }
 
+    public getWorldForward(): Vector3
+    {
+        return this._transform.getWorldForward();
+    }
+
     /**
      * Gets the right vector of the object calculated in its transform.
     */

@@ -2,6 +2,7 @@ import { Matrix4x4, Rotator, Vector3 } from "math";
 
 export class Transform
 {
+
     private _position: Vector3;
     private _rotation: Rotator;
     private _scale: Vector3;
@@ -56,7 +57,7 @@ export class Transform
         let pos = this._position.clone();
         out.x = pos.x;
         out.y = pos.y;
-        out.z = pos.z + 1; 
+        out.z = pos.z; 
         Matrix4x4.multiplyVector(out, this.matrix, out);
         return out;
     }
@@ -67,6 +68,13 @@ export class Transform
         let y: number = -Math.sin(this.rotation.getRadiansPitch());
         let z: number =  Math.cos(this.rotation.getRadiansPitch()) * Math.cos(this.rotation.getRadiansYaw());
         return new Vector3(x, y, z);
+    }
+
+    public getWorldForward(): Vector3 {
+        let out: Vector3 = this.getForward().clone();
+        this.applyToVector(out);
+        //Matrix4x4.multiplyVector(out, this.matrix, out);
+        return out;
     }
 
     public getRight(): Vector3
