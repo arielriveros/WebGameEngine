@@ -19,7 +19,6 @@ export class Cubemap{
         if(this._imagesPaths){
             for(let i = 0; i < this._imagesPaths.length; i++)
             {
-                console.log(this._imagesPaths[i]);
                 this._images[i] = await Loader.loadImage(this._imagesPaths[i]);
             }
         }
