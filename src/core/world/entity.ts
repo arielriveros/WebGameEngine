@@ -22,6 +22,10 @@ export abstract class Entity {
     public get name(): string { return this._name; }
     public set name(value: string) { this._name = value; }
 
+    /**
+     * Adds a component to the entity.
+     * @param component Component to add.
+     */
     public addComponent(component: Component): void
     {
         component.entity = this;
@@ -29,6 +33,11 @@ export abstract class Entity {
         this._components.push(component);
     }
 
+    /**
+     * Gets a component of the entity.
+     * @param name Name of the component to get.
+     * @returns the component with the given name, null if it doesn't exist.
+     */
     public getComponent(name: string): Component | null
     {
         for(let component of this._components)
@@ -41,6 +50,10 @@ export abstract class Entity {
         return null;
     }
 
+    /**
+     * Removes a component from the entity.
+     * @param name Name of the component to remove.
+     */
     public removeComponent(name: string): void
     {
         const component = this.getComponent(name);
@@ -91,6 +104,9 @@ export abstract class Entity {
         return this._transform.getForward();
     }
 
+    /**
+     * Gets the forward vector translated into world space.
+     */
     public getWorldForward(): Vector3
     {
         return this._transform.getWorldForward();
@@ -104,34 +120,54 @@ export abstract class Entity {
         return this._transform.getRight();
     }
 
+    /**
+     * Moves the object towards the forward vector.
+     * @param distance Distance to move.
+     */
     public moveForward(distance: number): void
     {
         this._transform.position.add(new Vector3(this.getForward().x * distance, this.getForward().y * distance, this.getForward().z * distance));
     }
 
+    /**
+     * Moves the object towards the right vector.
+     * @param distance Distance to move.
+     */
     public moveRight(distance: number): void
     {
         this._transform.position.add(new Vector3(this.getRight().x * distance, this.getRight().y * distance, this.getRight().z * distance));
     }
 
+    /**
+     * Translates the object by a given vector.
+     * @param delta Position to translate.
+     */
     public move(delta: Vector3): void
     {
         this._transform.position.add(delta);
-        this.transform();
     }
 
+    /**
+     * Rotates the object by a given rotator.
+     * @param delta Rotation to translate.
+     */
     public rotate(delta: Rotator): void
     {
         this._transform.rotation.add(delta);
-        this.transform();
     }
 
+    /**
+     * Rescales the object by a given vector.
+     * @param delta Vector to upscale or downscale.
+     */
     public rescale(delta: Vector3): void
     {
         this._transform.scale.add(delta);
-        this.transform();
     }
 
+    /**
+     * Deletes all components of the entity.
+     */
     public delete(): void
     {
         for(let component of this._components)
@@ -140,11 +176,12 @@ export abstract class Entity {
         }
     }
 
+    /**
+     * Applies the transform of the object.
+     */
     public transform(): void
     {
         this._transform.applyTransform();
-        //this._transform.rotation.rotateVector3(this._forward);
-        //this._transform.applyToVector(this._forward);
     }
 
     public initialize(): void { }
@@ -159,11 +196,5 @@ export abstract class Entity {
         {
             component.update(delta);
         }
-    }
-
-
-    public getWorldPosition(): Vector3
-    {
-        return this._transform.position;
     }
 }

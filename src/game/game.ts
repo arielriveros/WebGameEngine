@@ -6,13 +6,13 @@ import { setScene } from './sceneSetup';
 
 export class Game extends GameBase
 {
-    private _cameraOptions = {cameraSpeed: 0.8, cameraRotationScale: 1.5};
+    private _cameraOptions = {cameraSpeed: 0.35, cameraRotationScale: 1.5};
     private directionalLight!: DirectionalLight;
 
     public override setUp(): void
     {
-        let perspectiveCamera = new PerspectiveCamera({position: new Vector3(-10, 10, 10), fovy: 1.2, far: 10000});
-        let orthographicCamera = new OrthographicCamera({position: new Vector3(-1, 1, 2), left: -3, right: 3, bottom: -3, top: 3, near: 0.01, far: 100});
+        let perspectiveCamera = new PerspectiveCamera({position: new Vector3(-10, 5, 10), rotation: new Rotator(0, 135, 0), fovy: 1.2, far: 10000});
+        let orthographicCamera = new OrthographicCamera({position: new Vector3(-1, 1, 2), rotation: new Rotator(0, 135, 0), left: -3, right: 3, bottom: -3, top: 3, near: 0.01, far: 100});
         this.camera = perspectiveCamera;
         this.scene = new Scene();
 
@@ -23,62 +23,39 @@ export class Game extends GameBase
     public override start(): void
     {
         setScene(this.scene);
-
-        let c = this.scene.getEntity('controllable');
-        if(c){
-            this.camera.follow(c);
-        }
     }
 
     public override onUpdate(): void {
-        //this.directionalLight.rotate(new Rotator(1, 1, 1));
+        this.directionalLight.rotate(new Rotator(0.5, 0, 0));
     }
 
     public override inputListen(input: InputManager): void
     {
         
-        if(input.isKeyDown('Numpad4'))
+        if(input.isKeyDown('ArrowUp'))
         {
-            this.camera.move(new Vector3(-this._cameraOptions.cameraSpeed, 0));
+            this.camera.moveForward(this._cameraOptions.cameraSpeed);
         }
-        if(input.isKeyDown('Numpad6'))
+        if(input.isKeyDown('ArrowDown'))
         {
-            this.camera.move(new Vector3(this._cameraOptions.cameraSpeed, 0, 0));
+            this.camera.moveForward(-this._cameraOptions.cameraSpeed);
         }
-        if(input.isKeyDown('Numpad8'))
+        if(input.isKeyDown('ArrowLeft'))
         {
-            this.camera.move(new Vector3(0, this._cameraOptions.cameraSpeed, 0));
+            this.camera.moveRight(-this._cameraOptions.cameraSpeed);
         }
-        if(input.isKeyDown('Numpad2'))
+        if(input.isKeyDown('ArrowRight'))
         {
-            this.camera.move(new Vector3(0, -this._cameraOptions.cameraSpeed, 0));
+            this.camera.moveRight(this._cameraOptions.cameraSpeed);
         }
-        if(input.isKeyDown('Numpad1'))
-        {
-            this.camera.move(new Vector3(0, 0, this._cameraOptions.cameraSpeed));
-        }
-        if(input.isKeyDown('Numpad3'))
-        {
-            this.camera.move(new Vector3(0, 0, -this._cameraOptions.cameraSpeed));
-        }
-        if(input.isKeyDown('Numpad7'))
-        {
-            this.camera.rotate(new Rotator(0, this._cameraOptions.cameraSpeed * 10, 0));
-        }
-        if(input.isKeyDown('Numpad9'))
-        {
-            this.camera.rotate(new Rotator(0, -this._cameraOptions.cameraSpeed * 10, 0));
-        }
-        
+
         if(input.isKeyDown('KeyA'))
         {
             this.scene.getEntity('controllable')?.moveRight(-0.02);
-            
         }
         if(input.isKeyDown('KeyD'))
         {
             this.scene.getEntity('controllable')?.moveRight(0.02);
-            
         }
         if(input.isKeyDown('KeyW'))
         {
@@ -113,7 +90,6 @@ export class Game extends GameBase
             if(c)
             {
                 this.camera.position = new Vector3(c.position.x, c.position.y + 1, c.position.z + 2);
-                this.camera.follow(c);
             }
         }
 
@@ -129,14 +105,15 @@ export class Game extends GameBase
 
         if(input.isKeyDown('KeyX'))
         {
-            let c = this.scene.getEntity('controllable');
-            //let c = this.camera;
+            //let c = this.scene.getEntity('controllable');
+            let c = this.camera;
             if(c)
             {
                 //LOG(`(${c.getWorldPosition().x.toFixed(2)}, ${c.getWorldPosition().y.toFixed(2)}, ${c.getWorldPosition().z.toFixed(2)})
                 //LOG(`(${c.position.x.toFixed(2)}, ${c.position.y.toFixed(2)}, ${c.position.z.toFixed(2)})
                 //     (${c.rotation.pitch.toFixed(2)}, ${c.rotation.yaw.toFixed(2)}, ${c.rotation.roll.toFixed(2)})`);
-                LOG(`(${c.getForward().x.toFixed(2)}, ${c.getForward().y.toFixed(2)}, ${c.getForward().z.toFixed(2)})`);
+                //LOG(`(${c.getForward().x.toFixed(2)}, ${c.getForward().y.toFixed(2)}, ${c.getForward().z.toFixed(2)})`);
+                LOG(`(${c.getWorldForward().x.toFixed(2)}, ${c.getWorldForward().y.toFixed(2)}, ${c.getWorldForward().z.toFixed(2)})`);
             }
         }
         if(input.isKeyDown('KeyR'))
@@ -153,9 +130,9 @@ export class Game extends GameBase
             let scale = this._cameraOptions.cameraRotationScale;
             this.camera.rotate( 
                 new Rotator(
-                    0, 
-                    input.getMouseSpeed().x * scale, 
-                    0, 
+                    input.getMouseSpeed().y * scale, 
+                    -input.getMouseSpeed().x * scale, 
+                    0
                 ) 
             );
         }
