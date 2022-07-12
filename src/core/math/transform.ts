@@ -55,9 +55,7 @@ export class Transform
 
     public applyToVector(out: Vector3): Vector3 {
         let pos = this._position.clone();
-        out.x = pos.x;
-        out.y = pos.y;
-        out.z = pos.z; 
+        out.add(pos)
         Matrix4x4.multiplyVector(out, this.matrix, out);
         return out;
     }
@@ -72,8 +70,7 @@ export class Transform
 
     public getWorldForward(): Vector3 {
         let out: Vector3 = this.getForward().clone();
-        this.applyToVector(out);
-        //Matrix4x4.multiplyVector(out, this.matrix, out);
+        out.add(this.position);
         return out;
     }
 
