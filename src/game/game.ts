@@ -6,7 +6,7 @@ import { setScene } from './sceneSetup';
 
 export class Game extends GameBase
 {
-    private _cameraOptions = {cameraSpeed: 0.35, cameraRotationScale: 1.5};
+    private _cameraOptions = {cameraSpeed: 0.15, cameraRotationScale: 1.5};
     private directionalLight!: DirectionalLight;
 
     public override setUp(): void
@@ -25,54 +25,54 @@ export class Game extends GameBase
         setScene(this.scene);
     }
 
-    public override onUpdate(): void {
+    public override onUpdate(delta: number): void {
         this.directionalLight.rotate(new Rotator(0.5, 0, 0));
     }
 
-    public override inputListen(input: InputManager): void
+    public override inputListen(input: InputManager, delta: number): void
     {
         
         if(input.isKeyDown('ArrowUp'))
         {
-            this.camera.moveForward(this._cameraOptions.cameraSpeed);
+            this.camera.moveForward(this._cameraOptions.cameraSpeed * delta / 10);
         }
         if(input.isKeyDown('ArrowDown'))
         {
-            this.camera.moveForward(-this._cameraOptions.cameraSpeed);
+            this.camera.moveForward(-this._cameraOptions.cameraSpeed * delta / 10);
         }
         if(input.isKeyDown('ArrowLeft'))
         {
-            this.camera.moveRight(-this._cameraOptions.cameraSpeed);
+            this.camera.moveRight(-this._cameraOptions.cameraSpeed * delta / 10);
         }
         if(input.isKeyDown('ArrowRight'))
         {
-            this.camera.moveRight(this._cameraOptions.cameraSpeed);
+            this.camera.moveRight(this._cameraOptions.cameraSpeed * delta / 10);
         }
 
         if(input.isKeyDown('KeyA'))
         {
-            this.scene.getEntity('controllable')?.moveRight(-0.02);
+            this.scene.getEntity('controllable')?.moveRight(-0.02 * delta / 10);
         }
         if(input.isKeyDown('KeyD'))
         {
-            this.scene.getEntity('controllable')?.moveRight(0.02);
+            this.scene.getEntity('controllable')?.moveRight(0.02 * delta / 10);
         }
         if(input.isKeyDown('KeyW'))
         {
-            this.scene.getEntity('controllable')?.moveForward(0.02);
+            this.scene.getEntity('controllable')?.moveForward(0.02 * delta / 10);
         }
         if(input.isKeyDown('KeyS'))
         {
-            this.scene.getEntity('controllable')?.moveForward(-0.02);
+            this.scene.getEntity('controllable')?.moveForward(-0.02 * delta / 10);
         }
         if(input.isKeyDown('KeyE'))
         {
-            this.scene.getEntity('controllable')?.rotate( new Rotator(0, -2, 0));
+            this.scene.getEntity('controllable')?.rotate( new Rotator(0, -2 * delta / 25, 0));
             
         }
         if(input.isKeyDown('KeyQ'))
         {
-            this.scene.getEntity('controllable')?.rotate(  new Rotator(0, 2, 0));
+            this.scene.getEntity('controllable')?.rotate(  new Rotator(0, 2 * delta / 25, 0));
         }
         if(input.isKeyDown('Digit5'))
         {

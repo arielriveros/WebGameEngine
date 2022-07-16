@@ -12,6 +12,6 @@ export abstract class GameBase{
     public set scene(scene: Scene) { this._scene = scene; }
     public setUp(): void { }
     public start(): void { }
-    public inputListen(input: InputManager): void { }
-    public onUpdate(): void { }
+    public inputListen(input: InputManager, delta: number): void { }
+    public onUpdate(delta: number): void { }
 }

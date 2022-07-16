@@ -77,9 +77,9 @@ export class Engine{
         }
         // END DEBUG
 
-        this._game.inputListen(this._input);
+        this._game.inputListen(this._input, this._performance.time);
         collisionManager.update();
-        this._game.onUpdate();
+        this._game.onUpdate(this._performance.time);
         this._scene.update(this._performance.time);
         this._render.update();
         requestAnimationFrame(this.loop.bind( this ));
