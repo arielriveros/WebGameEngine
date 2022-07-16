@@ -2,7 +2,13 @@ import { Game } from '../game/game';
 import { InputManager } from './input/manager';
 import { Render } from './rendering/render';
 import { LOG, Performance } from 'utils';
+import { CollisionManager } from './physics/collisionManager';
 import { Scene } from './world/scene';
+
+/* GLOBAL COLLISION MANAGER
+    SHOULD CHANGE LATER FOR BETTER IMPLEMENTATION
+*/
+export let collisionManager: CollisionManager = new CollisionManager();
 
 /**
  *  Main Engine Class 
@@ -72,6 +78,7 @@ export class Engine{
         // END DEBUG
 
         this._game.inputListen(this._input);
+        collisionManager.update();
         this._game.onUpdate();
         this._scene.update(this._performance.time);
         this._render.update();

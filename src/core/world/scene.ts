@@ -82,7 +82,12 @@ export class Scene
     /**
      * Initialization function for the scene.
      */
-    public initialize(): void { }
+    public initialize(): void {
+        for (const e of this._objects)
+        {
+            e.initialize();
+        }
+    }
 
     /**
      * Runs every frame.

@@ -91,6 +91,8 @@ export abstract class Entity {
      */
     public set scale(scale: Vector3) { this._transform.scale = scale; }
 
+    public get transformStruct(): Transform { return this._transform; }
+
     /**
      * Gets the transform matrix of the object.
      */

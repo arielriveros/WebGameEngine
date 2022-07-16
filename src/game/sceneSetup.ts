@@ -120,6 +120,10 @@ function addControllable(scene: Scene)
     let forwardLine = new RenderableComponent('renderable-component', 
         new Shapes.Line({color: [0.5, 0, 0]}, new Vector3(), new Vector3(0, 0, 1) ));
     controllableEntity.addComponent(forwardLine);
+
+    let rigidBody = new RigidBody();
+    rigidBody.enableGravity = false;
+    controllableEntity.addComponent(rigidBody);
     scene.addEntity(controllableEntity);
 }
 
@@ -169,13 +173,14 @@ function randomScene(scene: Scene)
 
 function physicsScene( scene: Scene )
 {
-    for(let i = 0; i < 1000; i++)
+    let amount: number = 100;
+    for(let i = 0; i < amount; i++)
     {
         //let cube = new Shapes.Cube({texturePath: "assets/textures/roma.png"} );
         let cube = new Shapes.Cube({color: [randomNumber(1), randomNumber(1), randomNumber(1)]} );
         let cubeEntity = new ObjectEntity(
         'Rigid-Entity',
-        new Vector3(randomNumber(10, -10), randomNumber(1000), randomNumber(10, -10)),
+        new Vector3(randomNumber(10, -10), randomNumber(amount), randomNumber(10, -10)),
         new Rotator(randomNumber(360), randomNumber(360), randomNumber(360)),
         new Vector3(1, 1, 1),
         cube
@@ -185,6 +190,23 @@ function physicsScene( scene: Scene )
         cubeEntity.addComponent(rigidBody);
         scene.addEntity(cubeEntity);
     }
+}
+
+function simpleScene( scene:Scene)
+{
+    let cube = new Shapes.Cube({color: [randomNumber(1), randomNumber(1), randomNumber(1)]} );
+    let cubeEntity = new ObjectEntity(
+        'Rigid-Entity',
+        new Vector3(0, 0, 0),
+        new Rotator(0, 0, 0),
+        new Vector3(1, 1, 1),
+        cube
+    );
+    let rigidBody = new RigidBody();
+    rigidBody.enableGravity = false;
+    cubeEntity.addComponent(rigidBody);
+    rigidBody.registerCollision();
+    scene.addEntity(cubeEntity);
 }
 
 function addSkybox(scene: Scene)
@@ -210,7 +232,8 @@ export function setScene(scene: Scene)
     addSkybox(scene);
 
     //randomScene(scene);
-    physicsScene(scene);
+    //physicsScene(scene);
+    simpleScene(scene);
 
     addControllable(scene);
 }

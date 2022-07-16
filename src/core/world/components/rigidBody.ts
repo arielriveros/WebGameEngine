@@ -1,4 +1,7 @@
+import { collisionManager } from "../../engine";
 import { Vector3 } from "math";
+import { AxisAlignedBouningBox } from "../../physics/axisAlignedBoundingBox";
+import { CollisionShape } from "../../physics/collisionShape";
 import { Component } from "./component";
 
 export class RigidBody extends Component
@@ -9,6 +12,7 @@ export class RigidBody extends Component
     private _force: Vector3;
     private _isKinematic: boolean;
     private _enableGravity: boolean;
+    private _collision!: CollisionShape;
 
     public constructor()
     {
@@ -19,6 +23,14 @@ export class RigidBody extends Component
         this._force = new Vector3(0, 0, 0);
         this._isKinematic = true;
         this._enableGravity = false;
+    }
+
+    public registerCollision(): void
+    {
+        let collisionShape: CollisionShape = new AxisAlignedBouningBox(this.entity.transformStruct, 1, 1, 1)
+        this._collision = collisionShape;
+
+        collisionManager.addCollisionShape(this._collision);
     }
 
     public get mass(): number { return this._mass; }
@@ -46,7 +58,13 @@ export class RigidBody extends Component
         }
     }
 
+    public override initialize(): void {
+        this.registerCollision();
+    }
+
     public override update(delta: number): void {
+
+        this._collision.transform = this.entity.transformStruct;
 
         if (this._isKinematic) {
             let time: number = delta / 1000; // seconds
@@ -60,6 +78,10 @@ export class RigidBody extends Component
             // pf = pi + vf * dt
             this.entity.position.add(this.velocity.clone().scale(time));
         }
+    }
+
+    public override delete(): void {
+        collisionManager.removeCollisionShape(this._collision);
     }
 
 }
