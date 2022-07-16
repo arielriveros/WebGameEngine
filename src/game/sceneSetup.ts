@@ -194,19 +194,24 @@ function physicsScene( scene: Scene )
 
 function simpleScene( scene:Scene)
 {
-    let cube = new Shapes.Cube({color: [randomNumber(1), randomNumber(1), randomNumber(1)]} );
-    let cubeEntity = new ObjectEntity(
-        'Rigid-Entity',
-        new Vector3(0, 0, 0),
-        new Rotator(0, 0, 0),
-        new Vector3(1, 1, 1),
-        cube
-    );
-    let rigidBody = new RigidBody();
-    rigidBody.enableGravity = false;
-    cubeEntity.addComponent(rigidBody);
-    rigidBody.registerCollision();
-    scene.addEntity(cubeEntity);
+    for(let i = -10; i < 10; i+=5)
+    {
+        for(let j = -10; j < 10; j+=5)
+        {
+            let cube = new Shapes.Cube({color: [randomNumber(1), randomNumber(1), randomNumber(1)]} );
+            let cubeEntity = new ObjectEntity(
+                `Rigid-Entity=${i}`,
+                new Vector3(i, 0, j),
+                new Rotator(0, 0, 0),
+                new Vector3(1, 1, 1),
+                cube
+            );
+            let rigidBody = new RigidBody();
+            rigidBody.enableGravity = false;
+            cubeEntity.addComponent(rigidBody);
+            scene.addEntity(cubeEntity);
+        }
+    }
 }
 
 function addSkybox(scene: Scene)

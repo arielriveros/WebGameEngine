@@ -25,7 +25,7 @@ export class RigidBody extends Component
         this._enableGravity = false;
     }
 
-    public registerCollision(): void
+    private registerCollision(): void
     {
         let collisionShape: CollisionShape = new AxisAlignedBouningBox(this.entity.transformStruct, 1, 1, 1)
         this._collision = collisionShape;
@@ -58,14 +58,13 @@ export class RigidBody extends Component
         }
     }
 
-    public override initialize(): void {
+    public override initialize(): void
+    {
         this.registerCollision();
     }
 
-    public override update(delta: number): void {
-
-        this._collision.transform = this.entity.transformStruct;
-
+    public override update(delta: number): void
+    {
         if (this._isKinematic) {
             let time: number = delta / 1000; // seconds
 

@@ -1,3 +1,4 @@
+import { LOG } from "../utilities/logger";
 import { CollisionShape } from "./collisionShape";
 
 export class CollisionManager
@@ -28,8 +29,7 @@ export class CollisionManager
             {
                 if(coll1.collides(coll2) && coll1 !== coll2)
                 {
-                    console.log(`1: ${coll1.position} ; 2: ${coll2.position}`);
-                    //console.log("Collision");
+                    LOG(`Collision detected at ${coll1.position}`);
                 }
             }
         }
