@@ -50,13 +50,25 @@ export class Loader
         }
     }
 
-    public static loadJSONMesh(path: string): GeometryParameters
+    public static loadJSONMesh(path: string): GeometryParameters[]
     {
         let json = Loader.loadJSON(path);
-        let vertices = json.meshes[0].vertices;
-        let indices = [].concat.apply([], json.meshes[0].faces);
-        let normals = json.meshes[0].normals;
-        let uvs = json.meshes[0].texturecoords[0];
-        return { vertices, indices, normals, uvs };
+        let meshes: GeometryParameters[] = [];
+        for (let mesh of json.meshes) {
+            let vertices = mesh.vertices;
+            let indices = [].concat.apply([], mesh.faces);
+            let normals = null;
+            if(mesh.normals)
+            {
+                normals = mesh.normals;
+            }
+            let uvs = null;
+            if(mesh.texturecoords)
+            {
+                uvs = mesh.texturecoords[0];
+            }
+            meshes.push({ vertices, indices, normals, uvs });
+        }
+        return meshes;
     }
 }
