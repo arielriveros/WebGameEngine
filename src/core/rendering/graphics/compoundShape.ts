@@ -39,7 +39,7 @@ export class CompoundShape extends Renderable
             this._colorBuffer.upload();
         }
 
-        
+        this._texture.load();
         if(this._uvs)
         {
             this._uvBuffer = new GLArrayBuffer(2, gl.FLOAT, gl.TRIANGLES);
@@ -52,7 +52,6 @@ export class CompoundShape extends Renderable
             this._uvBuffer.pushData(this._uvs);
             this._uvBuffer.upload();
         }
-        this._texture.load();
 
         if(this._normals)
         {
@@ -80,8 +79,8 @@ export class CompoundShape extends Renderable
      */
      public override draw(): void
      {
-        this._vertexBuffer.bind();
-        this._texture.bind();
+         this._vertexBuffer.bind();
+         this._texture.bind();
         if(this.normals) { this._normalBuffer.bind(); }
         if(this.colors) { this._colorBuffer.bind(); }
         if(this.uvs) { this._uvBuffer.bind(); }

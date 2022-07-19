@@ -16,6 +16,7 @@ export class Mesh extends CompoundShape
         this.vertices = geometry.vertices;
         this.indices = geometry.indices;
         this.normals = geometry.normals;
+        this.colors = geometry.vertices.map((v, i) => { return 1; });
         this.uvs = geometry.uvs;
     }
 }

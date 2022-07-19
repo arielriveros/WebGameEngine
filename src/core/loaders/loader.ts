@@ -56,7 +56,7 @@ export class Loader
         let vertices = json.meshes[0].vertices;
         let indices = [].concat.apply([], json.meshes[0].faces);
         let normals = json.meshes[0].normals;
-        let uvs = json.meshes[0].texturecoords;
+        let uvs = json.meshes[0].texturecoords[0];
         return { vertices, indices, normals, uvs };
     }
 }

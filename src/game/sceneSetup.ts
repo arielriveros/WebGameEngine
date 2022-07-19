@@ -3,6 +3,8 @@ import { randomNumber, Rotator, Vector3 } from "math";
 import { RigidBody } from "../core/world/components/rigidBody";
 import { LOG } from "utils";
 import { RenderableComponent } from "../core/world/components/renderableComponent";
+import { Mesh } from "../core/rendering/graphics/mesh";
+import { Loader } from "../core/loaders/loader";
 
 
 function addGrid(scene: Scene, size: number = 10)
@@ -214,6 +216,23 @@ function simpleScene( scene:Scene)
     }
 }
 
+function houseScene(scene: Scene)
+{
+    let modelGeometry = Loader.loadJSONMesh('assets/models/cottage.json');
+    let house = new Mesh(modelGeometry, 'assets/textures/cottage_diffuse.png');
+    let houseEntity = new ObjectEntity(
+        'House',
+        new Vector3(0, 1, 0),
+        new Rotator(-90, 0, 0),
+        new Vector3(3, 3, 1),
+        house
+    );
+    let rigidBody = new RigidBody();
+    rigidBody.enableGravity = false;
+    houseEntity.addComponent(rigidBody);
+    scene.addEntity(houseEntity);
+}
+
 function addSkybox(scene: Scene)
 {
     scene.addEntity(
@@ -237,8 +256,9 @@ export function setScene(scene: Scene)
     addSkybox(scene);
 
     //randomScene(scene);
-    physicsScene(scene);
-    simpleScene(scene);
+    //physicsScene(scene);
+    //simpleScene(scene);
+    houseScene(scene);
 
     addControllable(scene);
 }
