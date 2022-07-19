@@ -25,13 +25,6 @@ export class RigidBody extends Component
         this._enableGravity = false;
     }
 
-    private registerCollision(): void
-    {
-        let collisionShape: CollisionShape = new AxisAlignedBouningBox(this.entity.transformStruct, 1, 1, 1)
-        this._collision = collisionShape;
-
-        collisionManager.addCollisionShape(this._collision);
-    }
 
     public get mass(): number { return this._mass; }
     public set mass(value: number) { this._mass = value; }
@@ -58,24 +51,37 @@ export class RigidBody extends Component
         }
     }
 
+    private registerCollision(): void
+    {
+        let collisionShape: CollisionShape = new AxisAlignedBouningBox(this.entity.transformStruct, 1, 1, 1)
+        this._collision = collisionShape;
+
+        collisionManager.addCollisionShape(this._collision);
+    }
+
     public override initialize(): void
     {
         this.registerCollision();
+    }
+
+    public setParentPosition(time: number): void
+    {
+        let friction: number = -0.01;
+        let frictionVector: Vector3 = (this._velocity.clone()).scale(friction);
+
+        // vf = vi + a * dt - friction * vi
+        this.velocity.add(this._acceleration.clone().scale(time).clone().add(frictionVector));
+
+        // pf = pi + vf * dt
+        this.entity.position.add(this.velocity.clone().scale(time));
     }
 
     public override update(delta: number): void
     {
         if (this._isKinematic) {
             let time: number = delta / 1000; // seconds
-
-            let friction: number = -0.01;
-            let frictionVector: Vector3 = (this._velocity.clone()).scale(friction);
-
-            // vf = vi + a * dt - friction * vi
-            this.velocity.add(this._acceleration.clone().scale(time).clone().add(frictionVector));
-
-            // pf = pi + vf * dt
-            this.entity.position.add(this.velocity.clone().scale(time));
+            this.setParentPosition(time);
+            
         }
     }
 
