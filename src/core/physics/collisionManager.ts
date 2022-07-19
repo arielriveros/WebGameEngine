@@ -29,7 +29,7 @@ export class CollisionManager
             {
                 if(coll1.collides(coll2) && coll1 !== coll2)
                 {
-                    LOG(`Collision detected at ${coll1.position}`);
+                    //LOG(`Collision detected at ${coll1.position}`);
                 }
             }
         }
