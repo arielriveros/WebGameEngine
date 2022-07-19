@@ -1,3 +1,4 @@
+import { Loader } from "../../loaders/loader";
 import { LOG } from "utils";
 import { gl } from "../render";
 
@@ -26,23 +27,9 @@ export abstract class Shader {
         this._program = this.createProgram(vertexShader, fragmentShader);
     }
 
-    private getSourceSync(url: string) {
-        let xhr = new XMLHttpRequest();
-        xhr.open("GET", url, false);
-        xhr.send(null);
-
-        if (xhr.status == 200) {
-            return xhr.responseText
-        }
-        else {
-            LOG("Error loading source shader file", "error", true);
-            return;
-        }
-      }; 
-
     private loadSource(sourceUrl: string, type: number): WebGLShader
     {
-        let source = this.getSourceSync(`./shaders/${sourceUrl}`);
+        let source = Loader.loadText(`./shaders/${sourceUrl}`);
         let shader: WebGLShader|null = gl.createShader(type);
         if(shader)
         {
