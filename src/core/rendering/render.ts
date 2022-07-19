@@ -66,6 +66,7 @@ class Render
      * Gets called every frame
      */
     public update(): void {
+        this._camera.update();
         this.render();
     }
 

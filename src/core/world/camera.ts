@@ -48,6 +48,20 @@ export abstract class Camera extends Entity
     {
         //this._focalPosition = entity.position;
     }
+
+    public override update(): void
+    {
+        super.update();
+        if(this.transformStruct.rotation.pitch >= 90)
+        {
+            this.transformStruct.rotation.pitch = 89.9999;
+        }
+
+        else if(this.transformStruct.rotation.pitch <= -90)
+        {
+            this.transformStruct.rotation.pitch = -89.9999;
+        }
+    }
     
     public refreshProjection(): void { }
 
