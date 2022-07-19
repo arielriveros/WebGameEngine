@@ -60,7 +60,7 @@ export class Transform
         return out;
     }
 
-    public getForward(): Vector3
+    public get forward(): Vector3
     { 
         let x: number =  Math.cos(this.rotation.getRadiansPitch()) * Math.sin(this.rotation.getRadiansYaw());
         let y: number = -Math.sin(this.rotation.getRadiansPitch());
@@ -68,16 +68,24 @@ export class Transform
         return new Vector3(x, y, z);
     }
 
-    public getWorldForward(): Vector3 {
-        let out: Vector3 = this.getForward().clone();
+    public get worldForward(): Vector3 {
+        let out: Vector3 = this.forward.clone();
         out.add(this.position);
         return out;
     }
 
-    public getRight(): Vector3
+    public get right(): Vector3
     {
         let x: number = -Math.cos(this.rotation.getRadiansYaw());
         let z: number = Math.sin(this.rotation.getRadiansYaw());
         return new Vector3(x, 0, z);
+    }
+
+    public get up(): Vector3
+    {
+        let x: number = Math.sin(this.rotation.getRadiansYaw()) * Math.cos(this.rotation.getRadiansPitch());
+        let y: number = Math.cos(this.rotation.getRadiansPitch());
+        let z: number = Math.sin(this.rotation.getRadiansYaw()) * Math.sin(this.rotation.getRadiansPitch());
+        return new Vector3(x, y, z);
     }
 }

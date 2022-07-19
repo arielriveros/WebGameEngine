@@ -103,7 +103,7 @@ export abstract class Entity {
     */
     public getForward(): Vector3
     { 
-        return this._transform.getForward();
+        return this._transform.forward;
     }
 
     /**
@@ -111,7 +111,7 @@ export abstract class Entity {
      */
     public getWorldForward(): Vector3
     {
-        return this._transform.getWorldForward();
+        return this._transform.worldForward;
     }
 
     /**
@@ -119,7 +119,12 @@ export abstract class Entity {
     */
     public getRight(): Vector3
     {
-        return this._transform.getRight();
+        return this._transform.right;
+    }
+
+    public getUp(): Vector3
+    {
+        return this._transform.up;
     }
 
     /**
@@ -138,6 +143,11 @@ export abstract class Entity {
     public moveRight(distance: number): void
     {
         this._transform.position.add(new Vector3(this.getRight().x * distance, this.getRight().y * distance, this.getRight().z * distance));
+    }
+
+    public moveUp(distance: number): void
+    {
+        this._transform.position.add(new Vector3(this.getUp().x * distance, this.getUp().y * distance, this.getUp().z * distance));
     }
 
     /**
