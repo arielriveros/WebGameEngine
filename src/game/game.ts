@@ -6,7 +6,7 @@ import { setScene } from './sceneSetup';
 
 export class Game extends GameBase
 {
-    private _cameraOptions = {cameraSpeed: 0.15, cameraRotationScale: 1.5};
+    private _cameraOptions = {cameraSpeed: 0.1, cameraRotationScale: 0.75};
     private directionalLight!: DirectionalLight;
 
     public override setUp(): void
@@ -31,24 +31,6 @@ export class Game extends GameBase
 
     public override inputListen(input: InputManager, delta: number): void
     {
-        
-        if(input.isKeyDown('ArrowUp'))
-        {
-            this.camera.moveForward(this._cameraOptions.cameraSpeed * delta / 10);
-        }
-        if(input.isKeyDown('ArrowDown'))
-        {
-            this.camera.moveForward(-this._cameraOptions.cameraSpeed * delta / 10);
-        }
-        if(input.isKeyDown('ArrowLeft'))
-        {
-            this.camera.moveRight(-this._cameraOptions.cameraSpeed * delta / 10);
-        }
-        if(input.isKeyDown('ArrowRight'))
-        {
-            this.camera.moveRight(this._cameraOptions.cameraSpeed * delta / 10);
-        }
-
         if(input.isKeyDown('KeyA'))
         {
             this.scene.getEntity('controllable')?.moveRight(-0.02 * delta / 10);
@@ -125,16 +107,37 @@ export class Game extends GameBase
             }
         }
 
-        if( input.isMouseMoving() && input.isMouseButtonPressed('Left'))
+        if(input.isMouseMoving())
         {
-            let scale = this._cameraOptions.cameraRotationScale;
-            this.camera.rotate( 
-                new Rotator(
-                    input.getMouseSpeed().y * scale, 
-                    -input.getMouseSpeed().x * scale, 
-                    0
-                ) 
-            );
-        }
+            let bothPressed: boolean = input.isMouseButtonPressed('Left') && input.isMouseButtonPressed('Right')
+            if(bothPressed)
+            {
+                let scale = this._cameraOptions.cameraRotationScale;
+                this.camera.moveRight(input.getMouseSpeed().x * scale / 10);
+                this.camera.moveUp(-input.getMouseSpeed().y * scale / 10);
+            }
+            else
+            {
+
+                if(input.isMouseButtonPressed('Left'))
+                {
+                let scale = this._cameraOptions.cameraRotationScale;
+                this.camera.moveRight(input.getMouseSpeed().x * scale / 10);
+                this.camera.moveForward(-input.getMouseSpeed().y * scale / 10);
+            }
+            
+            if(input.isMouseButtonPressed('Right'))
+            {
+                let scale = this._cameraOptions.cameraRotationScale;
+                this.camera.rotate( 
+                    new Rotator(
+                        input.getMouseSpeed().y * scale, 
+                        -input.getMouseSpeed().x * scale, 
+                        0
+                        ) 
+                        );
+                    }
+                }
+            }
     }
 }

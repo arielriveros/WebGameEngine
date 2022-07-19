@@ -232,12 +232,12 @@ function addSkybox(scene: Scene)
 
 export function setScene(scene: Scene)
 {
-    addGrid(scene);
+    addGrid(scene, 100);
     addAxis(scene);
     addSkybox(scene);
 
     //randomScene(scene);
-    //physicsScene(scene);
+    physicsScene(scene);
     simpleScene(scene);
 
     addControllable(scene);
