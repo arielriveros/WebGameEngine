@@ -111,13 +111,14 @@ function addRandomCubes(scene: Scene, count: number)
 
 function addControllable(scene: Scene)
 {
+    let suzanneGeometry = Loader.loadJSONMesh('assets/models/Suzanne.json');
+    let suzanne = new Mesh(suzanneGeometry[0], 'assets/textures/SusanTexture.png');
     let controllableEntity = new ObjectEntity(
         'controllable',
         new Vector3(),
         new Rotator(),
         new Vector3(1, 1, 1),
-        new Shapes.Cube( {base: 1.5, texturePath: 'assets/textures/dirt_cube.png',} )
-        //new Shapes.Sphere( {radius: 1.5, color:[1,1,1],texturePath: 'assets/textures/dirt_cube.png',} )
+        suzanne
     )
     let forwardLine = new RenderableComponent('renderable-component', 
         new Shapes.Line({color: [0.5, 0, 0]}, new Vector3(), new Vector3(0, 0, 1) ));
@@ -218,19 +219,44 @@ function simpleScene( scene:Scene)
 
 function houseScene(scene: Scene)
 {
-    let modelGeometry = Loader.loadJSONMesh('assets/models/cottage.json');
-    let house = new Mesh(modelGeometry, 'assets/textures/cottage_diffuse.png');
-    let houseEntity = new ObjectEntity(
-        'House',
-        new Vector3(0, 1, 0),
+    /* Houses */
+    let houseGeometry = Loader.loadJSONMesh('assets/models/cottage.json');
+    for(let i = -20; i <= 20; i+=20)
+    {
+        for(let j = -20; j <= 20; j+=20)
+        {
+            if(i != 0 || j != 0)
+            {
+                let houseEntity = new ObjectEntity(
+                    'House',
+                    new Vector3(i, 1, j),
+                    new Rotator(-90, 180, 0),
+                    new Vector3(3, 3, 1),
+                    new Mesh(houseGeometry[0], 'assets/textures/cottage_diffuse.png')
+                    );
+                let rigidBody = new RigidBody();
+                houseEntity.addComponent(rigidBody);
+                scene.addEntity(houseEntity);
+            }
+        }
+    }
+
+    /* Well */
+    let wellGeometry = Loader.loadJSONMesh('assets/models/well.json');
+    console.log(wellGeometry);
+
+    /* Ground */
+    let ground = new Shapes.Quad({color: [0.65, 0.88, 0.24], texturePath: 'assets/textures/grass.jpg'});
+    let groundEntity = new ObjectEntity(
+        'Ground',
+        new Vector3(0, 0.05, 0),
         new Rotator(-90, 0, 0),
-        new Vector3(3, 3, 1),
-        house
+        new Vector3(50, 50, 1),
+        ground
     );
-    let rigidBody = new RigidBody();
-    rigidBody.enableGravity = false;
-    houseEntity.addComponent(rigidBody);
-    scene.addEntity(houseEntity);
+    let rigidBodyGround = new RigidBody();
+    groundEntity.addComponent(rigidBodyGround);
+    scene.addEntity(groundEntity);
 }
 
 function addSkybox(scene: Scene)
@@ -251,8 +277,8 @@ function addSkybox(scene: Scene)
 
 export function setScene(scene: Scene)
 {
-    addGrid(scene, 100);
-    addAxis(scene);
+    //addGrid(scene, 100);
+    //addAxis(scene);
     addSkybox(scene);
 
     //randomScene(scene);

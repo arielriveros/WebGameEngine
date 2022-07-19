@@ -12,12 +12,13 @@ export class Game extends GameBase
     public override setUp(): void
     {
         let perspectiveCamera = new PerspectiveCamera({position: new Vector3(-10, 5, 10), rotation: new Rotator(0, 135, 0), fovy: 1.2, far: 10000});
-        let orthographicCamera = new OrthographicCamera({position: new Vector3(-1, 1, 2), rotation: new Rotator(0, 135, 0), left: -3, right: 3, bottom: -3, top: 3, near: 0.01, far: 100});
+        let orthographicCamera = new OrthographicCamera({position: new Vector3(-1, 1, 2), rotation: new Rotator(0, 135, 0), left: -3, right: 3, bottom: -3, top: 3, near: 0.01, far: 10000});
         this.camera = perspectiveCamera;
         this.scene = new Scene();
 
         this.directionalLight = new DirectionalLight('directional-light', [1, 1, 1], 1);
         this.scene.directionalLight = this.directionalLight;
+        this.scene.directionalLight.rotate(new Rotator(-45, -45, 0));
     }
 
     public override start(): void
@@ -26,7 +27,7 @@ export class Game extends GameBase
     }
 
     public override onUpdate(delta: number): void {
-        this.directionalLight.rotate(new Rotator(0.5, 0, 0));
+
     }
 
     public override inputListen(input: InputManager, delta: number): void
@@ -75,29 +76,6 @@ export class Game extends GameBase
             }
         }
 
-        if(input.isKeyDown('KeyY'))
-        {
-            this.scene.getEntity('controllable')?.rescale(new Vector3(0, 0.1, 0));
-        }
-
-        if(input.isKeyDown('KeyT'))
-        {
-            this.scene.getEntity('controllable')?.rescale(new Vector3(0, -0.1, 0));
-        }
-
-        if(input.isKeyDown('KeyX'))
-        {
-            //let c = this.scene.getEntity('controllable');
-            let c = this.camera;
-            if(c)
-            {
-                //LOG(`(${c.getWorldPosition().x.toFixed(2)}, ${c.getWorldPosition().y.toFixed(2)}, ${c.getWorldPosition().z.toFixed(2)})
-                //LOG(`(${c.position.x.toFixed(2)}, ${c.position.y.toFixed(2)}, ${c.position.z.toFixed(2)})
-                //     (${c.rotation.pitch.toFixed(2)}, ${c.rotation.yaw.toFixed(2)}, ${c.rotation.roll.toFixed(2)})`);
-                //LOG(`(${c.getForward().x.toFixed(2)}, ${c.getForward().y.toFixed(2)}, ${c.getForward().z.toFixed(2)})`);
-                LOG(`(${c.getWorldForward().x.toFixed(2)}, ${c.getWorldForward().y.toFixed(2)}, ${c.getWorldForward().z.toFixed(2)})`);
-            }
-        }
         if(input.isKeyDown('KeyR'))
         {
             let c = this.scene.getEntity('controllable');
@@ -105,6 +83,26 @@ export class Game extends GameBase
             {
                 this.scene.removeEntity(c.name);
             }
+        }
+
+        if(input.isKeyDown('ArrowLeft'))
+        {   
+            this.directionalLight.rotate(new Rotator(0, -1, 0));
+        }
+
+        if(input.isKeyDown('ArrowRight'))
+        {   
+            this.directionalLight.rotate(new Rotator(0, 1, 0));
+        }
+
+        if(input.isKeyDown('ArrowUp'))
+        {   
+            this.directionalLight.rotate(new Rotator(-1, 0, 0));
+        }
+
+        if(input.isKeyDown('ArrowDown'))
+        {   
+            this.directionalLight.rotate(new Rotator(1, 0, 0));
         }
 
         if(input.isMouseMoving())
@@ -138,6 +136,6 @@ export class Game extends GameBase
                         );
                     }
                 }
-            }
+        }
     }
 }
