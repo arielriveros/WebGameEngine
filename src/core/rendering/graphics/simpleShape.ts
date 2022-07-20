@@ -5,9 +5,9 @@ import { Shader } from "../shaders/shader";
 import { Renderable } from "./renderable";
 
 export class SimpleShape extends Renderable {
-    public constructor(transform: Transform)
+    public constructor()
     {
-        super(transform, "simple");
+        super("simple");
     }
 
     public override load(shader: Shader): void

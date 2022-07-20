@@ -18,7 +18,7 @@ class Line extends SimpleShape {
         let y_1 = end ? end.y : 0;
         let z_1 = end ? end.z : 0;
 
-        super(transform);
+        super();
         this.vertices = [
         //  X    Y    Z   
             x_0, y_0, z_0,
@@ -26,7 +26,11 @@ class Line extends SimpleShape {
         this.colors = [
             color[0], color[1], color[2],
             color[0], color[1], color[2]];
+        
+        this.transform = transform;
         }
+
+        
 }
 
 class Triangle extends CompoundShape
@@ -40,7 +44,7 @@ class Triangle extends CompoundShape
         let height: number = options.height || base;
         let color: number[] = options.color || [1, 1, 1];
         let transform: Transform = options.transform || new Transform();
-        super(transform, options.texturePath);
+        super(options.texturePath);
         this.vertices = [
         // VERTEX POSITION        
         // X       Y          Z
@@ -69,6 +73,8 @@ class Triangle extends CompoundShape
           1.0, 1.0,
           0.5, 0.0
         ];
+
+        this.transform = transform;
       }
 }
 
@@ -83,7 +89,7 @@ class Quad extends CompoundShape {
       let height: number = options.height || 1;
       let color: number[] = options.color || [1, 1, 1];
       let transform: Transform = options.transform || new Transform();
-      super(transform, options.texturePath);
+      super(options.texturePath);
       this.vertices = [
       // VERTEX POSITION        
       // X        Y         Z   
@@ -125,6 +131,8 @@ class Quad extends CompoundShape {
         1.0, 0.0,
         1.0, 1.0
       ];
+
+      this.transform = transform;
   }
 }
 
@@ -138,7 +146,7 @@ class Cube extends CompoundShape
         let base: number = options.base || 1;
         let color: number[] = options.color || [1, 1, 1];
         let transform: Transform = options.transform || new Transform();
-        super(transform, options.texturePath);
+        super(options.texturePath);
         const l2 = base/2;
         this.indices = [
             // Top
@@ -277,6 +285,8 @@ class Cube extends CompoundShape
           1/2, 2/3,
           1/2, 1.0,
         ];
+
+        this.transform = transform;
     }
 }
 
@@ -287,7 +297,7 @@ class Sphere extends CompoundShape
     let radius: number = options.base || 1;
     let color: number[] = options.color || [1, 1, 1];
     let transform: Transform = options.transform || new Transform();
-    super(transform, options.texturePath);
+    super(options.texturePath);
 
     let i: number, j: number;
     let lats = 40;
@@ -334,6 +344,7 @@ class Sphere extends CompoundShape
        }
        this.indices?.push(0);
    }
+   this.transform = transform;
 
   }
 }

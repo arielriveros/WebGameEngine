@@ -40,7 +40,7 @@ export abstract class Renderable
 
     protected _type: string;
     
-    public constructor(transform: Transform = new Transform(), type: string = "simple", name: string = `renderable-id-${randomNumber(9999)}`)
+    public constructor(type: string = "simple", name: string = `renderable-id-${randomNumber(9999)}`)
     {
         this._name = name;
         this._vertices = [];
@@ -51,7 +51,7 @@ export abstract class Renderable
         this._worldMatrix = new Matrix4x4();
         this._localMatrix = new Matrix4x4();
         this._type = type;
-        this._transform = transform;
+        this._transform = new Transform();
     }
 
     public get name(): string { return this._name; }
@@ -73,6 +73,7 @@ export abstract class Renderable
     public get normals(): number[] | null { return this._normals; }
     public get colors(): number[] | null { return this._colors; }
     public get uvs(): number[] | null { return this._uvs; }
+
     /**
      * Sets the vertices of the object for the vertex array buffer.
      */
@@ -97,6 +98,8 @@ export abstract class Renderable
      * @param newUvs The new uvs of the object.
      */
     protected set uvs(newUvs: number[] | null) { this._uvs = newUvs; }
+
+    protected set transform(newTransform: Transform) { this._transform = newTransform; }
 
     public get type(): string { return this._type; }
 

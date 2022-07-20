@@ -12,7 +12,7 @@ export class Skybox extends Renderable
 
     public constructor(texturePaths: string[])
     {
-      super(new Transform(), "skybox");
+      super("skybox");
       this._cubemap = new Cubemap(texturePaths);
 
       let base: number = 10000;

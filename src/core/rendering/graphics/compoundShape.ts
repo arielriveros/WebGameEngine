@@ -10,9 +10,9 @@ export class CompoundShape extends Renderable
 {
     private _texture: Texture;
 
-    public constructor(transform: Transform, texturePath?: string)
+    public constructor(texturePath?: string)
     {
-        super(transform, "textured");
+        super("textured");
         this._texture = new Texture(texturePath);
     }
 
