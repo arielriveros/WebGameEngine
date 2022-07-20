@@ -62,6 +62,16 @@ export class Transform
         return out;
     }
 
+    public setByMatrix(matrix: number[]): void {
+        this.position = new Vector3(matrix[12], matrix[13], matrix[14]);
+    }
+
+    public apply(out: Transform, input: Transform): Transform
+    {
+       Matrix4x4.multiply( out.matrix, out.matrix, input.matrix );
+       return out;
+    }
+
     public get forward(): Vector3
     { 
         let x: number =  Math.cos(this.rotation.getRadiansPitch()) * Math.sin(this.rotation.getRadiansYaw());
