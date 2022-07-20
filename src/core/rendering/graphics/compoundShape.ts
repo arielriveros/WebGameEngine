@@ -1,3 +1,4 @@
+import { Transform } from "math";
 import { GLArrayBuffer, AttributeInformation } from "../gl/arrayBuffer";
 import { GLElementArrayBuffer } from "../gl/elementArrayBuffer";
 import { gl } from "../render";
@@ -9,9 +10,9 @@ export class CompoundShape extends Renderable
 {
     private _texture: Texture;
 
-    public constructor(texturePath?: string)
+    public constructor(transform: Transform, texturePath?: string)
     {
-        super("textured");
+        super(transform, "textured");
         this._texture = new Texture(texturePath);
     }
 

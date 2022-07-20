@@ -1,12 +1,13 @@
+import { Transform } from "math";
 import { GLArrayBuffer, AttributeInformation } from "../gl/arrayBuffer";
 import { gl } from "../render";
 import { Shader } from "../shaders/shader";
 import { Renderable } from "./renderable";
 
 export class SimpleShape extends Renderable {
-    public constructor()
+    public constructor(transform: Transform)
     {
-        super("simple");
+        super(transform, "simple");
     }
 
     public override load(shader: Shader): void

@@ -1,3 +1,4 @@
+import { Transform } from "math";
 import { GLArrayBuffer, AttributeInformation } from "../gl/arrayBuffer";
 import { GLElementArrayBuffer } from "../gl/elementArrayBuffer";
 import { gl } from "../render";
@@ -11,7 +12,7 @@ export class Skybox extends Renderable
 
     public constructor(texturePaths: string[])
     {
-      super("skybox");
+      super(new Transform(), "skybox");
       this._cubemap = new Cubemap(texturePaths);
 
       let base: number = 10000;

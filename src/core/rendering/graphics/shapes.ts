@@ -1,4 +1,4 @@
-import { PI, Vector3 } from "math";
+import { PI, Transform, Vector3 } from "math";
 import { CompoundShape } from "./compoundShape";
 import { Options } from "./renderable";
 import { SimpleShape } from "./simpleShape";
@@ -8,6 +8,7 @@ class Line extends SimpleShape {
     public constructor(options: Options = {}, origin?: Vector3, end?: Vector3) {
         let base: number = options.base || 1;
         let color: number[] = options.color || [0, 0, 0];
+        let transform: Transform = options.transform || new Transform();
 
         let x_0 = origin ? origin.x : 0;
         let y_0 = origin ? origin.y : 0;
@@ -17,7 +18,7 @@ class Line extends SimpleShape {
         let y_1 = end ? end.y : 0;
         let z_1 = end ? end.z : 0;
 
-        super();
+        super(transform);
         this.vertices = [
         //  X    Y    Z   
             x_0, y_0, z_0,
@@ -38,7 +39,8 @@ class Triangle extends CompoundShape
         let base: number = options.base || 1;
         let height: number = options.height || base;
         let color: number[] = options.color || [1, 1, 1];
-        super(options.texturePath);
+        let transform: Transform = options.transform || new Transform();
+        super(transform, options.texturePath);
         this.vertices = [
         // VERTEX POSITION        
         // X       Y          Z
@@ -80,7 +82,8 @@ class Quad extends CompoundShape {
       let base: number = options.base || 1;
       let height: number = options.height || 1;
       let color: number[] = options.color || [1, 1, 1];
-      super(options.texturePath);
+      let transform: Transform = options.transform || new Transform();
+      super(transform, options.texturePath);
       this.vertices = [
       // VERTEX POSITION        
       // X        Y         Z   
@@ -134,7 +137,8 @@ class Cube extends CompoundShape
     {
         let base: number = options.base || 1;
         let color: number[] = options.color || [1, 1, 1];
-        super(options.texturePath);
+        let transform: Transform = options.transform || new Transform();
+        super(transform, options.texturePath);
         const l2 = base/2;
         this.indices = [
             // Top
@@ -276,34 +280,14 @@ class Cube extends CompoundShape
     }
 }
 
-/* class Sphere extends CompoundShape
-{
-  public constructor(options: Options = {})
-  {
-    let radius: number = options.base || 1;
-    let color: number[] = options.color || [1, 1, 1];
-    super(options.texturePath);
-
-    for (let i = 0; i < 128; i++)
-    {
-      this.vertices.push(
-        radius * Math.cos(i * Math.PI / 12),
-        radius * Math.sin(i * Math.PI / 12),
-        0,
-        color[0], color[1], color[2],
-        1 / 24 * i,
-        0.0);
-    }
-  }
-} */
-
 class Sphere extends CompoundShape
 {
   public constructor(options: Options = {})
   {
     let radius: number = options.base || 1;
     let color: number[] = options.color || [1, 1, 1];
-    super(options.texturePath);
+    let transform: Transform = options.transform || new Transform();
+    super(transform, options.texturePath);
 
     let i: number, j: number;
     let lats = 40;

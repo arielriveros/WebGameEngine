@@ -1,7 +1,7 @@
 import { GLArrayBuffer, AttributeInformation } from "../gl/arrayBuffer";
 import { GLElementArrayBuffer } from "../gl/elementArrayBuffer";
 import { Shader } from "../shaders/shader";
-import { Matrix4x4 } from "math";
+import { Matrix4x4, Transform } from "math";
 import { randomNumber } from "math";
 
 export interface Options
@@ -10,7 +10,8 @@ export interface Options
     base?: number,
     color?: number[],
     radius?: number,
-    texturePath?: string
+    texturePath?: string,
+    transform?: Transform
 }
 
 /**
@@ -33,10 +34,13 @@ export abstract class Renderable
     protected _uvBuffer!: GLArrayBuffer;
     
     protected _worldMatrix: Matrix4x4;
+    protected _localMatrix: Matrix4x4;
+
+    protected _transform: Transform;
 
     protected _type: string;
     
-    public constructor(type: string = "simple", name: string = `renderable-id-${randomNumber(9999)}`) 
+    public constructor(transform: Transform = new Transform(), type: string = "simple", name: string = `renderable-id-${randomNumber(9999)}`)
     {
         this._name = name;
         this._vertices = [];
@@ -45,13 +49,24 @@ export abstract class Renderable
         this._colors = null;
         this._uvs = null;
         this._worldMatrix = new Matrix4x4();
+        this._localMatrix = new Matrix4x4();
         this._type = type;
+        this._transform = transform;
     }
 
     public get name(): string { return this._name; }
 
-    public get worldMatrix(): Matrix4x4 { return this._worldMatrix; }
+    public get worldMatrix(): Matrix4x4 {
+        let result: Matrix4x4 = new Matrix4x4();
+        this._localMatrix = this._transform.applyTransform();
+
+        Matrix4x4.multiply(result, this._worldMatrix, this._localMatrix);
+        return result;
+    }
     public set worldMatrix(matrix: Matrix4x4) { this._worldMatrix = matrix; }
+
+    public get localMatrix(): Matrix4x4 { return this._localMatrix; }
+    public set localMatrix(matrix: Matrix4x4) { this._localMatrix = matrix; }
 
     public get vertices(): number[] { return this._vertices; }
     public get indices(): number[] | null { return this._indices; }

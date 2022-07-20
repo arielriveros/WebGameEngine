@@ -1,5 +1,5 @@
 import { ObjectEntity, Scene, Shapes } from "core";
-import { randomNumber, Rotator, Vector3 } from "math";
+import { randomNumber, Rotator, Transform, Vector3 } from "math";
 import { RigidBody } from "../core/world/components/rigidBody";
 import { LOG } from "utils";
 import { RenderableComponent } from "../core/world/components/renderableComponent";
@@ -112,7 +112,7 @@ function addRandomCubes(scene: Scene, count: number)
 function addControllable(scene: Scene)
 {
     let suzanneGeometry = Loader.loadJSONMesh('assets/models/Suzanne.json');
-    let suzanne = new Mesh(suzanneGeometry[0], 'assets/textures/SusanTexture.png');
+    let suzanne = new Mesh(suzanneGeometry[0], 'assets/textures/SusanTexture.png', new Transform(new Vector3(0, 1, 0), new Rotator(-90, 0, 0), new Vector3(1, 1, 1)));
     let controllableEntity = new ObjectEntity(
         'controllable',
         new Vector3(),
