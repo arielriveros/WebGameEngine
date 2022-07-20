@@ -1,3 +1,4 @@
+import { Rotator, Transform, Vector3, Matrix4x4 } from "math";
 import { LOG } from "utils";
 import { GeometryParameters } from "../rendering/graphics/mesh";
 
@@ -35,39 +36,58 @@ export class Loader
         }
     }; 
 
-    public static loadJSON(path: string): any
-    {
-        let xhr = new XMLHttpRequest();
-        xhr.open("GET", path, false);
-        xhr.send(null);
+    public static loadJSON(path: string): Promise<any>{
+        return new Promise((resolve, reject) => {
+            let xhr = new XMLHttpRequest();
+            xhr.open("GET", path, false);
+            xhr.send(null);
 
-        if (xhr.status == 200) {
-            return JSON.parse(xhr.responseText);
-        }
-        else {
-            LOG("Error loading source shader file", "error", true);
-            return;
-        }
+            if (xhr.status == 200) {
+                resolve(JSON.parse(xhr.responseText));
+            }
+            else {
+                LOG("Error loading source shader file", "error", true);
+                reject();
+            }
+        });
     }
 
-    public static loadJSONMesh(path: string): GeometryParameters[]
+    public static async loadJSONMesh(path: string): Promise<GeometryParameters[]>
     {
-        let json = Loader.loadJSON(path);
+        let json = await Loader.loadJSON(path);
         let meshes: GeometryParameters[] = [];
-        for (let mesh of json.meshes) {
-            let vertices = mesh.vertices;
-            let indices = [].concat.apply([], mesh.faces);
-            let normals = null;
-            if(mesh.normals)
+        for(let i in json.rootnode.children)
+        {
+            if("meshes" in json.rootnode.children[i])
             {
-                normals = mesh.normals;
-            }
-            let uvs = null;
-            if(mesh.texturecoords)
-            {
-                uvs = mesh.texturecoords[0];
-            }
-            meshes.push({ vertices, indices, normals, uvs });
+                let index = json.rootnode.children[i].meshes[0];
+                let meshInfo = json.meshes[index];
+                let vertices = meshInfo.vertices;
+                let indices = [].concat.apply([], meshInfo.faces);
+                let normals = null;
+                if(meshInfo.normals)
+                {
+                    normals = meshInfo.normals;
+                }
+                let uvs = null;
+                if(meshInfo.texturecoords)
+                {
+                    uvs = meshInfo.texturecoords[0];
+                }
+
+                let transformMatrix = new Matrix4x4();
+                transformMatrix.data = json.rootnode.children[i].transformation;
+
+                let transform = new Transform(
+                    new Vector3(),
+                    new Rotator(),
+                    new Vector3(1, 1, 1),
+                    transformMatrix
+                );
+
+                console.log(transform);
+                meshes.push({ vertices, indices, normals, uvs, transform });
+            }            
         }
         return meshes;
     }
