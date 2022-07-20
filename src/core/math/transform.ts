@@ -17,12 +17,14 @@ export class Transform
     public constructor(
         position: Vector3 = new Vector3(),
         rotation: Rotator = new Rotator(),
-        scale: Vector3 = new Vector3(1, 1, 1))
+        scale: Vector3 = new Vector3(1, 1, 1),
+        matrix: Matrix4x4 = new Matrix4x4()
+        )
     {
         this._position = position;
         this._rotation = rotation;
         this._scale = scale;
-        this._matrix = new Matrix4x4();
+        this._matrix = matrix;
     }
 
     public get position(): Vector3 { return this._position; }
