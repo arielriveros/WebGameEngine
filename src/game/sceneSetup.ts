@@ -109,10 +109,10 @@ function addRandomCubes(scene: Scene, count: number)
     }
 }
 
-function addControllable(scene: Scene)
+async function addControllable(scene: Scene)
 {
-    let suzanneGeometry = Loader.loadJSONMesh('assets/models/Suzanne.json');
-    let suzanne = new Mesh(suzanneGeometry[0], 'assets/textures/SusanTexture.png', new Transform(new Vector3(0, 1, 0), new Rotator(-90, 0, 0), new Vector3(1, 1, 1)));
+    let suzanneGeometry = await Loader.loadJSONMesh('assets/models/Suzanne.json');
+    let suzanne = new Mesh(new Transform(new Vector3(0, 1, 0), new Rotator(-90, 0, 0)), suzanneGeometry[0], 'assets/textures/SusanTexture.png');
     let controllableEntity = new ObjectEntity(
         'controllable',
         new Vector3(),
@@ -217,10 +217,10 @@ function simpleScene( scene:Scene)
     }
 }
 
-function houseScene(scene: Scene)
+async function houseScene(scene: Scene)
 {
     /* Houses */
-    let houseGeometry = Loader.loadJSONMesh('assets/models/cottage.json');
+    let houseGeometry = await Loader.loadJSONMesh('assets/models/cottage.json');
     for(let i = -20; i <= 20; i+=20)
     {
         for(let j = -20; j <= 20; j+=20)
@@ -232,7 +232,7 @@ function houseScene(scene: Scene)
                     new Vector3(i, 1, j),
                     new Rotator(-90, 180, 0),
                     new Vector3(3, 3, 1),
-                    new Mesh(houseGeometry[0], 'assets/textures/cottage_diffuse.png')
+                    new Mesh(new Transform(), houseGeometry[0], 'assets/textures/cottage_diffuse.png')
                     );
                 let rigidBody = new RigidBody();
                 houseEntity.addComponent(rigidBody);
