@@ -76,17 +76,8 @@ export class Loader
                 }
 
                 let transformMatrix = new Matrix4x4();
-                console.log(json.rootnode.children[i].transformation);
                 transformMatrix.data = json.rootnode.children[i].transformation;
-                console.log(transformMatrix.data);
-                let transform = new Transform(
-                    new Vector3(),
-                    new Rotator(),
-                    new Vector3(1, 1, 1),
-                    transformMatrix
-                );
-
-                transform.setByMatrix(transformMatrix.data);
+                let transform = new Transform({initMatrix: transformMatrix});
                 meshes.push({ vertices, indices, normals, uvs, transform });
             }            
         }

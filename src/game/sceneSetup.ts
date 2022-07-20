@@ -13,19 +13,20 @@ function addGrid(scene: Scene, size: number = 10)
     {
         scene.addEntity(
             new ObjectEntity(
-                `line-${i}h`, 
-                new Vector3(i, 0, size), 
-                new Rotator(0, 90, 0), 
-                new Vector3(1, 1, 1),
+                `line-${i}h`,
+                {
+                    position: new Vector3(i, 0, size), 
+                    rotation: new Rotator(0, 90, 0), 
+                },
                 new Shapes.Line({base:2 * size, color: [0.4, 0.4, 0.4]})
             )
         );
         scene.addEntity(
             new ObjectEntity(
                 `line-${i}v`,
-                new Vector3(-size, 0, i),
-                new Rotator(0, 0, 0),
-                new Vector3(1, 1, 1),
+                {
+                    position: new Vector3(-size, 0, i),
+                },
                 new Shapes.Line({base:2 * size, color: [0.75, 0.75, 0.75]})
             )
         );
@@ -37,28 +38,26 @@ function addAxis(scene: Scene)
     scene.addEntity(
         new ObjectEntity(
             `axis-x`,
-            new Vector3(0, 0.001, 0),
-            new Rotator(0, 0, 0),
-            new Vector3(1, 1, 1),
+            {
+                position: new Vector3(0, 0.001, 0),
+            },
             new Shapes.Line({base:1.5, color: [1, 0, 0]})
         )
     );
     scene.addEntity(
         new ObjectEntity(
             `axis-y`,
-            new Vector3(0, 0, 0),
-            new Rotator(0, 0, 90),
-            new Vector3(1, 1, 1),
-            new Shapes.Line({base:1.5, color: [0, 1, 0]}
-            )
+            {rotation: new Rotator(0, 0, 90)},
+            new Shapes.Line({base:1.5, color: [0, 1, 0]})
         )
     );
     scene.addEntity(
         new ObjectEntity(
             `axis-z`,
-            new Vector3(0, 0.001, 0),
-            new Rotator(0, -90, 0),
-            new Vector3(1, 1, 1),
+            {
+                position: new Vector3(0, 0.001, 0),
+                rotation: new Rotator(0, -90, 0),
+            },
             new Shapes.Line({base:1.5, color: [0, 0, 1]}) 
         )
     );
@@ -77,9 +76,11 @@ function addRandomtriangles(scene: Scene, count: number)
         scene.addEntity(
             new ObjectEntity(
                 `randTriangle-${i}`,
-                new Vector3(randomNumber(10, -10), randomNumber(10, -10), randomNumber(10, -10)),
-                new Rotator(randomNumber(360), randomNumber(360), randomNumber(360)),
-                new Vector3(randomNumber(0.5, 1.5), randomNumber(0.5, 1.5), randomNumber(0.5, 1.5)),
+                {
+                    position: new Vector3(randomNumber(10, -10), randomNumber(10, -10), randomNumber(10, -10)),
+                    rotation: new Rotator(randomNumber(360), randomNumber(360), randomNumber(360)),
+                    scale: new Vector3(randomNumber(0.5, 1.5), randomNumber(0.5, 1.5), randomNumber(0.5, 1.5)),
+                },
                 newTriangle
             )
         )
@@ -100,9 +101,11 @@ function addRandomCubes(scene: Scene, count: number)
         scene.addEntity(
             new ObjectEntity(
                 `randTexCube-${i}`,
-                new Vector3(randomNumber(10, -10), randomNumber(10, -10), randomNumber(10, -10)),
-                new Rotator(randomNumber(360), randomNumber(360), randomNumber(360)),
-                new Vector3(randomNumber(0.5, 1.5), randomNumber(0.5, 1.5), randomNumber(0.5, 1.5)),
+                {
+                    position: new Vector3(randomNumber(10, -10), randomNumber(10, -10), randomNumber(10, -10)),
+                    rotation: new Rotator(randomNumber(360), randomNumber(360), randomNumber(360)),
+                    scale: new Vector3(randomNumber(0.5, 1.5), randomNumber(0.5, 1.5), randomNumber(0.5, 1.5)),
+                },
                 newCube
             )
         )
@@ -112,14 +115,11 @@ function addRandomCubes(scene: Scene, count: number)
 async function addControllable(scene: Scene)
 {
     let suzanneGeometry = await Loader.loadJSONMesh('assets/models/Suzanne.json');
-    let suzanne = new Mesh(new Transform(new Vector3(0, 1, 0), new Rotator(-90, 0, 0)), suzanneGeometry[0], 'assets/textures/SusanTexture.png');
-    let controllableEntity = new ObjectEntity(
-        'controllable',
-        new Vector3(),
-        new Rotator(),
-        new Vector3(1, 1, 1),
-        suzanne
-    )
+    let suzanne = new Mesh(new Transform({
+        position: new Vector3(0, 1, 0), 
+        rotation: new Rotator(-90, 0, 0)}), 
+        suzanneGeometry[0], 'assets/textures/SusanTexture.png');
+    let controllableEntity = new ObjectEntity('controllable', {}, suzanne );
     let forwardLine = new RenderableComponent('renderable-component', 
         new Shapes.Line({color: [0.5, 0, 0]}, new Vector3(), new Vector3(0, 0, 1) ));
     controllableEntity.addComponent(forwardLine);
@@ -136,19 +136,13 @@ function addRandomLines(scene: Scene, count: number)
     {
         scene.addEntity(
             new ObjectEntity(
-                'Line',
-                new Vector3(0, 0, 0),
-                new Rotator(),
-                new Vector3(1, 1, 1),
+                'Line', {},
                 new Shapes.Line({color: [1, 0, 1]}, )
             )
         )
         scene.addEntity(
             new ObjectEntity(
-                `randLine-${i}`,
-                new Vector3(),
-                new Rotator(),
-                new Vector3(1, 1, 1),
+                `randLine-${i}`, {},
                 new Shapes.Line
                 (
                     { color: [randomNumber(), randomNumber(), randomNumber()] },
@@ -182,11 +176,12 @@ function physicsScene( scene: Scene )
         //let cube = new Shapes.Cube({texturePath: "assets/textures/roma.png"} );
         let cube = new Shapes.Cube({color: [randomNumber(1), randomNumber(1), randomNumber(1)]} );
         let cubeEntity = new ObjectEntity(
-        'Rigid-Entity',
-        new Vector3(randomNumber(10, -10), randomNumber(amount), randomNumber(10, -10)),
-        new Rotator(randomNumber(360), randomNumber(360), randomNumber(360)),
-        new Vector3(1, 1, 1),
-        cube
+            'Rigid-Entity',
+            {
+                position: new Vector3(randomNumber(10, -10), randomNumber(amount), randomNumber(10, -10)),
+                rotation: new Rotator(randomNumber(360), randomNumber(360), randomNumber(360)),
+            },
+            cube
         );
         let rigidBody = new RigidBody();
         rigidBody.enableGravity = true;
@@ -203,10 +198,10 @@ function simpleScene( scene:Scene)
         {
             let cube = new Shapes.Cube({color: [randomNumber(1), randomNumber(1), randomNumber(1)]} );
             let cubeEntity = new ObjectEntity(
-                `Rigid-Entity=${i}`,
-                new Vector3(i, 0, j),
-                new Rotator(0, 0, 0),
-                new Vector3(1, 1, 1),
+                `Rigid-Entity=${i}`, 
+                {
+                    position: new Vector3(i, 0, j),
+                },
                 cube
             );
             let rigidBody = new RigidBody();
@@ -229,11 +224,13 @@ async function houseScene(scene: Scene)
             {
                 let houseEntity = new ObjectEntity(
                     'House',
-                    new Vector3(i, 1, j),
-                    new Rotator(-90, 180, 0),
-                    new Vector3(3, 3, 1),
+                    {
+                        position: new Vector3(i, 1, j),
+                        rotation: new Rotator(-90, 180, 0),
+                        scale: new Vector3(3, 3, 1)
+                    },
                     new Mesh(new Transform(), houseGeometry[0], 'assets/textures/cottage_diffuse.png')
-                    );
+                );
                 let rigidBody = new RigidBody();
                 houseEntity.addComponent(rigidBody);
                 scene.addEntity(houseEntity);
@@ -249,9 +246,11 @@ async function houseScene(scene: Scene)
     let ground = new Shapes.Quad({color: [0.65, 0.88, 0.24], texturePath: 'assets/textures/grass.jpg'});
     let groundEntity = new ObjectEntity(
         'Ground',
-        new Vector3(0, 0.05, 0),
-        new Rotator(-90, 0, 0),
-        new Vector3(50, 50, 1),
+        {
+            position: new Vector3(0, 0.05, 0),
+            rotation: new Rotator(-90, 0, 0),
+            scale: new Vector3(50, 50, 1),
+        },
         ground
     );
     let rigidBodyGround = new RigidBody();
@@ -263,10 +262,7 @@ function addSkybox(scene: Scene)
 {
     scene.addEntity(
         new ObjectEntity(
-            'Skybox',
-            new Vector3(),
-            new Rotator(),
-            new Vector3(1, 1, 1),
+            'Skybox', {},
             new Shapes.Skybox( 
                 ['assets/textures/sky_right.png', 'assets/textures/sky_left.png', 'assets/textures/sky_top.png',
                  'assets/textures/sky_bottom.png','assets/textures/sky_back.png', 'assets/textures/sky_front.png'

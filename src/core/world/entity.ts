@@ -1,4 +1,5 @@
 import { Matrix4x4, Rotator, Transform, Vector3 } from "math";
+import { TransformParameters } from "../math/transform";
 import { Component } from "./components/component";
 
 export abstract class Entity {
@@ -7,17 +8,18 @@ export abstract class Entity {
 
     private _components: Component[];
 
-    public constructor(
-        name: string,
-        position: Vector3 = new Vector3(),
-        rotation: Rotator = new Rotator(),
-        scale: Vector3 = new Vector3(1, 1, 1))
-        {
-            this._name = name;
-            this._transform = new Transform(position, rotation, scale);
-            this._components = [];
-            this.transform();
-        }
+    public constructor(name: string, transformParameters: TransformParameters = {})
+    {
+        this._name = name;
+        this._transform = new Transform({
+            position: transformParameters.position || new Vector3(), 
+            rotation: transformParameters.rotation || new Rotator(), 
+            scale: transformParameters.scale || new Vector3(1, 1, 1)
+            }
+        );
+        this._components = [];
+        this.transform();
+    }
 
     public get name(): string { return this._name; }
     public set name(value: string) { this._name = value; }

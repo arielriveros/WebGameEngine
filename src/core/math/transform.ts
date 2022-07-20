@@ -1,8 +1,22 @@
 import { Matrix4x4, Rotator, Vector3 } from "math";
 
+/**
+ * Parameters for a transformation
+ * @param position Vector3 position of the object.
+ * @param rotation Rotator rotation of the object.
+ * @param scale Vector3 scale of the object.
+ * @param initMatrix Matrix4x4 initial matrix of the object.
+ */
+export interface TransformParameters
+{
+    position?: Vector3;
+    rotation?: Rotator;
+    scale?: Vector3;
+    initMatrix?: Matrix4x4;
+}
+
 export class Transform
 {
-
     private _position: Vector3;
     private _rotation: Rotator;
     private _scale: Vector3;
@@ -10,21 +24,13 @@ export class Transform
 
     /**
      * Transform Matrix for position-rotation-scaling object handling.
-     * @param position Vector3 position of the object.
-     * @param rotation Rotator rotation of the object.
-     * @param scale Vector3 scale of the object.
      */
-    public constructor(
-        position: Vector3 = new Vector3(),
-        rotation: Rotator = new Rotator(),
-        scale: Vector3 = new Vector3(1, 1, 1),
-        matrix: Matrix4x4 = new Matrix4x4()
-        )
+    public constructor( parameters: TransformParameters = {} )
     {
-        this._position = position;
-        this._rotation = rotation;
-        this._scale = scale;
-        this._matrix = matrix;
+        this._position = parameters.position || new Vector3();
+        this._rotation = parameters.rotation || new Rotator();
+        this._scale = parameters.scale || new Vector3(1, 1, 1);
+        this._matrix = parameters.initMatrix || new Matrix4x4();
     }
 
     public get position(): Vector3 { return this._position; }
@@ -60,10 +66,6 @@ export class Transform
         out.add(pos)
         Matrix4x4.multiplyVector(out, this.matrix, out);
         return out;
-    }
-
-    public setByMatrix(matrix: number[]): void {
-        this.position = new Vector3(matrix[12], matrix[13], matrix[14]);
     }
 
     public apply(out: Transform, input: Transform): Transform

@@ -11,7 +11,7 @@ export abstract class Camera extends Entity
 
     public constructor( position: Vector3 = new Vector3(), rotation: Rotator = new Rotator(), near: number = 0.01, far: number = 1000)
     {
-        super('camera', position, rotation);
+        super('camera', {position: position, rotation: rotation});
         this._viewMatrix = new Matrix4x4();
         this._near = near;
         this._far = far;

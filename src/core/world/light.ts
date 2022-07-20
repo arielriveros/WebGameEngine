@@ -7,7 +7,7 @@ abstract class Light extends Entity {
     private _intensity: number;
 
     public constructor(name: string, color: number[] = [1, 1, 1], intensity: number = 1) {
-        super(name, new Vector3(), new Rotator(), new Vector3(1, 1, 1));
+        super(name);
         this._color = color;
         this._intensity = intensity;
     }   
