@@ -18,6 +18,10 @@ export class Matrix4x4 {
         return this._data;
     }
 
+    public set data(value: number[]) {
+        this._data = value;
+    }
+
     public toFloat32Array(): Float32Array {
         return new Float32Array(this._data);
     }
