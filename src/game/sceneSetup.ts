@@ -116,8 +116,10 @@ async function addControllable(scene: Scene)
 {
     let suzanneGeometry = await Loader.loadJSONMesh('assets/models/Suzanne.json');
     let suzanne = new Mesh(new Transform({
-        position: new Vector3(0, 1, 0), 
-        rotation: new Rotator(-90, 0, 0)}), 
+        position: new Vector3(0, 0, -0.01), 
+        rotation: new Rotator(180, 0, 0),
+        scale: new Vector3(0.01, 0.01, 0.01)
+    }), 
         suzanneGeometry[0], 'assets/textures/SusanTexture.png');
     let controllableEntity = new ObjectEntity('controllable', {}, suzanne );
     let forwardLine = new RenderableComponent('renderable-component', 
@@ -273,13 +275,13 @@ function addSkybox(scene: Scene)
 
 export function setScene(scene: Scene)
 {
-    //addGrid(scene, 100);
-    //addAxis(scene);
+    addGrid(scene, 100);
+    addAxis(scene);
     addSkybox(scene);
 
     //randomScene(scene);
-    //physicsScene(scene);
-    //simpleScene(scene);
+    physicsScene(scene);
+    simpleScene(scene);
     houseScene(scene);
 
     addControllable(scene);

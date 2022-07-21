@@ -77,8 +77,7 @@ export class Loader
 
                 let transformMatrix = new Matrix4x4();
                 transformMatrix.data = json.rootnode.children[i].transformation;
-                let transform = new Transform({initMatrix: transformMatrix});
-                meshes.push({ vertices, indices, normals, uvs, transform });
+                meshes.push({ vertices, indices, normals, uvs, transformMatrix });
             }            
         }
         return meshes;

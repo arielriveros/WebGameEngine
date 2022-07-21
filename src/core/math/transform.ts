@@ -21,6 +21,7 @@ export class Transform
     private _rotation: Rotator;
     private _scale: Vector3;
     private _matrix: Matrix4x4;
+    private _initMatrix: Matrix4x4 | undefined;
 
     /**
      * Transform Matrix for position-rotation-scaling object handling.
@@ -30,7 +31,8 @@ export class Transform
         this._position = parameters.position || new Vector3();
         this._rotation = parameters.rotation || new Rotator();
         this._scale = parameters.scale || new Vector3(1, 1, 1);
-        this._matrix = parameters.initMatrix || new Matrix4x4();
+        this._matrix = new Matrix4x4();
+        this._initMatrix = parameters.initMatrix;
     }
 
     public get position(): Vector3 { return this._position; }
@@ -43,8 +45,10 @@ export class Transform
     public set scale(scale: Vector3) { this._scale = scale; }
 
     public get matrix(): Matrix4x4 { return this._matrix; }
+
+    public get initMatrix(): Matrix4x4 | undefined { return this._initMatrix; }
     public get inverseTransposedMatrix(): Matrix4x4 {
-        let out = this._matrix.clone();
+        let out = this.matrix.clone();
         Matrix4x4.invert(out, out);
         Matrix4x4.transpose(out, out);
         return out; 
@@ -58,7 +62,15 @@ export class Transform
         Matrix4x4.translate(this._matrix, new Matrix4x4(), this._position);
         Matrix4x4.rotateWithRotator(this._matrix, this._matrix, this._rotation);
         Matrix4x4.scale(this._matrix, this._matrix, this._scale);
-        return this._matrix;
+        if(this._initMatrix)
+        {
+            return Matrix4x4.multiply(this._matrix, this._initMatrix, this._matrix);
+        }
+        else
+        {
+            return this._matrix; 
+        }
+        
     }
 
     public applyToVector(out: Vector3): Vector3 {
