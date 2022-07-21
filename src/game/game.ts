@@ -85,6 +85,32 @@ export class Game extends GameBase
             }
         }
 
+        if(input.isKeyDown('KeyX'))
+        {
+            let c = this.scene.getEntity('controllable');
+            if(c)
+            {
+                console.log(c.transformStruct.matrix.data);
+            }
+        }
+
+        if(input.isKeyDown('KeyY'))
+        {
+            let c = this.scene.getEntity('controllable');
+            if(c)
+            {
+                c.rescale(new Vector3(0.1, 0.1, 0.1));
+            }
+        }
+        if(input.isKeyDown('KeyT'))
+        {
+            let c = this.scene.getEntity('controllable');
+            if(c)
+            {
+                c.rescale(new Vector3(-0.1, -0.1, -0.1));
+            }
+        }
+
         if(input.isKeyDown('ArrowLeft'))
         {   
             this.directionalLight.rotate(new Rotator(0, -1, 0));

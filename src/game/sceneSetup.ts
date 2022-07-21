@@ -115,11 +115,7 @@ function addRandomCubes(scene: Scene, count: number)
 async function addControllable(scene: Scene)
 {
     let suzanneGeometry = await Loader.loadJSONMesh('assets/models/Suzanne.json');
-    let suzanne = new Mesh(new Transform({
-        position: new Vector3(0, 0, -0.01), 
-        rotation: new Rotator(180, 0, 0),
-        scale: new Vector3(0.01, 0.01, 0.01)
-    }), 
+    let suzanne = new Mesh(new Transform(), 
         suzanneGeometry[0], 'assets/textures/SusanTexture.png');
     let controllableEntity = new ObjectEntity('controllable', {}, suzanne );
     let forwardLine = new RenderableComponent('renderable-component', 
