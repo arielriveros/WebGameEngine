@@ -27,8 +27,8 @@ void main() {
     /* Texture */
     v_texCoord = a_texCoord;
     /* Lighting */
-    vec3 world_normal = (u_normalMatrix * vec4(a_normal, 1.0)).xyz;
-    vec3 directional_light = normalize(u_lightDirection);
+    vec3 world_normal = normalize((u_normalMatrix * vec4(a_normal, 1.0)).xyz);
+    vec3 directional_light = u_lightDirection;
     v_brightness = max(ambient_coefficient, dot( world_normal, directional_light )) * u_lightIntensity;
     /* To fragment shader */
     gl_Position = u_viewProj * vec4(a_position, 1.0);
