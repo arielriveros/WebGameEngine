@@ -71,8 +71,9 @@ export class Engine{
             }
         }
 
+        this._performance.measure();
+
         if(this._performance.showPerformance) {
-            this._performance.measure();
             this._performance.sendToHUD();
         }
         // END DEBUG

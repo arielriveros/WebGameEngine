@@ -8,7 +8,7 @@ export class Performance
     {
         this._previousTime = 0;
         this._time = 0;
-        this._showPerformance = true;
+        this._showPerformance = false;
     }
 
     public get previousTime(): number { return this._previousTime; }
