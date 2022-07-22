@@ -127,7 +127,10 @@ export class Vector3
 
     public length(): number
     {
-        return Math.sqrt(this._x * this._x + this._y * this._y + this._z * this._z);
+        let x = this._x;
+        let y = this._y;
+        let z = this._z;
+        return Math.sqrt(x * x + y * y + z * z);
     }
 
     public toArray(): number[]
@@ -177,6 +180,14 @@ export class Vector3
     public opposite(): Vector3
     {
         this.scale(-1);
+        return this;
+    }
+
+    public inverse(): Vector3
+    {
+        this._x = this._x !== 0 ? 1 / this._x : 0;
+        this._y = this._y !== 0 ? 1 / this._y : 0;
+        this._z = this._z !== 0 ? 1 / this._z : 0;
         return this;
     }
 }
