@@ -63,13 +63,9 @@ export class Transform
         Matrix4x4.rotateWithRotator(this._matrix, this._matrix, this._rotation);
         Matrix4x4.scale(this._matrix, this._matrix, this._scale);
         if(this._initMatrix)
-        {
-            return Matrix4x4.multiply(this._matrix, this._initMatrix, this._matrix);
-        }
-        else
-        {
-            return this._matrix; 
-        }
+            return Matrix4x4.multiply(this._matrix, this._matrix, this._initMatrix);
+
+        return this._matrix; 
         
     }
 
