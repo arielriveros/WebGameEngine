@@ -46,4 +46,15 @@ export class Rotator {
         return out;
     }
 
+    public static fromQuaternion(quaternion: Array<number>): Rotator
+    {
+        // asin(2 (q0 * q1 - q2 * q3))
+        const pitch = Math.asin(2 * quaternion[2] * quaternion[3] + 2 * quaternion[0] * quaternion[1]);
+        // atan2(2*(q0*q1 + q2*q3), 1 - 2*(q1q1 + q2q2))
+        const yaw = Math.atan2(2 * quaternion[1] * quaternion[3] - 2 * quaternion[0] * quaternion[2], 1 - 2 * (quaternion[1] * quaternion[1] - quaternion[2] * quaternion[2]));
+        // atan2(2*(q0*q3 + q1*q2), 1 - 2*(q2q2 + q2q3))
+        const roll = Math.atan2(2 * quaternion[0] * quaternion[3] - 2 * quaternion[1] * quaternion[2], 1 - 2 * quaternion[2] * quaternion[2] - 2 * quaternion[3] * quaternion[3]);
+        return new Rotator(pitch, yaw, roll);
+    }
+
 }
