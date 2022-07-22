@@ -31,7 +31,6 @@ export abstract class Entity {
     public addComponent(component: Component): void
     {
         component.entity = this;
-        component.initialize();
         this._components.push(component);
     }
 
@@ -63,6 +62,14 @@ export abstract class Entity {
         {
             component.delete();
             this._components = this._components.filter(c => c !== component);
+        }
+    }
+
+    private initializeComponents(): void
+    {
+        for(let component of this._components)
+        {
+            component.initialize();
         }
     }
 
@@ -198,7 +205,9 @@ export abstract class Entity {
         this._transform.applyTransform();
     }
 
-    public initialize(): void { }
+    public initialize(): void {
+        this.initializeComponents();
+    }
 
     /**
      * Runs every frame.
