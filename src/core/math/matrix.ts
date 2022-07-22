@@ -614,8 +614,148 @@ export class Matrix4x4 {
       return out;
     }
 
+    public static getScaling(out: Vector3, mat: Matrix4x4): Vector3 {
+      let m11 = mat._data[0];
+      let m12 = mat._data[1];
+      let m13 = mat._data[2];
+      let m21 = mat._data[4];
+      let m22 = mat._data[5];
+      let m23 = mat._data[6];
+      let m31 = mat._data[8];
+      let m32 = mat._data[9];
+      let m33 = mat._data[10];
+      out.x = Math.hypot(m11, m12, m13);
+      out.y = Math.hypot(m21, m22, m23);
+      out.z = Math.hypot(m31, m32, m33);
+      return out;
+    }
+
+    public static getRotation(out: Array<number>, mat: Matrix4x4): Array<number> {
+      let scaling = new Vector3();
+      this.getScaling(scaling, mat);
+      let is1 = 1 / scaling.x;
+      let is2 = 1 / scaling.y;
+      let is3 = 1 / scaling.z;
+      let sm11 = mat._data[0] * is1;
+      let sm12 = mat._data[1] * is2;
+      let sm13 = mat._data[2] * is3;
+      let sm21 = mat._data[4] * is1;
+      let sm22 = mat._data[5] * is2;
+      let sm23 = mat._data[6] * is3;
+      let sm31 = mat._data[8] * is1;
+      let sm32 = mat._data[9] * is2;
+      let sm33 = mat._data[10] * is3;
+      let trace = sm11 + sm22 + sm33;
+      let S = 0;
+      //let out = Array<number>(4);
+      if (trace > 0) {
+        S = Math.sqrt(trace + 1.0) * 2;
+        out[3] = 0.25 * S;
+        out[0] = (sm23 - sm32) / S;
+        out[1] = (sm31 - sm13) / S;
+        out[2] = (sm12 - sm21) / S;
+      } else if (sm11 > sm22 && sm11 > sm33) {
+        S = Math.sqrt(1.0 + sm11 - sm22 - sm33) * 2;
+        out[3] = (sm23 - sm32) / S;
+        out[0] = 0.25 * S;
+        out[1] = (sm12 + sm21) / S;
+        out[2] = (sm31 + sm13) / S;
+      } else if (sm22 > sm33) {
+        S = Math.sqrt(1.0 + sm22 - sm11 - sm33) * 2;
+        out[3] = (sm31 - sm13) / S;
+        out[0] = (sm12 + sm21) / S;
+        out[1] = 0.25 * S;
+        out[2] = (sm23 + sm32) / S;
+      } else {
+        S = Math.sqrt(1.0 + sm33 - sm11 - sm22) * 2;
+        out[3] = (sm12 - sm21) / S;
+        out[0] = (sm31 + sm13) / S;
+        out[1] = (sm23 + sm32) / S;
+        out[2] = 0.25 * S;
+      }
+      return out;
+    }
+
     public static getTranslation(mat: Matrix4x4): Vector3 {
       return new Vector3(mat._data[12], mat._data[13], mat._data[14]);
+    }
+
+    public static fromQuat(out: Matrix4x4, q: Array<number>): Matrix4x4
+    {
+      let x = q[0],
+        y = q[1],
+        z = q[2],
+        w = q[3];
+      let x2 = x + x;
+      let y2 = y + y;
+      let z2 = z + z;
+      let xx = x * x2;
+      let yx = y * x2;
+      let yy = y * y2;
+      let zx = z * x2;
+      let zy = z * y2;
+      let zz = z * z2;
+      let wx = w * x2;
+      let wy = w * y2;
+      let wz = w * z2;
+      out._data[0] = 1 - yy - zz;
+      out._data[1] = yx + wz;
+      out._data[2] = zx - wy;
+      out._data[3] = 0;
+      out._data[4] = yx - wz;
+      out._data[5] = 1 - xx - zz;
+      out._data[6] = zy + wx;
+      out._data[7] = 0;
+      out._data[8] = zx + wy;
+      out._data[9] = zy - wx;
+      out._data[10] = 1 - xx - yy;
+      out._data[11] = 0;
+      out._data[12] = 0;
+      out._data[13] = 0;
+      out._data[14] = 0;
+      out._data[15] = 1;
+      return out;
+    }
+
+    public static fromScaling(out: Matrix4x4, v: Vector3): Matrix4x4 {
+      out._data[0] = v.x;
+      out._data[1] = 0;
+      out._data[2] = 0;
+      out._data[3] = 0;
+      out._data[4] = 0;
+      out._data[5] = v.y;
+      out._data[6] = 0;
+      out._data[7] = 0;
+      out._data[8] = 0;
+      out._data[9] = 0;
+      out._data[10] = v.z;
+      out._data[11] = 0;
+      out._data[12] = 0;
+      out._data[13] = 0;
+      out._data[14] = 0;
+      out._data[15] = 1;
+      return out;
+    }
+
+    public static fromTranslation(out: Matrix4x4, v: Vector3)
+    {
+      out._data[0] = 1;
+      out._data[1] = 0;
+      out._data[2] = 0;
+      out._data[3] = 0;
+      out._data[4] = 0;
+      out._data[5] = 1;
+      out._data[6] = 0;
+      out._data[7] = 0;
+      out._data[8] = 0;
+      out._data[9] = 0;
+      out._data[10] = 1;
+      out._data[11] = 0;
+      out._data[12] = v.x;
+      out._data[13] = v.y;
+      out._data[14] = v.z;
+      out._data[15] = 1;
+      return out;
     }
 
     public static multiplyVector(out: Vector3, a: Matrix4x4, vec: Vector3): Vector3 {
